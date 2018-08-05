@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html class="hungry profile" ng-app="app">
+    <head>
+        <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+        <meta charset="utf-8" />
+        <title>HungryNaki - Accounts</title>
+        <base href="/">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+        <meta content="" name="description" />
+        <meta content="" name="author" />
+        <!-- build:css styles/lib.css -->
+        <!-- bower:css -->
+        <!-- endbower -->
+        <!-- endbuild -->
+        <!-- build:css styles/app.css-->
+        <!-- inject:css -->
+        <!-- endinject -->
+        <!-- endbuild -->
+        <!-- END CSS TEMPLATE -->
+    </head>
+    <!-- END HEAD -->
+    <!-- BEGIN BODY -->
+    <body>
+        <div ng-controller="loginController as vm">
+            <div id="loginBox" ng-hide="vm.logg">
+                <div class="row login-container animated fadeInUp">
+                    <div class="col-md-7 col-md-offset-2 tiles white no-padding">
+                        <div class="p-t-30 p-l-40 p-b-20 xs-p-t-10 xs-p-l-10 xs-p-b-10">
+                            <h2 class="normal">Sign in to <span style="font-weight: bold;color:#FF7801;">HungryNaki</span>-Accounts</h2>
+                            <p>Use your email to sign in.<br></p>
+                            <p class="p-b-20">Sign up Now! for HungryNaki - User Panel accounts</p>
+                            <button type="button" class="btn btn-primary btn-cons" id="login_toggle" ng-click="vm.submitLoginForm()">Login</button>
+                        </div>
+                        <div class="tiles grey p-t-20 p-b-20 text-black">
+                            <form id="frm_login" class="animated fadeIn" name="vm.loginForm">
+                                <div class="row form-row m-l-20 m-r-20 xs-m-l-10 xs-m-r-10">
+                                    <div class="col-md-6 col-sm-6 ">
+                                        <input 
+                                            ng-model="vm.loginForm.username"
+                                            ng-init="vm.loginForm.username = 'jabed@gmail.com'"
+                                            ng-keyup="$event.keyCode == 13 ? vm.submitLoginForm() : null"
+                                            type="text"
+                                            class="form-control"
+                                            placeholder="Username"
+                                        >
+                                    </div>
+                                    <div class="col-md-6 col-sm-6">
+                                        <input
+                                            ng-model="vm.loginForm.password"
+                                            ng-init="vm.loginForm.password = 123"
+                                            ng-keyup="$event.keyCode == 13 ? vm.submitLoginForm() : null"
+                                            type="password"
+                                            class="form-control"
+                                            placeholder="Password"
+                                        >
+                                    </div>
+                                </div>
+                            </form>
+                           
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+
+        <!-- BEGIN HEADER -->
+        <div class="header navbar navbar-inverse ">
+            <!-- BEGIN TOP NAVIGATION BAR -->
+            <div class="navbar-inner">
+                <div class="header-seperation">
+                    <ul class="nav pull-left notifcation-center" id="main-menu-toggle-wrapper" style="display:none">
+                        <li class="dropdown">
+                            <a id="main-menu-toggle" href="#main-menu"  class="" >
+                                <div class="iconset top-menu-toggle-white"></div>
+                            </a>
+                        </li>
+                    </ul>
+                    <!-- BEGIN LOGO --> 
+                    <a href="index.html"><img src="images/logo.png" class="logo" alt=""  data-src="assets/img/logo.png" data-src-retina="assets/img/logo2x.png" width="210" height="42"/></a>
+                    <!-- END LOGO --> 
+                </div>
+                <!-- END RESPONSIVE MENU TOGGLER --> 
+                <div class="header-quick-nav" >
+                    <!-- BEGIN TOP NAVIGATION MENU -->
+                    <div class="pull-left">
+                        <ul class="nav quick-section">
+                            <li class="quicklinks">
+                                <a href="#" class="" id="layout-condensed-toggle" >
+                                    <div class="iconset top-menu-toggle-dark"></div>
+                                </a>
+                            </li>
+                        </ul>
+                        <ul class="nav quick-section">
+                            <li class="quicklinks">
+                                <a href="#" class="" >
+                                    <div class="iconset top-reload"></div>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- END TOP NAVIGATION MENU -->
+                    <!-- BEGIN CHAT TOGGLER -->
+                    <div class="pull-right">
+                        <ul class="nav quick-section ">
+                            <li class="quicklinks">
+                                <a data-toggle="dropdown" class="dropdown-toggle  pull-right " href="#" id="user-options">
+                                    <div class="iconset top-settings-dark "></div>
+                                </a>
+                                <ul class="dropdown-menu  pull-right" role="menu" aria-labelledby="user-options">
+                                    <li ng-controller="logoutController as vm"><a ng-click="vm.logout()"><i class="fa fa-power-off"></i>&nbsp;&nbsp;Log Out</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- END CHAT TOGGLER -->
+                </div>
+                <!-- END TOP NAVIGATION MENU --> 
+            </div>
+            <!-- END TOP NAVIGATION BAR --> 
+        </div>
+        <!-- END HEADER -->
+        <!-- BEGIN CONTAINER -->
+        <div class="page-container row-fluid">
+            <!-- BEGIN SIDEBAR -->
+            <div class="page-sidebar" id="main-menu">
+                <!-- BEGIN MINI-PROFILE -->
+                <div class="page-sidebar-wrapper" id="main-menu-wrapper" slimscroll>
+                    <div class="user-info-wrapper">
+                        <div class="profile-wrapper">
+                            <img src="images/profiles/avatar.jpg"  alt="" data-src="assets/img/profiles/avatar.jpg" data-src-retina="assets/img/profiles/avatar2x.jpg" width="69" height="69" />
+                        </div>
+                        <div class="user-info">
+                            <div class="greeting">Welcome</div>
+                            <div class="username">Silent <span class="semi-bold">Bob</span></div>
+                            <div class="status">
+                                Status
+                                <a href="#">
+                                    <div class="status-icon green"></div>
+                                    Online
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- END MINI-PROFILE -->
+                    <!-- BEGIN SIDEBAR MENU --> 
+                    <p class="menu-title">BROWSE <span class="pull-right"><a href="javascript:;"><i class="fa fa-refresh"></i></a></span></p>
+                    <ul arm-sidebar="uType"></ul>
+                    <div class="clearfix"></div>
+                    <!-- END SIDEBAR MENU --> 
+                </div>
+            </div>
+            <a href="#" class="scrollup">Scroll</a>
+            <!-- END SIDEBAR --> 
+            <!-- BEGIN PAGE CONTAINER-->
+            <div class="page-content">
+                <div class="clearfix"></div>
+                <div class="content">
+                    <div class="grid simple ">
+                        <ui-view></ui-view>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- build:js js/lib.js -->
+        <!-- bower:js -->
+        <!-- endbower -->
+        <!-- endbuild -->
+        <!-- build:js js/app.js-->
+        <!-- inject:js -->
+        <!-- endinject -->
+        <!-- inject:templates:js -->
+        <!-- endinject -->
+        <!-- endbuild -->
+    </body>
+</html>

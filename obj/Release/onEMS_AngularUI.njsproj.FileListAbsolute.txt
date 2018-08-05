@@ -1,0 +1,2 @@
+D:\TFS\EMSProjects\Development\onEMS_AngularUI_Dev\onEMS_AngularUI\obj\Release\onEMS_AngularUI.njsproj.CoreCompileInputs.cache
+D:\TFS\EMSProjects\Development\onEMS_AngularUI_Dev\onEMS_AngularUI\bin\Microsoft.NodejsTools.WebRole.dll

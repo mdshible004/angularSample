@@ -1,0 +1,173 @@
+<div class="grid simple col-md-12" ng-show="createItem">
+
+	<div class="grid-title">
+        <div class="row">
+            <div class="col-md-9">
+                <div class="page-title">
+
+                    <h3>
+                        General -
+                        <span class="semi-bold">Ledger</span>
+                    </h3>
+                </div>
+
+            </div>
+            <div class="col-md-1">
+                <button type="submit" class="btn btn-primary btn-block resetBtn" ng-click="clearField()">Reset</button>
+            </div>
+            <div class="col-md-1 marginOff pull-right">
+                <button type="submit" class="btn btn-danger clearfix btn-block " ng-click="vm.exportToPDF('print')">
+                    <span class="fa fa-file-pdf-o"></span> PDF
+                </button>
+            </div>
+            <div class="col-md-1 marginOff pull-right">
+                <button type="submit" class="btn btn-primary btn-block saveBtn" ng-click="vm.printDiv('print')">
+                    <span class="glyphicon glyphicon-print"></span> Print
+                </button>
+            </div>
+
+        </div>
+	</div>
+	<div class="grid-body">
+		<div class="row">
+
+			<form class="form-horizontal col-sm-10" name="vm.GeneralLedger">
+				<div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-sm-7 control-label">COA Head</label>
+                            <div class="col-sm-5">
+                                <ui-select ng-model="vm.CL.selected" theme="bootstrap" ng-click="vm.COAID = $select.selected.COAID">
+                                <!-- ng-keyup="$event.keyCode == 13 ? vm.tabSetOnEnter(): null" -->
+                                <ui-select-match placeholder="- Select Accounts Head -">
+                                    {{$select.selected.COAName}}
+                                    <span style="float:right" ng-click="vm.COAID = null; $select.selected=undefined"><i class="fa fa-remove" aria-hidden="true"></i></span>
+                                </ui-select-match>
+                                <ui-select-choices repeat="CL in vm.COAList | filter: $select.search">
+                                    <div ng-bind-html="CL.COAName | highlight: $select.search"></div>
+                                </ui-select-choices>
+                            </ui-select>
+                            </div>
+                        </div>
+                        <!--<div class="form-group">
+        <label class="col-sm-7 control-label">LC No</label>
+        <div class="col-sm-5">
+            <ui-select ng-model="vm.month.selected" theme="bootstrap" ng-click="vm.MonthID = $select.selected.MonthID">
+                <ui-select-match placeholder="-Select-">{{$select.selected.MonthName}}</ui-select-match>
+                <ui-select-choices repeat="month in  vm.months | filter: $select.search">
+                    <div ng-bind-html="month.MonthName | highlight: $select.search"></div>
+                </ui-select-choices>
+            </ui-select>
+        </div>
+    </div>-->
+                        <div class="form-group">
+                            <label class="col-sm-7 control-label">Party</label>
+                            <div class="col-sm-5">
+                                <ui-select ng-model="vm.ChequeSetup.USR.selected" theme="bootstrap" ng-click="vm.ChequeSetup.PartyID = $select.selected.UserID">
+                                    <ui-select-match placeholder="- Select Party -">
+                                        {{$select.selected.UserFullName}}
+                                        <span style="float:right" ng-click="vm.ChequeSetup.PartyID = null; $select.selected=undefined"><i class="fa fa-remove" aria-hidden="true"></i></span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="USR in vm.UserList | filter: $select.search">
+                                        <div ng-bind-html="USR.UserFullName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-7 control-label">From Date</label>
+                            <div class="col-sm-5 input-groups margin-bottom-sm">
+                                <datepicker date-format="dd-MM-yyyy" selector="form-control">
+                                    <div class="input-group">
+                                        <input class="form-control" placeholder="Choose a date" ng-model="vm.FromDate" />
+                                        <span class="input-group-addon" style="cursor: pointer">
+                                            <i class="fa fa-lg fa-calendar"></i>
+                                        </span>
+                                    </div>
+                                </datepicker>
+                            </div>
+                        </div>
+                      
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label"> Branch</label>
+                            <div class="col-sm-5">
+                                <ui-select ng-model="vm.branch.selected" theme="bootstrap" ng-click="vm.BrunchID = $select.selected.BrunchID">
+                                    <ui-select-match placeholder="-Select Branch-">
+                                        {{$select.selected.BrunchName}}
+                                        <span style="float:right" ng-click="vm.BrunchID = null; $select.selected=undefined">
+                                            <i class="fa fa-remove" aria-hidden="true"></i>
+                                        </span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="branch in vm.branches | filter: $select.search">
+                                        <div ng-bind-html="branch.BrunchName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label">Fiscal Year</label>
+                            <div class="col-sm-5">
+                                <ui-select ng-model="vm.year.selected" theme="bootstrap" ng-click="vm.YearID = $select.selected.YearID">
+                                    <ui-select-match placeholder="-Select Year-">
+                                        {{$select.selected.YearName}}
+                                        <span style="float:right" ng-click="vm.YearID = null; $select.selected=undefined">
+                                            <i class="fa fa-remove" aria-hidden="true"></i>
+                                        </span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="year in vm.years | filter: $select.search">
+                                        <div ng-bind-html="year.YearName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label">To Date</label>
+                            <div class="col-sm-5 input-groups margin-bottom-sm">
+                                <datepicker date-format="dd-MM-yyyy" selector="form-control">
+                                    <div class="input-group">
+                                        <input class="form-control" placeholder="Choose a date" ng-model="vm.ToDate" />
+                                        <span class="input-group-addon" style="cursor: pointer">
+                                            <i class="fa fa-lg fa-calendar"></i>
+                                        </span>
+                                    </div>
+                                </datepicker>
+                            </div>
+                        </div>
+                    </div>
+					
+				
+				</div>
+			</form>
+
+		</div>
+	</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+	.thumb {
+		width: 24px;
+		height: 24px;
+		float: none;
+		position: relative;
+		top: 7px;
+	}
+
+	.modal-content {
+		width: 1660px;
+		margin-left: -405px;
+	}
+</style>

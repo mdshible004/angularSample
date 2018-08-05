@@ -1,0 +1,521 @@
+<div class="grid simple col-md-12" ng-show="createItem">
+
+    <div class="grid-title">
+        <div class="row">
+            <div class="col-sm-8">
+                <div class="page-title">
+                    <i class="fa fa-keyboard-o" aria-hidden="true"></i>
+                    <h3>
+                        Admit Card -
+                        <span class="semi-bold">Entry</span>
+                    </h3>
+                </div>
+            </div>
+
+            <div class="col-sm-1 marginOff">
+                <button type="submit" class="btn btn-primary btn-block saveBtn" ng-disabled="disButton" ng-click="listEvent()"> Show List</button>
+            </div>
+            <div class="col-sm-1 marginOff">
+                <button type="submit" class="btn btn-primary btn-block resetBtn" ng-click="clearField()">Reset</button>
+            </div>
+            <div class="col-sm-1 marginOff">
+                <button type="submit" class="btn btn-primary btn-block saveBtn" ng-disabled="disButton" ng-click="vm.postAdmitCard()">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid-body">
+        <div class="row">
+            <form class="form-horizontal col-sm-11" name="vm.PeriodSetup">
+                <div class="row">
+                    <div class="col-md-6">
+
+
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Medium</label>
+                            <div class="col-sm-8">
+                                <ui-select ng-model="vm.medium.selected" theme="bootstrap" name="Med" ng-click="vm.MediumID = $select.selected.MediumID" ng-keydown="$event.keyCode == 13 ? $event.preventDefault() : null" ng-change="hideList()" on-select="vm.MediumWiseClassDDL($select.selected.MediumID, '')">
+                                    <!-- <ui-select ng-model="vm.medium.selected" name="Med" on-select="vm.MediumWiseClassDDL(vm.MediumID)" theme="bootstrap" ng-click="vm.MediumID = $select.selected.MediumID" ng-change="changeGrid()" required>-->
+                                    <ui-select-match placeholder="-Select-">
+                                        {{$select.selected.MameName}}
+                                        <span style="float:right" ng-click="vm.MediumID = null; DisBtn(); vm.class=undefined; vm.department=undefined; $select.selected=undefined; vm.classes = [];vm.departments = []; vm.section = undefined; vm.sections =[];vm.subject=undefined; vm.values=[];vm.registrationSetup=[];">
+                                            <i class="fa fa-remove" aria-hidden="true"></i>
+                                        </span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="medium in vm.mediums | filter: $select.search">
+                                        <div ng-bind-html="medium.MameName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            <span class="error" ng-show="(vm.PeriodSetup.$dirty||submitted) && vm.PeriodSetup.Med.$error.required">*</span>
+                        </div>
+
+
+
+
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Class</label>
+                            <div class="col-sm-8">
+                                <ui-select ng-model="vm.class.selected" theme="bootstrap" name="Cls" ng-click="vm.ClassID = $select.selected.ClassID" ng-change="hideList()" on-select="vm.ClassWiseDepartmentDDL(vm.ClassID, '')" ng-keydown="$event.keyCode == 13 ? $event.preventDefault() : null" required>
+                                    <!--<ui-select ng-model="vm.class.selected" name="Cls" on-select="vm.ClassWiseDepartmentDDL(vm.ClassID)" theme="bootstrap" ng-click="vm.ClassID = $select.selected.ClassID" ng-change="changeGrid()" required>-->
+                                    <ui-select-match placeholder="-Select-">
+                                        {{$select.selected.ClassName}}
+                                        <span style="float:right" ng-click="vm.ClassID = null; DisBtn(); $select.selected=undefined; vm.department=undefined;  vm.departments = []; vm.section = undefined; vm.sections =[];vm.subject=undefined; vm.values=[];vm.registrationSetup=[];">
+                                            <i class="fa fa-remove" aria-hidden="true"></i>
+                                        </span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="class in vm.classes | filter: $select.search">
+                                        <div ng-bind-html="class.ClassName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            <span class="error" ng-show="(vm.PeriodSetup.$dirty||submitted) && vm.PeriodSetup.Cls.$error.required">*</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Department</label>
+                            <div class="col-sm-8">
+                                <ui-select ng-model="vm.department.selected" theme="bootstrap" name="Dep" ng-click="vm.DepartmentID = $select.selected.DepartmentID" ng-keydown="$event.keyCode == 13 ? $event.preventDefault() : null" ng-change="hideList()" on-select="vm.ClassSelected(0, '')" ng-required="IsRequired">
+                                    <!--<ui-select ng-model="vm.department.selected" name="Dep" theme="bootstrap" ng-click="vm.DepartmentID = $select.selected.DepartmentID" ng-change="changeGrid()" on-select="vm.ClassSelected(0, '')" ng-required="IsRequired">-->
+                                    <ui-select-match placeholder="-Select-">
+                                        {{$select.selected.DepartmentName}}
+                                        <span style="float:right" ng-click="vm.DepartmentID = null; DisBtn(); $select.selected=undefined; vm.section = undefined; vm.sections =[]; vm.subject=undefined; vm.values=[];vm.registrationSetup=[];">
+                                            <i class="fa fa-remove" aria-hidden="true"></i>
+                                        </span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="department in vm.departments | filter: $select.search">
+                                        <div ng-bind-html="department.DepartmentName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            <span class="error" ng-show="(vm.PeriodSetup.$dirty||submitted) && vm.PeriodSetup.Dep.$error.required">*</span>
+                        </div>
+
+                    </div>
+
+
+                    <div class="col-md-6">
+
+
+
+
+
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Section</label>
+                            <div class="col-sm-8">
+                                <ui-select ng-model="vm.section.selected" theme="bootstrap" name="sec" ng-click="vm.SectionID = $select.selected.SectionID" ng-keydown="$event.keyCode == 13 ? $event.preventDefault() : null" ng-change="hideList()" ng-required="IsRequiredSec">
+                                    <!--<ui-select ng-model="vm.section.selected" theme="bootstrap" name="sec" ng-click="vm.SectionID = $select.selected.SectionID" ng-keydown="$event.keyCode == 13 ? $event.preventDefault() : null" ng-change="changeGrid()" ng-required="IsRequiredSec">  -->
+                                    <ui-select-match placeholder="-Select-">
+                                        {{$select.selected.SectionName}}
+                                        <span style="float:right" ng-click="vm.SectionID = null; $select.selected=undefined; vm.subject=undefined; vm.values=[];vm.registrationSetup=[]; "><i class="fa fa-remove" aria-hidden="true"></i></span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="section in vm.sections | filter: $select.search">
+                                        <div ng-bind-html="section.SectionName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            <span class="error" ng-show="(vm.PeriodSetup.$dirty||submitted) && vm.PeriodSetup.sec.$error.required">*</span>
+                        </div>
+
+
+
+
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Shift</label>
+                            <div class="col-sm-8">
+                                <ui-select ng-model="vm.shift.selected" theme="bootstrap" ng-click="vm.ShiftID = $select.selected.ShiftID" ng-change="hideList()" ng-keydown="$event.keyCode == 13 ? $event.preventDefault() : null">
+                                    <ui-select-match placeholder="-Select-">
+                                        {{$select.selected.ShiftName}}
+                                        <span style="float:right" ng-click="vm.ShiftID = null; $select.selected=undefined; vm.registrationSetup=[];"><i class="fa fa-remove" aria-hidden="true"></i></span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="shift in vm.shifts | filter: $select.search">
+                                        <div ng-bind-html="shift.ShiftName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Exam</label>
+                            <div class="col-sm-8">
+                                <ui-select ng-model="vm.exam.selected" theme="bootstrap" name="Exm" ng-click="vm.ExamID = $select.selected.ExamID" ng-keydown="$event.keyCode == 13 ? $event.preventDefault() : null" ng-change="hideList()" on-select="getExamDetail()" required>
+                                    <!--<ui-select ng-model="vm.department.selected" name="Dep" theme="bootstrap" ng-click="vm.DepartmentID = $select.selected.DepartmentID" ng-change="changeGrid()" on-select="vm.ClassSelected(0, '')" ng-required="IsRequired">-->
+                                    <ui-select-match placeholder="-Select-">
+                                        {{$select.selected.ExamName}}
+                                        <span style="float:right" ng-click="vm.ExamID = null; DisBtn(); $select.selected=undefined; vm.registrationSetup=[];">
+                                            <i class="fa fa-remove" aria-hidden="true"></i>
+                                        </span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="exam in vm.exames | filter: $select.search">
+                                        <div ng-bind-html="exam.ExamName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+
+                            </div>
+                            <span class="error" ng-show="(vm.PeriodSetup.$dirty||submitted) && vm.PeriodSetup.Exm.$error.required">*</span>
+
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Student</label>
+                            <div class="col-sm-5">
+                                <input type="text" class="form-control" placeholder="Student" ng-model="vm.UserName" ng-value="" disabled>
+                                <input type="hidden" class="form-control" placeholder="UserID" ng-model="vm.UserID">
+                                <input type="hidden" class="form-control" placeholder="RFID" ng-model="vm.RFID">
+                                <input type="hidden" class="form-control" placeholder="QRCode" ng-model="vm.QRCode">
+
+                            </div>
+                            <div class="col-md-2 marginOff">
+
+                                <button href="#" title="Select first" name="abc" class="btn btn-primary btn-block " style="background-color:#205a39cf" data-toggle="modal" data-target="#myModal"
+                                        ng-disabled="vm.PeriodSetup.$invalid" ng-click="RefreshModalList()">
+                                    <i class="fa fa-search" aria-hidden="true"></i>
+
+                                </button>
+                            </div>
+                            <span class="error" ng-show="(vm.PeriodSetup.$dirty||submitted) && vm.PeriodSetup.abc.$error.required">*</span>
+                            <div class="col-md-3">
+                                <button type="submit" id="btnAdd" class="btn btn-primary btn-block showBtn" ng-click="generateQRCode(SelectedModel)" ng-disabled="resultBtn">Generate</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+
+<!-- ---------------------------------------------------- Start UI-Grid Modal ------------------------------------------------ -->
+<div class="modal fade " id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" style="float:left">Student List</h4>
+            </div>
+            <div class="modal-body">
+                <div class="grid-body">
+                    <div class="row">
+                        <div class="col-md-12" style="text-align:right">
+                            <input type="text" ng-model="SearchProperty" placeholder="Search Student" ng-keyup="$event.keyCode == 13 ? SearchModalNow(SearchProperty) : null" />
+                            <button type="button" class="close" aria-label="Close" ng-click="SearchModalCancel('')">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div ui-grid="gridOptionsModal" ui-grid-resize-columns ui-grid-auto-resize ui-grid-move-columns ui-grid-exporter ui-grid-pinning
+                                 class="grid" style="height:550px"></div>
+
+                            <div class="loadmore">
+                                <div ng-show="loaderMore" ng-class="result">
+                                    <!-- <img src="~/Content/img/ng-loader.gif" /> -->
+                                    {{lblMessage}}
+                                </div>
+                            </div>
+                            <div class="row"></div>
+                            <div role="contentinfo" style="margin-bottom: -20px;" class="ui-grid-pager-panel ng-scope">
+                                <div role="navigation" class="ui-grid-pager-container">
+                                    <div role="menubar" class="ui-grid-pager-control">
+                                        <!-- Start Page -->
+                                        <button type="button" role="menuitem" class="ui-grid-pager-first" ui-grid-one-bind-title="aria.pageToFirst" ui-grid-one-bind-aria-label="aria.pageToFirst"
+                                                ng-click="paginationModal.firstPage()" ng-disabled="cantPageBackward()" title="Page to first" aria-label="Page to first"
+                                                disabled="disabled">
+                                            <div class="first-triangle">
+                                                <div class="first-bar"></div>
+                                            </div>
+                                        </button>
+
+                                        <!-- Prev Page -->
+                                        <button type="button" role="menuitem" class="ui-grid-pager-previous" ui-grid-one-bind-title="aria.pageBack" ui-grid-one-bind-aria-label="aria.pageBack"
+                                                ng-click="paginationModal.previousPage()" ng-disabled="cantPageBackward()" title="Page back" aria-label="Page back"
+                                                disabled="disabled">
+                                            <div class="first-triangle prev-triangle"></div>
+                                        </button>
+
+                                        <input type="number" ui-grid-one-bind-title="aria.pageSelected" ui-grid-one-bind-aria-label="aria.pageSelected" class="ui-grid-pager-control-input ng-pristine ng-untouched ng-valid ng-not-empty ng-valid-min ng-valid-max ng-valid-required"
+                                               ng-model="paginationModal.pageNumber" min="1" max="{{paginationModal.getTotalPages()}}" required="" title="Selected page"
+                                               aria-label="Selected page" />
+
+                                        <span class="ui-grid-pager-max-pages-number ng-binding" ng-show="paginationModal.getTotalPages() > 0">
+                                            <abbr ui-grid-one-bind-title="paginationOf" title="of">/</abbr>{{paginationModal.getTotalPages()}}
+                                        </span>
+
+                                        <!-- Next Page -->
+                                        <button type="button" role="menuitem" class="ui-grid-pager-next" ui-grid-one-bind-title="aria.pageForward" ui-grid-one-bind-aria-label="aria.pageForward"
+                                                ng-click="paginationModal.nextPage()" ng-disabled="cantPageForward()" title="Page forward" aria-label="Page forward">
+                                            <div class="last-triangle next-triangle"></div>
+                                        </button>
+
+                                        <!-- Last Page -->
+                                        <button type="button" role="menuitem" class="ui-grid-pager-last" ui-grid-one-bind-title="aria.pageToLast" ui-grid-one-bind-aria-label="aria.pageToLast"
+                                                ng-click="paginationModal.lastPage()" ng-disabled="cantPageToLast()" title="Page to last" aria-label="Page to last">
+                                            <div class="last-triangle">
+                                                <div class="last-bar"></div>
+                                            </div>
+                                        </button>
+                                    </div>
+                                    <!-- ngIf: grid.options.paginationPageSizes.length > 1 -->
+
+                                    <div class="ui-grid-pager-row-count-picker ng-scope">
+                                        <select ng-model="paginationModal.ddlpageSize" ng-options="o as o for o in paginationModal.paginationPageSizes" ng-change="paginationModal.pageSizeChange()"
+                                                class="ng-pristine ng-untouched ng-valid ng-not-empty"></select>
+                                        <span class="ui-grid-pager-row-count-label ng-binding">&nbsp;items per page</span>
+                                    </div>
+                                    <!-- end ngIf: grid.options.paginationPageSizes.length > 1 -->
+                                    <!-- ngIf: grid.options.paginationPageSizes.length <= 1 -->
+                                </div>
+                                <div class="ui-grid-pager-count-container">
+                                    <div class="ui-grid-pager-count">
+                                        <span ng-show="paginationModal.totalItems > 0" class="ng-binding">
+                                            {{paginationModal.pageNumber}}
+                                            <abbr ui-grid-one-bind-title="paginationThrough" title="through">-</abbr>
+                                            {{paginationModal.ddlpageSize}} of {{paginationModal.totalItems}} items
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ----------------------------------------------------- End UI-Grid Modal ------------------------------------------------- -->
+
+<!-- ---------------------------------------------------- Start UI-Grid Master ------------------------------------------------ -->
+<div class="grid simple col-md-12" ng-show="showItem">
+    <div class="col-md-12">
+        <div class="grid-title">
+            <div class="row">
+                <div class="col-md-11">
+                    <div class="page-title">
+                        <!--<i class="fa fa-keyboard-o" aria-hidden="true"></i>-->
+                        <h3>
+                            Admit -
+                            <span class="semi-bold">List</span>
+                        </h3>
+                    </div>
+                </div>
+
+                <div class="col-md-1 marginOff">
+                    <button type="submit" class="btn btn-primary btn-block saveBtn" ng-click="itemEvent()">Create</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="grid-body">
+        <div class="row">
+            <div class="col-md-12" style="text-align:right">
+                <input type="text" ng-model="SearchProperty" placeholder="Search Student ID" ng-keyup="$event.keyCode == 13 ? SearchNow(SearchProperty) : null" />
+                <button type="button" class="close" aria-label="Close" ng-click="SearchCancel('')">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div ui-grid="gridOptions" ui-grid-resize-columns ui-grid-auto-resize ui-grid-move-columns ui-grid-exporter ui-grid-pinning
+                     class="grid" style="height:550px"></div>
+
+                <div class="loadmore">
+                    <div ng-show="loaderMore" ng-class="result">
+                        <!-- <img src="~/Content/img/ng-loader.gif" /> -->
+                        {{lblMessage}}
+                    </div>
+                </div>
+                <div class="row"></div>
+                <div role="contentinfo" style="margin-bottom: -20px;" class="ui-grid-pager-panel ng-scope">
+                    <div role="navigation" class="ui-grid-pager-container">
+                        <div role="menubar" class="ui-grid-pager-control">
+                            <!-- Start Page -->
+                            <button type="button" role="menuitem" class="ui-grid-pager-first" ui-grid-one-bind-title="aria.pageToFirst" ui-grid-one-bind-aria-label="aria.pageToFirst"
+                                    ng-click="pagination.firstPage()" ng-disabled="cantPageBackward()" title="Page to first" aria-label="Page to first"
+                                    disabled="disabled">
+                                <div class="first-triangle">
+                                    <div class="first-bar"></div>
+                                </div>
+                            </button>
+
+                            <!-- Prev Page -->
+                            <button type="button" role="menuitem" class="ui-grid-pager-previous" ui-grid-one-bind-title="aria.pageBack" ui-grid-one-bind-aria-label="aria.pageBack"
+                                    ng-click="pagination.previousPage()" ng-disabled="cantPageBackward()" title="Page back" aria-label="Page back"
+                                    disabled="disabled">
+                                <div class="first-triangle prev-triangle"></div>
+                            </button>
+
+                            <input type="number" ui-grid-one-bind-title="aria.pageSelected" ui-grid-one-bind-aria-label="aria.pageSelected" class="ui-grid-pager-control-input ng-pristine ng-untouched ng-valid ng-not-empty ng-valid-min ng-valid-max ng-valid-required"
+                                   ng-model="pagination.pageNumber" min="1" max="{{pagination.getTotalPages()}}" required="" title="Selected page"
+                                   aria-label="Selected page" />
+
+                            <span class="ui-grid-pager-max-pages-number ng-binding" ng-show="pagination.getTotalPages() > 0">
+                                <abbr ui-grid-one-bind-title="paginationOf" title="of">/</abbr>{{pagination.getTotalPages()}}
+                            </span>
+
+                            <!-- Next Page -->
+                            <button type="button" role="menuitem" class="ui-grid-pager-next" ui-grid-one-bind-title="aria.pageForward" ui-grid-one-bind-aria-label="aria.pageForward"
+                                    ng-click="pagination.nextPage()" ng-disabled="cantPageForward()" title="Page forward" aria-label="Page forward">
+                                <div class="last-triangle next-triangle"></div>
+                            </button>
+
+                            <!-- Last Page -->
+                            <button type="button" role="menuitem" class="ui-grid-pager-last" ui-grid-one-bind-title="aria.pageToLast" ui-grid-one-bind-aria-label="aria.pageToLast"
+                                    ng-click="pagination.lastPage()" ng-disabled="cantPageToLast()" title="Page to last" aria-label="Page to last">
+                                <div class="last-triangle">
+                                    <div class="last-bar"></div>
+                                </div>
+                            </button>
+                        </div>
+                        <!-- ngIf: grid.options.paginationPageSizes.length > 1 -->
+
+                        <div class="ui-grid-pager-row-count-picker ng-scope">
+                            <select ng-model="pagination.ddlpageSize" ng-options="o as o for o in pagination.paginationPageSizes" ng-change="pagination.pageSizeChange()"
+                                    class="ng-pristine ng-untouched ng-valid ng-not-empty"></select>
+                            <span class="ui-grid-pager-row-count-label ng-binding">&nbsp;items per page</span>
+                        </div>
+                        <!-- end ngIf: grid.options.paginationPageSizes.length > 1 -->
+                        <!-- ngIf: grid.options.paginationPageSizes.length <= 1 -->
+                    </div>
+                    <div class="ui-grid-pager-count-container">
+                        <div class="ui-grid-pager-count">
+                            <span ng-show="pagination.totalItems > 0" class="ng-binding">
+                                {{pagination.pageNumber}}
+                                <abbr ui-grid-one-bind-title="paginationThrough" title="through">-</abbr>
+                                {{pagination.ddlpageSize}} of {{pagination.totalItems}} items
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ----------------------------------------------------- End UI-Grid Master------------------------------------------------- -->
+
+
+
+<div ng-show="IsAdmitShow">
+    <div class="pull-right">
+        <button type="submit" style="margin-right:31px" id="btnAdd" class="btn btn-primary showBtn" ng-click="printDiv('print')" ng-disabled="printBtn">Print</button>
+    </div>
+    <div class="grid-body" id="print" ng-show="true">
+        <!--printthis-->
+        <table width=100%">
+            <tr>
+                <td style=" text-align:center; width:30%;">
+                    <img height="85" width="80" style="text-align:center" src="{{vm.UserImage}}" onerror="this.src='images/profiles/no-user-image.png'" alt="images/profiles/no-user-image.png" />
+                    <br /> {{vm.UserName}}
+                </td>
+                <td style="font-size:25px; text-align:center; width:40%;" colspan="3">
+                    {{InstituteName}}<br />
+                    <span style="font-size:11px">
+                        Address: {{InsAddress}}
+                    </span> <br />
+                    <span style="font-size:11px">
+                        Phone: {{InsPhoneNo}}
+                    </span> <br />
+                    <span style="font-size:11px">
+                        Email: {{InsEmail}}
+                    </span>
+                </td>
+                <td style="text-align:center; width:30%;">
+                    <img height="90" width="90" style="text-align:center" src="{{InstituteLogoUrl}}" onerror="this.src='images/onairlogo.png'" alt="images/onairlogo.png" />
+                </td>
+            </tr>
+            <tr>
+                <td style="width:20% !important; text-align:left">
+                    Class: {{SelectedModel.ClassName}}
+                </td>
+                <td style="width:20%  !important;text-align:left">
+                    Department: {{SelectedModel.DepartmentName}}
+                </td>
+                <td style="width:20%  !important;text-align:left">
+                    Section: {{SelectedModel.SectionName}}
+                </td>
+                <td style="width:15%  !important;text-align:left">
+                    Roll: {{SelectedModel.RollNo}}
+                </td>
+                <td rowspan="2" style="width:25%  !important; text-align:left">
+                    <div style="float:left" id="qrcode"></div> <br />
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" style="width:15%;">
+                    Guardian: {{SelectedModel.GuardianNickName}}
+                </td>
+                <td colspan="2" style="width:15%;">
+                    Contact No: {{SelectedModel.GuardianPhone}}
+                </td>
+                <!--<td style="width:15%">
+
+                </td>
+                <td style="width:40%">
+                </td>-->
+            </tr>
+            <tr>
+                <td colspan="5" style="width:15%;">
+                    <hr style="border:.3px solid #000000" />
+                    <br /><span>Is Allowed to appear in {{ExamName}} Commencing form the date {{ExamStartDate}}</span><br />
+                    <span>Note: Keep this card safe and must bring to the vanue on every exam day.</span><br /><br />
+                </td>
+            </tr>
+
+        </table>
+
+        <br />
+        <br />
+        <pre style="margin-left: 60px; background:#ffffff;">_______________________                                ______________________</pre>
+        <pre style="margin-left: 60px;background:#ffffff;">    Exam Controller                                           Principal</pre>
+        <br />
+
+    </div>
+</div>
+
+
+
+
+
+
+
+
+<style>
+    .thumb {
+        width: 24px;
+        height: 24px;
+        float: none;
+        position: relative;
+        top: 7px;
+    }
+
+    .modal-content {
+        width: 1660px;
+        margin-left: -405px;
+    }
+
+    input[type="checkbox"] {
+        display: inline-block;
+        width: 19px;
+        height: 19px;
+        margin: -2px 10px 0 0;
+        vertical-align: middle;
+        background: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/210284/check_radio_sheet.png) left top no-repeat;
+        cursor: pointer;
+    }
+
+    #btnAdd {
+        margin-left: -30px;
+        margin-top: 6px;
+    }
+</style>

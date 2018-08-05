@@ -1,0 +1,256 @@
+<div class="grid simple col-md-12" ng-show="createItem">
+
+    <div class="grid-title">
+        <div class="row">
+            <div class="col-md-9">
+                <div class="page-title">
+                    <i class="fa fa-keyboard-o" aria-hidden="true"></i>
+                    <h3>
+                        Manual Student Attendance
+                    </h3>
+                </div>
+            </div>
+            <div class="col-md-1 marginOff">
+                <button type="submit" class="btn btn-primary btn-block showBtn" ng-click="getAllStudentMAList()" ng-disabled="vm.attendance.$invalid">Show</button>
+
+            </div>
+            <div class="col-md-1 marginOff">
+                <button type="submit" class="btn btn-primary btn-block resetBtn" ng-click="clearField()">Reset</button>
+            </div>
+            <div class="col-md-1 marginOff">
+                <button type="submit" class="btn btn-primary btn-block saveBtn" ng-disabled="btnDis" ng-hide="btnHide" ng-click="vm.postManualStudentAttendance()" >Save</button>
+            </div>
+        </div>
+    </div>
+    <div class="grid-body">
+        <div class="row">
+            <form class="form-horizontal col-sm-12" name="vm.attendance">
+                <div class="row">
+                    <div class="col-md-4">
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Medium</label>
+                            <div class="col-sm-8">
+                                <ui-select ng-model="vm.medium.selected" theme="bootstrap" name="Med" ng-click="vm.MediumID = $select.selected.MediumID" ng-keydown="$event.keyCode == 13 ? $event.preventDefault() : null" ng-change="changeGrid()" on-select="vm.MediumWiseClassDDL($select.selected.MediumID, '')">
+                                    <!-- <ui-select ng-model="vm.medium.selected" name="Med" on-select="vm.MediumWiseClassDDL(vm.MediumID)" theme="bootstrap" ng-click="vm.MediumID = $select.selected.MediumID" ng-change="changeGrid()" required>-->
+                                    <ui-select-match placeholder="-Select-">
+                                        {{$select.selected.MameName}}
+                                        <span style="float:right" ng-click="vm.MediumID = null; DisBtn(); vm.ClassID=null; vm.class=undefined; vm.classes=[]; vm.DepartmentID = null; vm.department=undefined; vm.departments=[]; vm.SectionID = null; vm.section=undefined; vm.sections=[]; $select.selected=undefined">
+                                            <i class="fa fa-remove" aria-hidden="true"></i>
+                                        </span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="medium in vm.mediums | filter: $select.search">
+                                        <div ng-bind-html="medium.MameName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            <span class="error" ng-show="(vm.attendance.$dirty||submitted) && vm.attendance.Med.$error.required">*</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Section</label>
+                            <div class="col-sm-8">
+                                <ui-select ng-model="vm.section.selected" theme="bootstrap" name="sec" ng-click="vm.SectionID = $select.selected.SectionID" ng-keydown="$event.keyCode == 13 ? $event.preventDefault() : null" ng-change="changeGrid()" ng-required="IsRequiredSec">
+                                    <!--<ui-select ng-model="vm.section.selected" theme="bootstrap" name="sec" ng-click="vm.SectionID = $select.selected.SectionID" ng-keydown="$event.keyCode == 13 ? $event.preventDefault() : null" ng-change="changeGrid()" ng-required="IsRequiredSec">  -->
+                                    <ui-select-match placeholder="-Select-">
+                                        {{$select.selected.SectionName}}
+                                        <span style="float:right" ng-click="vm.SectionID = null; $select.selected=undefined"><i class="fa fa-remove" aria-hidden="true"></i></span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="section in vm.sections | filter: $select.search">
+                                        <div ng-bind-html="section.SectionName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            <span class="error" ng-show="(vm.attendance.$dirty||submitted) && vm.attendance.sec.$error.required">*</span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Class</label>
+                            <div class="col-sm-8">
+                                <ui-select ng-model="vm.class.selected" theme="bootstrap" name="Cls" ng-click="vm.ClassID = $select.selected.ClassID" ng-change="changeGrid()" on-select="vm.ClassWiseDepartmentDDL(vm.ClassID, '')" ng-keydown="$event.keyCode == 13 ? $event.preventDefault() : null" required>
+                                    <!--<ui-select ng-model="vm.class.selected" name="Cls" on-select="vm.ClassWiseDepartmentDDL(vm.ClassID)" theme="bootstrap" ng-click="vm.ClassID = $select.selected.ClassID" ng-change="changeGrid()" required>-->
+                                    <ui-select-match placeholder="-Select-">
+                                        {{$select.selected.ClassName}}
+                                        <span style="float:right" ng-click="vm.ClassID = null; DisBtn(); vm.DepartmentID = null; vm.department=undefined; vm.departments=[]; vm.SectionID = null; vm.section=undefined; vm.sections=[]; $select.selected=undefined">
+                                            <i class="fa fa-remove" aria-hidden="true"></i>
+                                        </span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="class in vm.classes | filter: $select.search">
+                                        <div ng-bind-html="class.ClassName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            <span class="error" ng-show="(vm.attendance.$dirty||submitted) && vm.attendance.Cls.$error.required">*</span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Shift</label>
+                            <div class="col-sm-8">
+                                <ui-select ng-model="vm.shift.selected" theme="bootstrap" ng-click="vm.ShiftID = $select.selected.ShiftID" ng-change="changeGrid()" ng-keydown="$event.keyCode == 13 ? $event.preventDefault() : null">
+                                    <ui-select-match placeholder="-Select-">
+                                        {{$select.selected.ShiftName}}
+                                        <span style="float:right" ng-click="vm.ShiftID = null; $select.selected=undefined"><i class="fa fa-remove" aria-hidden="true"></i></span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="shift in vm.shifts | filter: $select.search">
+                                        <div ng-bind-html="shift.ShiftName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Department</label>
+                            <div class="col-sm-8">
+                                <ui-select ng-model="vm.department.selected" theme="bootstrap" name="Dep" ng-click="vm.DepartmentID = $select.selected.DepartmentID" ng-keydown="$event.keyCode == 13 ? $event.preventDefault() : null" ng-change="changeGrid()" on-select="vm.ClassSelected(0, '')" ng-required="IsRequired">
+                                    <!--<ui-select ng-model="vm.department.selected" name="Dep" theme="bootstrap" ng-click="vm.DepartmentID = $select.selected.DepartmentID" ng-change="changeGrid()" on-select="vm.ClassSelected(0, '')" ng-required="IsRequired">-->
+                                    <ui-select-match placeholder="-Select-">
+                                        {{$select.selected.DepartmentName}}
+                                        <span style="float:right" ng-click="vm.DepartmentID = null; DisBtn(); vm.SectionID = null; vm.section=undefined; vm.sections=[];  $select.selected=undefined">
+                                            <i class="fa fa-remove" aria-hidden="true"></i>
+                                        </span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="department in vm.departments | filter: $select.search">
+                                        <div ng-bind-html="department.DepartmentName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            <span class="error" ng-show="(vm.attendance.$dirty||submitted) && vm.attendance.Dep.$error.required">*</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Date</label>
+                            <div class="col-sm-8">
+                                <datepicker date-format="dd-MM-yyyy" selector="form-control">
+                                    <div class="input-group">
+                                        <input class="form-control" placeholder="Choose a date" ng-model="vm.dateSetup.dateName" ng-change="changeGrid()" required>
+                                        <span class="input-group-addon" style="cursor: pointer">
+                                            <i class="fa fa-lg fa-calendar"></i>
+                                        </span>
+                                    </div>
+                                </datepicker>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- ---------------------------------------------------- Start UI-Grid ------------------------------------------------ -->
+<div class="grid simple col-md-12" ng-show="showItem" style="margin-top:-34px">
+    <!--<div class="grid-title">
+        <div class="row">
+            <div class="col-md-11">
+                <div class="page-title">
+                    <i class="fa fa-keyboard-o" aria-hidden="true"></i>
+                    <h3>
+                        Mannual Student Attendance -
+                        <span class="semi-bold">List</span>
+                    </h3>
+                </div>
+            </div>
+        </div>
+    </div>-->
+    <div class="grid-body">
+        <div class="row">
+            <div class="col-md-12" style="text-align:right" ng-hide="true">
+                <input type="text" ng-model="SearchProperty" placeholder="Search Account No" ng-keyup="$event.keyCode == 13 ? SearchNow(SearchProperty) : null" />
+                <button type="button" class="close" aria-label="Close" ng-click="SearchCancel('')">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="col-md-12">
+                <div class="checkbox check-primary pull-right">
+                    <input id="{{$index + 300}}" type="checkbox" ng-model="IsCheck" ng-click="allSelectCheckBox(IsCheck)">
+                    <label for="{{$index + 300}}">Is Present All</label>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div ui-grid="gridOptions" ui-grid-resize-columns ui-grid-auto-resize ui-grid-move-columns ui-grid-exporter ui-grid-pinning ui-grid-edit
+                     class="grid" style="height:550px"></div>
+
+                <div class="loadmore">
+                    <div ng-show="loaderMore" ng-class="result">
+                        <!-- <img src="~/Content/img/ng-loader.gif" /> -->
+                        {{lblMessage}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ----------------------------------------------------- End UI-Grid ------------------------------------------------- -->
+<!-- Item Entry List Grid -->
+<!-- <pre>{{vm.attendances | json}}</pre> -->
+<!--<div class="grid simple col-md-12" ng-show="showItem">
+    <div class="grid-body">
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>SL</th>
+                            <th>Date</th>
+                            <th>Shift</th>
+                            <th>Medium</th>
+                            <th>Class</th>
+                            <th>Section</th>
+                            <th>Student Name</th>
+                            <th>Student ID</th>
+                            <th>Roll</th>
+                            <th>Present <input id="{{$index + 10000000}}" type="checkbox" ng-model="vm.Present11" ng-click="allSelectCheckBox()" >
+                                <label for="{{$index + 10000000}}"></label></th>
+                            <th>In Time</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr  ng-repeat="attendance in vm.attendances">
+                            <td valign="center">{{$index+1}}</td>
+                            <td valign="center">{{vm.dateSetup.dateName}}</td>
+                            <td valign="center">{{attendance.ShiftName}}</td>
+                            <td valign="center">{{attendance.Medium}}</td>
+                            <td valign="center">{{attendance.Class}}</td>
+                            <td valign="center">{{attendance.Section}}</td>
+                            <td valign="center">{{attendance.Name}}</td>
+                            <td valign="center">{{attendance.RFID}}</td>
+                            <td valign="center">{{attendance.RollNo}}</td>
+                            <td valign="center" ng-click="openPresentIndex($index)">
+                                <div class="checkbox check-primary">
+                                    <input id="{{$index + 10000}}" type="checkbox" ng-model="attendance.Present" ng-checked="attendance.Present===1" ng-click="switch(attendance.Present)" >
+                                    <label for="{{$index + 10000}}"></label>
+                                </div>
+
+                            </td>
+
+                            <td valign="center" style="width:20%" ng-click="openTextIndex($index)">
+                                <input type="time" id="{{$index + attendance.RFID}}" ng-model="vm.attendances[$index].Intime" ng-readonly="attendance.Present===0">
+                                <label for="{{$index + attendance.RFID}}"></label>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>-->
+
+<style>
+    .thumb {
+        width: 24px;
+        height: 24px;
+        float: none;
+        position: relative;
+        top: 7px;
+    }
+
+    .modal-content {
+        width: 1660px;
+        margin-left: -405px;
+    }
+</style>

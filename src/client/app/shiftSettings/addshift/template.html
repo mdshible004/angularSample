@@ -1,0 +1,108 @@
+<div class="grid simple col-md-12" ng-show="createItem">
+	
+		<div class="grid-title">
+			<div class="row">
+				<div class="col-md-9">
+					<div class="page-title">
+						<i class="fa fa-keyboard-o" aria-hidden="true"></i>
+						<h3>Shift -
+							<span class="semi-bold">Settings</span>
+						</h3>
+					</div>
+				</div>
+				<div class="col-md-1 marginOff">
+					<button type="submit" class="btn btn-primary btn-block showBtn" ng-click="itemEvent()">Show List</button>
+					<!-- <button type="submit" class="btn btn-primary btn-block" ng-click="">Update</button> -->
+				</div>
+				<div class="col-md-1 marginOff">
+					<button type="submit" class="btn btn-primary btn-block resetBtn" ng-click="clearField()">Reset</button>
+				</div>
+				<div class="col-md-1 marginOff">
+					<button type="submit" class="btn btn-primary btn-block saveBtn"  ng-click="vm.AddShiftSettings()">Save</button>
+				</div>
+			</div>
+		</div>
+		<div class="grid-body">
+			<div class="row">
+				<form class="form-horizontal col-sm-8" name="vm.addShift">
+					<div class="row">
+						<div class="col-md-12">
+							<div class="form-group">
+								<label class="col-sm-5 control-label">Shift Name</label>
+								<div class="col-sm-7">
+									<input type="text" class="form-control" placeholder="Shift Name" ng-model="vm.addShift.ShiftName">
+									<input type="hidden" class="form-control" placeholder="Shift Name" ng-model="vm.ShiftID">
+								</div>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	
+	<!-- Item Entry List Grid -->
+	
+	<div class="grid simple col-md-12" ng-show="showItem">
+		<div class="grid-title">
+			<div class="row">
+				<div class="col-md-11">
+					<div class="page-title">
+						<i class="fa fa-keyboard-o" aria-hidden="true"></i>
+						<h3>Shift -
+							<span class="semi-bold">List</span>
+						</h3>
+					</div>
+				</div>
+	
+				<div class="col-md-1 marginOff">
+					<button type="submit" class="btn btn-primary btn-block saveBtn" ng-click="listEvent()">Create</button>
+				</div>
+			</div>
+		</div>
+		<div class="grid-body">
+			<div class="row">
+				<div class="col-md-12">
+					
+					<table st-table="rowCollection" class="table table-bordered">
+						<thead>
+							<tr>
+								<th>SL</th>
+								<th>ShiftName</th>
+								<th>Action</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="shift in vm.shifts">
+								<td>{{$index+1}}</td>
+								<td>{{shift.ShiftName}}</td>
+								<td>
+									<button href="#" class="btn btn-info btn-xs btn-mini" ng-click="vm.editShift(shift.ShiftID)">Edit</button>
+									<button href="/manage-deliveryman-info/edit/1" class="btn btn-primary btn-xs btn-mini"ng-click="vm.deleteShift(shift.ShiftID)">Delete</button>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--------------- End Item Entry List Grid ---------------->
+	
+	<!--------------- Edit button press popup here ------------------>
+	
+	
+	<style>
+		.thumb {
+			width: 24px;
+			height: 24px;
+			float: none;
+			position: relative;
+			top: 7px;
+		}
+	
+		.modal-content {
+			width: 1660px;
+			margin-left: -405px;
+		}
+	</style>

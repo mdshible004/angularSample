@@ -1,0 +1,294 @@
+<div class="grid simple col-md-12" ng-show="header">
+        
+            <div class="grid-title">
+                <div class="row">
+                    <div class="col-md-9">
+                        <div class="page-title">
+                            <i class="fa fa-keyboard-o" aria-hidden="true"></i>
+                            <h3>General-
+                                <span class="semi-bold">Journal</span>
+                            </h3>
+                        </div>
+                    </div>
+                    <div class="col-md-1 marginOff">
+                        <button type="submit" class="btn btn-primary btn-block showBtn" ng-click="itemEvent()">Show List</button>
+                        <!-- <button type="submit" class="btn btn-primary btn-block" ng-click="">Update</button> -->
+                    </div>
+                    <div class="col-md-1 marginOff">
+                        <button type="submit" class="btn btn-primary btn-block resetBtn" ng-click="clearField()">Reset</button>
+                    </div>
+                    <div class="col-md-1 marginOff">
+                        <button type="submit" class="btn btn-primary btn-block saveBtn" ng-click="vm.AddFees()">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        
+        
+        
+        <div class="grid simple col-md-12" ng-show="createItem">
+        
+            <div class="grid-body">
+                <div class="row">
+                    <form class="form-horizontal col-sm-8" name="vm.FeesSetup">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="col-sm-5 control-label">Voucher No</label>
+                                    <div class="col-sm-7">
+                                        <input type="text" class="form-control" placeholder="Voucher No" ng-model="vm.FeesSetup.FeesHead">
+                                    </div>
+                                </div>
+        
+                                <div class="form-group">
+                                    <label class="col-sm-5 control-label">Ref. No.</label>
+                                    <div class="col-sm-7">
+                                        <input type="text" class="form-control" placeholder="Ref No" ng-model="vm.FeesSetup.FeesHead">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-5 control-label">Narration</label>
+                                    <div class="col-sm-7">
+                                        <input type="text" class="form-control" placeholder="Narration" ng-model="vm.FeesSetup.FeesHead">
+                                    </div>
+                                </div>
+                            
+                                <div class="form-group">
+                                    <label class="col-sm-5 control-label">Voucher Date</label>
+                                    <div class="col-sm-7">
+                                        <datepicker date-format="yyyy-MM-dd" selector="form-control">
+                                            <div class="input-group">
+                                                <input class="form-control" placeholder="Choose a date" ng-model="vm.dateSetup.dateName">
+                                                <span class="input-group-addon" style="cursor: pointer">
+                                                    <i class="fa fa-lg fa-calendar"></i>
+                                                </span>
+                                            </div>
+                                        </datepicker>
+                                    </div>
+                                </div>
+                            </div>
+        
+                            <div class="col-md-6">
+                            
+        
+        
+                                <div class="form-group">
+                                    <label class="col-sm-5 control-label"> Currency</label>
+                                    <div class="col-sm-7">
+                                        <ui-select ng-model="vm.Fee.selected" theme="bootstrap" ng-click="vm.FeesTypeID = $select.selected.FeesTypeID">
+                                            <ui-select-match placeholder="- Select Fees Type -">{{$select.selected.FeesType}}</ui-select-match>
+                                            <ui-select-choices repeat="Fee in   vm.FeeTypes | filter: $select.search">
+                                                <div ng-bind-html="Fee.FeesType | highlight: $select.search"></div>
+                                            </ui-select-choices>
+                                        </ui-select>
+        
+                                    </div>
+                                </div>
+                          
+                            
+                                <div class="form-group">
+                                    <label class="col-sm-5 control-label">Auto Narration</label>
+                                    <div class="col-sm-7">
+                                        <ui-select ng-model="vm.med.selected" theme="bootstrap" ng-click="vm.MediumID = $select.selected.MediumID">
+                                            <ui-select-match placeholder="- Select Medium -">{{$select.selected.MameName}}</ui-select-match>
+                                            <ui-select-choices repeat="med in   vm.medium | filter: $select.search">
+                                                <div ng-bind-html="med.MameName | highlight: $select.search"></div>
+                                            </ui-select-choices>
+                                        </ui-select>
+        
+                                    </div>
+                                </div>
+        
+        
+        
+        
+                            </div>
+                        </div>
+                    </form>
+        
+                </div>
+            </div>
+        </div>
+        <!-- for test purpose -->
+        <!-- <pre>{{value|json}}</pre> -->
+        <!-- Item Entry List Grid -->
+        
+        
+        
+        <div class="grid simple col-md-12" ng-show="detailGrid">
+            <div class="grid-title">
+                <div class="row">
+                    <div class="col-md-8 col-md-offset-1">
+                        <ul class="nav nav-tabs">
+                            <li class="active">
+                                <a data-toggle="tab" href="#0" ng-click="openFeesTabIndex(0)">Detail</a>
+                            </li>
+                            <li class="">
+                                <a data-toggle="tab" href="#0" ng-click="openFeesTabIndex(0)">Another</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="grid-body">
+                                <div class="grid-body">
+                                    <button href="#" class="btn btn-info btn-xs btn-mini" data-toggle="modal" data-target="#" ng-click="">Add</button>
+                                    <button href="#" class="btn btn-info btn-xs btn-mini" data-toggle="modal" ng-click="vm.deleteScholarship(sc.ScholarshipID)">Clear</button>
+                                    <br/>
+                                    <br/>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <table st-table="rowCollection" class="table table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Account Head</th>
+                                                        <th>Party</th>
+                                                      
+                                                        <th>Dr Amount FC</th>
+                                                        <th>Dr Amount</th>
+                                                        <th>Cr Amount</th>
+                                                        <th>Reference</th>
+                                                        <th>Address From</th>
+                                                        <th>Address To</th>
+                                                        <th>Carrier</th>
+                                                        <!-- <th>Edit</th> -->
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr ng-repeat="fee in vm.Fees track by $index">
+                                                        <td>{{$index+1}}</td>
+        
+                                                        <td ng-click="checkBoxIndex($index)">
+                                                            <input id="checkBox" class="form-check-input" type="checkbox" ng-checked="fee.IsActive===1" ng-model="fee.IsActive" ng-click="clickEvent(fee.IsActive,fee.FeesHead,$index)"
+                                                            />
+                                                        </td>
+        
+                                                       
+                                                        <td>{{fee.FeesType}}</td>
+                                                        <td style="width:20%">
+                                                            <input id="{{fee.FeesHead}}" type="number" text-aling="center" class="form-control text-center" placeholder="{{fee.Fee}}"
+                                                                ng-model="fee.inputFee" ng-readonly="isReadOnly(fee.Fee)">
+                                                        </td>
+                                                        <td style="width:20%">
+                                                            <input id="{{fee.FeesHead}}" type="number" text-aling="center" class="form-control text-center" placeholder="{{fee.Fee}}"
+                                                                ng-model="fee.inputFee" ng-readonly="isReadOnly(fee.Fee)">
+                                                        </td>
+                                                        <td>{{fee.FeesHead}}</td>
+                                                        <td>{{fee.FeesHead}}</td>
+                                                        <td>{{fee.FeesType}}</td>
+                                                        <td ng-click="checkBoxIndex($index)">
+                                                                <input id="checkBox" class="form-check-input" type="checkbox" ng-checked="fee.IsActive===1" ng-model="fee.IsActive" ng-click="clickEvent(fee.IsActive,fee.FeesHead,$index)"
+                                                                />
+                                                            </td>
+                                                    </tr>
+                                                </tbody>
+                                                <tfoot>
+                                                    <tr>
+                                                        <td colspan="5" class="text-center">
+                                                            <div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="7"></div>
+                                                        </td>
+                                                    </tr>
+                                                </tfoot>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+        
+                        </div>
+                    </div>
+        
+        
+                </div>
+            </div>
+        </div>>
+        
+        
+        
+        
+        <div class="grid simple col-md-12" ng-show="showItem">
+            <div class="grid-title">
+                <div class="row">
+                    <div class="col-md-11">
+                        <div class="page-title">
+                            <i class="fa fa-keyboard-o" aria-hidden="true"></i>
+                            <h3>Journal
+                                <span class="semi-bold">Grid</span>
+                            </h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="grid-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <table st-table="rowCollection" class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Voucher No</th>
+                                    <th>Voucher Date</th>
+                                    <th>Amount</th>
+                                    <th>Narration</th>                                   
+                                    <th>Invoice No</th>
+                                    <th>Status</th>
+                                    <!-- <th>Edit</th> -->
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="fee in vm.Fees track by $index">
+                                    <td>{{$index+1}}</td>
+        
+                                    <td ng-click="checkBoxIndex($index)">
+                                        <input id="checkBox" class="form-check-input" type="checkbox" ng-checked="fee.IsActive===1" ng-model="fee.IsActive" ng-click="clickEvent(fee.IsActive,fee.FeesHead,$index)"
+                                        />
+                                    </td>
+        
+                                 
+                                    <td>{{fee.FeesType}}</td>
+                                    <td style="width:20%">
+                                        <input id="{{fee.FeesHead}}" type="number" text-aling="center" class="form-control text-center" placeholder="{{fee.Fee}}"
+                                            ng-model="fee.inputFee" ng-readonly="isReadOnly(fee.Fee)">
+                                    </td>
+                                    <td>{{fee.FeesHead}}</td>
+                                    <td>{{fee.FeesType}}</td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="5" class="text-center">
+                                        <div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="7"></div>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        
+        
+        
+        <style>
+            .thumb {
+                width: 24px;
+                height: 24px;
+                float: none;
+                position: relative;
+                top: 7px;
+            }
+        
+            .modal-content {
+                width: 1660px;
+                margin-left: -405px;
+            }
+        
+            input[type="checkbox"] {
+                display: inline-block;
+                width: 19px;
+                height: 19px;
+                margin: -2px 10px 0 0;
+                vertical-align: middle;
+                background: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/210284/check_radio_sheet.png) left top no-repeat;
+                cursor: pointer;
+            }
+        </style>

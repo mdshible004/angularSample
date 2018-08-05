@@ -1,0 +1,183 @@
+
+
+<div class="grid simple col-md-12" ng-show = "createItem">
+	
+    <div class="grid-title">
+		<div class="row">
+			<div class="col-md-9">
+				<div class="page-title"> <i class="fa fa-keyboard-o" aria-hidden="true"></i>
+					<h3>Cheque Type - <span class="semi-bold">Setup</span></h3>
+				</div>
+			</div>
+			<div class="col-md-1 marginOff">
+				<button type="submit" class="btn btn-primary btn-block showBtn" ng-click="itemEvent()">Show List</button>
+				<!-- <button type="submit" class="btn btn-primary btn-block" ng-click="">Update</button> -->
+			</div>
+			<div class="col-md-1 marginOff">
+				<button type="submit" class="btn btn-primary btn-block resetBtn" ng-click="clearField()">Reset</button>
+			</div>
+			<div class="col-md-1 marginOff">
+				<button type="submit" class="btn btn-primary btn-block saveBtn" ng-click="vm.AddClassSetting()">Save</button>
+			</div>	
+		</div>
+    </div>
+    <div class="grid-body">
+		<div class="row">
+
+			<form class="form-horizontal col-sm-8" name="vm.chequeTypeSetup">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="form-group">
+							<label class="col-sm-5 control-label">Custom Code</label>
+							<div class="col-sm-7">
+								<input type="text" class="form-control" placeholder="Class Name" ng-model="vm.chequeTypeSetup.customCode">
+							</div>
+                        </div>
+                        <div class="form-group">
+							<label class="col-sm-5 control-label">Cheque Type Name</label>
+							<div class="col-sm-7">
+								<input type="text" class="form-control" placeholder="Class Name" ng-model="vm.chequeTypeSetup.chequeTypeName">
+							</div>
+						</div>
+					
+						
+					</div>
+				</div>
+			</form>
+
+		</div>
+    </div>
+</div>
+
+<!-- Item Entry List Grid -->
+
+<div class="grid simple col-md-12" ng-show = "showItem" >
+    <div class="grid-title">
+		<div class="row">
+			<div class="col-md-11">
+				<div class="page-title"> <i class="fa fa-keyboard-o" aria-hidden="true"></i>
+					<h3>Class - <span class="semi-bold">List</span></h3>
+				</div>
+			</div>
+			
+			<div class="col-md-1 marginOff">
+				<button type="submit" class="btn btn-primary btn-block saveBtn" ng-click="listEvent()">Create</button>
+			</div>
+		</div>
+	</div>
+	<div class="grid-body">
+		<div class="row">
+			<div class="col-md-12">
+				
+				 <label for="items">Cheque Type List</label>
+				<input class="input-sm form-control" name="items" id="items" type="number" ng-model="itemsByPage" />
+				<table st-table="rowCollection" class="table table-bordered">
+					<thead>
+						<tr>
+							<th>SL</th>
+							<th>Cheque Type</th>
+							<th>Edit</th>
+						</tr>
+					
+					</thead>
+					<tbody>
+						<tr ng-repeat="class in vm.classes">
+							<td></td>
+							<td></td>
+							<td></td>
+							<td>
+								<button href="#" class="btn btn-info btn-xs btn-mini" data-toggle="modal" data-target="#myModal" ng-click="vm.getClassByID(class.ClassID)">Edit</button>
+								<button href="/manage-deliveryman-info/edit/1" class="btn btn-primary btn-xs btn-mini">Delete</button>
+							</td>
+						</tr>
+					</tbody>
+					<tfoot>
+						<tr>
+							<td colspan="5" class="text-center">
+								<div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="7"></div>
+							</td>
+						</tr>
+					</tfoot>
+				</table> 
+			</div> 
+		</div>
+	</div>	
+</div>	
+
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+	  	<div class="modal-content">
+			<div class="modal-body">	
+				<div class="row">
+					<div class="col-md-12">
+						<div class="page-title"> <i class="fa fa-keyboard-o" aria-hidden="true"></i>
+							<h3>Edit Class - <span class="semi-bold">Entry</span></h3>
+						</div>
+					</div>
+				</div>
+				<div class="grid-body">
+					<div class="row">
+						<form class="form-horizontal col-sm-8" name="vm.chequeTypeSetup">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label class="col-sm-5 control-label">Custom Code</label>
+                                        <div class="col-sm-7">
+                                            <input type="text" class="form-control" placeholder="Class Name" ng-model="vm.chequeTypeSetup.customCode">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-5 control-label">Cheque Type Name</label>
+                                        <div class="col-sm-7">
+                                            <input type="text" class="form-control" placeholder="Class Name" ng-model="vm.chequeTypeSetup.chequeTypeName">
+                                        </div>
+                                    </div>
+                                
+                                    
+                                </div>
+                            </div>
+                        </form>
+
+					</div>
+				</div>		
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-primary" ng-click="vm.patchClass()">Save changes</button>
+			</div>
+	  	</div>
+	  <!-- /.modal-content -->
+	</div>
+<!-- /.modal-dialog -->
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+	.thumb {
+    width: 24px;
+    height: 24px;
+    float: none;
+    position: relative;
+    top: 7px;
+}
+.modal-content{
+	width: 1660px;
+    margin-left: -405px;
+}
+</style>

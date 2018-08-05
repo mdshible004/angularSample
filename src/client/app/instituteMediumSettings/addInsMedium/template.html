@@ -1,0 +1,132 @@
+<div class="grid simple col-md-12" ng-show = "createItem">
+    
+    <div class="grid-title">
+        <div class="row">
+            <div class="col-md-9">
+                <div class="page-title"> <i class="fa fa-keyboard-o" aria-hidden="true"></i>
+                    <h3>Institute Medium - <span class="semi-bold">Settings</span></h3>
+                </div>
+            </div>	
+        </div>
+    </div>
+    <div class="grid-body">
+        <div class="row">
+
+            <form class="form-horizontal col-sm-12" name="vm.insMediumSetup">
+                <div class="row">
+                    <div class="col-md-7">
+                        <div class="form-group">
+							<label class="col-sm-5 control-label">Institute Name</label>
+							<div class="col-sm-6">
+                                <ui-select ng-model="vm.institute.selected" on-select="vm.mediumReset()" name="InsID" theme="bootstrap" ng-click="vm.instituteID = $select.selected.InstituteID" ng-disabled="vm.InstituteID!==1?true:false" required>
+                                    <ui-select-match placeholder="-Select Institute-">{{$select.selected.InstituteName}}
+                                        <span style="float:right" ng-click="vm.instituteID = null; DisBtn(); $select.selected=undefined">
+                                            <i class="fa fa-remove" aria-hidden="true"></i>
+                                        </span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="institute in vm.institutes | filter: $select.search">
+                                        <div ng-bind-html="institute.InstituteName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+						</div>	
+                    </div>
+                    <!-- <div class="col-md-2 marginOff">
+                        <button type="submit" class="btn btn-primary btn-block showBtn" ng-click="vm.showmedium($index)">Show Medium</button>
+                      
+                    </div>
+                    <div class="col-md-2 marginOff">
+                        <button type="submit" class="btn btn-primary btn-block showBtn" ng-click="vm.saveMedium()">Save</button>
+                      
+                    </div> -->
+                      <div class="col-md-2 marginOff">
+						<button type="submit" class="btn btn-primary btn-block showBtn" ng-click="vm.showmedium()">Show Medium</button>
+					</div>
+					<div class="col-md-1 marginOff ">
+						<button type="submit" class="btn btn-primary btn-block resetBtn" ng-click="clearField()">Reset</button>
+					</div>
+					<div class="col-md-1 marginOff">
+						<button type="submit" ng-show= "showMedium"class="btn btn-primary btn-block saveBtn" ng-click="vm.saveMedium()">Save</button >
+                        <!-- <button type="submit" class="btn btn-primary btn-block" ng-click="">Update</button> -->
+					</div>
+					
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<!-- Item Entry List Grid -->
+  <!-- <pre>{{mediums|json}}</pre>   -->
+<div class="grid simple col-md-12" ng-show = "showMedium" >
+    <div class="grid-title">
+        <div class="row">
+            <div class="col-md-11">
+                <!-- <div class="page-title"> <i class="fa fa-keyboard-o" aria-hidden="true"></i>
+                    <h3>Medium Name - <span class="semi-bold">List</span></h3>
+                </div> -->
+            </div>
+        </div>
+    </div>
+    <div class="grid-body">
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <table st-table="rowCollection" class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>SL</th>
+                            <th>Medium Name</th>
+                            <th>Is Active</th>
+                        </tr>
+                        <tr>
+                             <!-- <th>
+                                <input st-search="'ItemName'" placeholder="search for ItemName" class="input-sm form-control" type="search"/>
+                            </th> 
+                             <th colspan="4">
+                                <input st-search placeholder="global search" class="input-sm form-control" type="search"/>
+                            </th>  -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="medium in mediums">
+                            <td>{{$index + 1}}</td>
+                            <td>{{medium.MameName}}</td>
+                            <td ng-click="openMediumIndex($index)">
+                                <div class="checkbox check-primary">
+                                    <input id="{{medium.id}}" type="checkbox" ng-model="medium.IsActive" ng-checked="medium.IsActive===1" ng-click="switch(medium.IsActive)">
+                                    <label for="{{medium.id}}"></label>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table> 
+            </div> 
+        </div>
+    </div>	
+</div>	
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+    .thumb {
+    width: 24px;
+    height: 24px;
+    float: none;
+    position: relative;
+    top: 7px;
+}
+.modal-content{
+    width: 1660px;
+    margin-left: -405px;
+}
+</style>

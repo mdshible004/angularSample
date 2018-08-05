@@ -1,0 +1,192 @@
+<div class="grid simple col-md-12" ng-show="createItem">
+
+    <div class="grid-title">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="page-title">
+                    <i class="fa fa-keyboard-o" aria-hidden="true"></i>
+                    <h3>Event - <span class="semi-bold">Setup</span></h3>
+                </div>
+            </div>
+            <div class="col-md-2 marginOff">
+                <button type="submit" class="btn btn-primary btn-block showBtn" ng-click="itemEvent()">Show List</button>
+            </div>
+            <div class="col-md-1 marginOff">
+                <button type="submit" class="btn btn-primary btn-block resetBtn" ng-click="clearField()">Reset</button>
+            </div>
+            <div class="col-md-1 marginOff">
+                <button type="submit" class="btn btn-primary btn-block saveBtn" ng-click="vm.AddEventSetup()" ng-disabled="vm.degreeSetup.$invalid">Save</button>
+            </div>
+        </div>
+    </div>
+    <div class="grid-body">
+        <div class="row">
+
+            <form class="form-horizontal col-sm-12" name="vm.degreeSetup">
+                <div class="row">
+                   
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Institute</label>
+                            <div class="col-sm-8">
+                                <ui-select ng-disabled="isReadOnly" ng-model="vm.Institute.selected" theme="bootstrap" name="inst" ng-click="vm.instituteID = $select.selected.InstituteID" required>
+                                    <ui-select-match placeholder=" -Select-">
+                                        {{$select.selected.InstituteName}}
+                                        <span class="pull-right" ng-click="vm.instituteID = null; $select.selected=undefined"><i class="fa fa-remove" aria-hidden="true"></i></span>
+                                    </ui-select-match>
+                                    <ui-select-choices value="Please select" repeat="Institute in vm.Institutes | filter: $select.search">
+                                        <div ng-bind-html="Institute.InstituteName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            <span class="error" ng-show="(vm.degreeSetup.$dirty||submitted) && vm.degreeSetup.inst.$error.required">*</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Event Type</label>
+                            <div class="col-sm-8">
+                                <ui-select ng-model="vm.event.selected" theme="bootstrap" name="EType" ng-click="vm.eventTypeID = $select.selected.EventTypeID" required>
+                                    <ui-select-match placeholder="-Select Events-">
+                                        {{$select.selected.EventType}}
+                                        <span class="pull-right" ng-click="vm.eventTypeID = null; $select.selected=undefined"><i class="fa fa-remove" aria-hidden="true"></i></span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="event in  vm.events | filter: $select.search">
+                                        <div ng-bind-html="event.EventType | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            <span class="error" ng-show="(vm.degreeSetup.$dirty||submitted) && vm.degreeSetup.EType.$error.required">*</span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Event Name</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" placeholder="Event Name" name="EName" ng-model="vm.eventname" required>
+                            </div>
+                            <span class="error" ng-show="(vm.degreeSetup.$dirty||submitted) && vm.degreeSetup.EName.$error.required">*</span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Description</label>
+                            <div class="col-sm-8">
+                                <textarea class="form-control" placeholder="Description" ng-model="vm.remarks"></textarea>
+                            </div>
+
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label"></label>
+                            <div class="col-sm-8 checkbox check-primary pull-left" style="margin-left:15px">
+                                <input id="1" type="checkbox" ng-checked="vm.IsClassOff===true" ng-model="vm.IsClassOff">
+                                <label for="1">Is Class Off</label>
+                            </div>
+                        </div>
+                    </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Start Date</label>
+                                <div class="col-sm-8 input-groups margin-bottom-sm">
+                                    <datepicker date-format="MM-dd-yyyy" selector="form-control" ng-click="dateValidation()">
+                                        <div class="input-group">
+                                            <input class="form-control" placeholder="Choose a date" ng-model="vm.formDateSetup" ng-change="CheckIfBlank()" />
+                                            <span class="input-group-addon" style="cursor: pointer">
+                                                <i class="fa fa-lg fa-calendar"></i>
+                                            </span>
+                                        </div>
+                                    </datepicker>
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label"> End Date </label>
+                                <div class="col-sm-8 input-groups margin-bottom-sm">
+                                    <datepicker date-format="MM-dd-yyyy" selector="form-control" ng-click="dateValidation()">
+                                        <div class="input-group">
+                                            <input class="form-control" placeholder="Choose a date" ng-model="vm.toDateSetup" ng-change="CheckIfBlank()" />
+                                            <span class="input-group-addon" style="cursor: pointer">
+                                                <i class="fa fa-lg fa-calendar"></i>
+                                            </span>
+                                        </div>
+                                    </datepicker>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">No Of Day</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" name="noOfDay" placeholder="No OF Day" ng-model="vm.noofdate" disabled required>
+                                </div>
+                                <span class="error" ng-show="(vm.degreeSetup.$dirty||submitted) && vm.degreeSetup.noOfDay.$error.required">*</span>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Start Time</label>
+                                <div class="col-sm-8">
+                                    <input type="time" class="form-control" placeholder="hh:mm:ss " ng-model="vm.starttime">
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<!-- Item Entry List Grid -->
+
+<div class="grid simple col-md-12" ng-show="showItem">
+    <div class="grid-title">
+        <div class="row">
+            <div class="col-md-11">
+                <div class="page-title">
+                    <i class="fa fa-keyboard-o" aria-hidden="true"></i>
+                    <h3>Event - <span class="semi-bold">List</span></h3>
+                </div>
+            </div>
+
+            <div class="col-md-1 marginOff">
+                <button type="submit" class="btn btn-primary btn-block saveBtn" ng-click="listEvent()">Create</button>
+            </div>
+        </div>
+    </div>
+    <div class="grid-body">
+        <div class="row">
+            <div class="col-md-12">
+
+
+                <table st-table="rowCollection" class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th> sl</th>
+                            <th>Event Type </th>
+                            <th>Event Name</th>
+                            <th>From Date</th>
+                            <th>To Date</th>
+                            <th>Star Time</th>
+                            <th>No Of Day</th>
+                            <th>Institute</th>
+                            <th>Edit</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="event in vm.eventss">
+                            <td>{{$index+1}}</td>
+                            <td>{{event.EventType}}</td>
+                            <td>{{event.Event}}</td>
+                            <td>{{event.FromDate}}</td>
+                            <td>{{event.ToDate }}</td>
+                            <td>{{event.StarTime }}</td>
+                            <td>{{event.NoOfDay}}</td>
+                            <td>{{event.InstituteName}}</td>
+                            <td>
+                                <button href="#" class="btn btn-info btn-xs btn-mini"  ng-click="vm.getEventByID(event.EventID)">Edit</button>
+                                <button href="#" class="btn btn-primary btn-xs btn-mini" ng-click="vm.deleteUserEvent(event.EventID)">Delete</button>
+                            </td>
+                        </tr>
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+

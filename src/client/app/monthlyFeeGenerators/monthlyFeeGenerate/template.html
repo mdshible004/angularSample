@@ -1,0 +1,1222 @@
+<div class="grid simple col-md-12" ng-show="createItem">
+
+    <div class="grid-title">
+        <div class="row">
+            <div class="col-md-9">
+                <div class="page-title">
+                    <i class="fa fa-keyboard-o" aria-hidden="true"></i>
+                    <h3>
+                        Monthly Fee -
+                        <span class="semi-bold">Collection</span>
+                    </h3>
+                </div>
+            </div>
+            <div class="col-md-1 marginOff">
+                <button type="submit" class="btn btn-primary btn-block showBtn" ng-click="showMonthlyInfo()">Show List</button>
+            </div>
+            <div class="col-md-1 marginOff">
+                <button type="submit" class="btn btn-primary btn-block resetBtn" ng-click="clearField()">Reset</button>
+            </div>
+
+        </div>
+    </div>
+    <div class="grid-body">
+        <div class="row" ng-show="IsShowQ = IsShowQT === 0 ? true : false">
+            <div class="form-horizontal col-md-12 col-xs-12">
+                <div class="row">
+                    <div class="col-md-11">
+                        <div class="col-md-6">
+                            <form name="vm.classSetupPF">
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">Medium</label>
+                                    <div class="col-sm-7">
+                                        <ui-select ng-model="vm.medium.selected" name="medium" theme="bootstrap" ng-click="vm.mediumID = $select.selected.MediumID; vm.classID = null; vm.classes = []; vm.class = undefined; vm.depertmentID = null; vm.depertments = []; vm.depertment = undefined;" on-select="vm.getAllClass('')" required>
+                                            <ui-select-match placeholder=" -Select-">
+                                                {{$select.selected.MameName}}
+                                                <span style="float:right" ng-click="vm.mediumID = undefined; $select.selected=undefined; vm.classID = null; vm.classes = []; vm.class = undefined; vm.depertmentID = null; vm.depertments = []; vm.depertment = undefined;">
+                                                    <i class="fa fa-remove" aria-hidden="true"></i>
+                                                </span>
+                                            </ui-select-match>
+                                            <ui-select-choices repeat="medium in vm.mediums | filter: $select.search">
+                                                <div ng-bind-html="medium.MameName | highlight: $select.search"></div>
+                                            </ui-select-choices>
+                                        </ui-select>
+                                        <!-- value:{{vm.medium.selected.MediumID}} -->
+                                    </div>
+                                    <span class="error" ng-show="(vm.classSetupPF.$dirty||submitted) && vm.classSetupPF.medium.$error.required">*</span>
+                                </div>
+                                <div class="form-group">
+
+
+                                    <label class="col-sm-4 control-label">Class</label>
+                                    <div class="col-sm-7">
+                                        <ui-select ng-model="vm.class.selected" name="clss" theme="bootstrap" ng-click="vm.classID = $select.selected.ClassID; vm.depertmentID = null; vm.depertments = []; vm.depertment = undefined;" on-select="vm.getAllDepertment('')" required>
+                                            <ui-select-match placeholder=" -Select-">
+                                                {{$select.selected.ClassName}}
+                                                <span style="float:right" ng-click="vm.classID = undefined; $select.selected=undefined; vm.depertmentID = null; vm.depertments = []; vm.depertment = undefined;">
+                                                    <i class="fa fa-remove" aria-hidden="true"></i>
+                                                </span>
+                                            </ui-select-match>
+                                            <ui-select-choices repeat="class in vm.classes | filter: $select.search">
+                                                <div ng-bind-html="class.ClassName | highlight: $select.search"></div>
+                                            </ui-select-choices>
+                                        </ui-select>
+                                        <!-- value:{{vm.class}} -->
+                                    </div>
+                                    <span class="error" ng-show="(vm.classSetupPF.$dirty||submitted) && vm.classSetupPF.clss.$error.required">*</span>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">Depertment</label>
+                                    <div class="col-sm-7">
+                                        <ui-select ng-model="vm.depertment.selected" name="dept" theme="bootstrap" ng-click="vm.depertmentID = $select.selected.DepartmentID" ng-required="IsDeptReqed= vm.depertments.length > 0 ? true : false">
+                                            <ui-select-match placeholder=" -Select-">
+                                                {{$select.selected.DepartmentName}}
+                                                <span style="float:right" ng-click="vm.depertmentID = undefined; $select.selected=undefined">
+                                                    <i class="fa fa-remove" aria-hidden="true"></i>
+                                                </span>
+                                            </ui-select-match>
+                                            <ui-select-choices repeat="depertment in vm.depertments | filter: $select.search">
+                                                <div ng-bind-html="depertment.DepartmentName | highlight: $select.search"></div>
+                                            </ui-select-choices>
+                                        </ui-select>
+                                        <!-- value:{{vm.class.selected.ClassID}} -->
+                                    </div>
+                                    <span class="error" ng-show="(vm.classSetupPF.$dirty||submitted) && vm.classSetupPF.dept.$error.required">*</span>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">Shift</label>
+                                    <div class="col-sm-7">
+                                        <ui-select ng-model="vm.shift.selected" theme="bootstrap" ng-click="vm.shiftID = $select.selected.ShiftID">
+                                            <ui-select-match placeholder=" -Select-">
+                                                {{$select.selected.ShiftName}}
+                                                <span style="float:right" ng-click="vm.shiftID = undefined; $select.selected=undefined">
+                                                    <i class="fa fa-remove" aria-hidden="true"></i>
+                                                </span>
+                                            </ui-select-match>
+                                            <ui-select-choices repeat="shift in vm.shifts | filter: $select.search">
+                                                <div ng-bind-html="shift.ShiftName | highlight: $select.search"></div>
+                                            </ui-select-choices>
+
+
+                                        </ui-select>
+
+                                        <!-- value:{{vm.shift.selected.ShiftID}} -->
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label"></label>
+                                    <div class="col-sm-4">
+                                        <button href="#" class="btn btn-primary btn-block showBtn" data-toggle="modal" ng-click="vm.getStudents()" ng-disabled="vm.classSetupPF.$invalid">Find Student</button>
+                                    </div>
+                                </div>
+                            </form>
+
+                        </div>
+
+                        <div class="col-md-6">
+
+                            <form name="vm.classSetupPS">
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">Currency</label>
+                                    <div class="col-sm-3">
+                                        <ui-select ng-model="vm.currency.selected" theme="bootstrap" ng-click="vm.CurrencyID = $select.selected.CurrencyID">
+                                            <ui-select-match placeholder=" -Select-">
+                                                {{$select.selected.Currency}}
+                                                <span style="float:right" ng-click="vm.CurrencyID  = undefined; $select.selected=undefined">
+                                                    <i class="fa fa-remove" aria-hidden="true"></i>
+                                                </span>
+                                            </ui-select-match>
+                                            <ui-select-choices repeat="currency in vm.currencys | filter: $select.search">
+                                                <div ng-bind-html="currency.Currency | highlight: $select.search"></div>
+                                            </ui-select-choices>
+                                        </ui-select>
+                                    </div>
+
+                                    <label class="col-sm-2 control-label" style="margin-left: -33px !important;padding-left: 0px !important;">Year</label>
+                                    <div class="col-sm-3" style="padding-left: 0px !important; margin-left: -4px !important;">
+                                        <ui-select ng-model="vm.year.selected" theme="bootstrap" ng-click="vm.YearName = $select.selected.YearName">
+                                            <ui-select-match placeholder=" -Select-">
+                                                {{$select.selected.YearName}}
+                                                <span style="float:right" ng-click="setYear()">
+                                                    <i class="fa fa-remove" aria-hidden="true"></i>
+                                                </span>
+                                            </ui-select-match>
+                                            <ui-select-choices repeat="year in vm.YearList | filter: $select.search">
+                                                <div ng-bind-html="year.YearName | highlight: $select.search"></div>
+                                            </ui-select-choices>
+                                        </ui-select>
+                                    </div>
+
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">From Month</label>
+                                    <div class="col-sm-7">
+                                        <ui-select ng-model="vm.Fmon.selected" theme="bootstrap" ng-click="vm.FromMonthID = $select.selected.MonthID" on-select="MonthFromToValidation()">
+                                            <ui-select-match placeholder=" -Select-">
+                                                {{$select.selected.MonthName}}
+                                                <span style="float:right" ng-click="vm.FromMonthID = undefined; $select.selected=undefined">
+                                                    <i class="fa fa-remove" aria-hidden="true"></i>
+                                                </span>
+                                            </ui-select-match>
+                                            <ui-select-choices repeat="Fmon in vm.months | filter: $select.search">
+                                                <div ng-bind-html="Fmon.MonthName | highlight: $select.search"></div>
+                                            </ui-select-choices>
+                                        </ui-select>
+                                        <!-- value:{{vm.mon.selected.MonthID}} -->
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">To Month</label>
+                                    <div class="col-sm-7">
+                                        <ui-select ng-model="vm.mon.selected" name="mont" theme="bootstrap" ng-click="vm.monthID = $select.selected.MonthID" on-select="MonthFromToValidation()" required>
+                                            <ui-select-match placeholder=" -Select-">
+                                                {{$select.selected.MonthName}}
+                                                <span style="float:right" ng-click="vm.monthID = undefined; $select.selected=undefined">
+                                                    <i class="fa fa-remove" aria-hidden="true"></i>
+                                                </span>
+                                            </ui-select-match>
+                                            <ui-select-choices repeat="mon in vm.months | filter: $select.search">
+                                                <div ng-bind-html="mon.MonthName | highlight: $select.search"></div>
+                                            </ui-select-choices>
+                                        </ui-select>
+                                        <!-- value:{{vm.mon.selected.MonthID}} -->
+                                    </div>
+                                    <span class="error" ng-show="(vm.classSetupPS.$dirty||submitted) && vm.classSetupPS.mont.$error.required">*</span>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">Student ID</label>
+                                    <div class="col-sm-7">
+                                        <input ng-model="RFID" name="rfid" type="text" class="form-control" ng-blur="SetOnBlurRFID(RFID, $event)" required />
+                                    </div>
+                                    <span class="error" ng-show="(vm.classSetupPS.$dirty||submitted) && vm.classSetupPS.rfid.$error.required">*</span>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label"></label>
+                                    <div class="col-sm-4">
+                                        <button href="#" class="btn btn-primary btn-block showBtn" data-toggle="modal" ng-click="vm.generateFee()" ng-disabled="vm.classSetupPS.$invalid">Get Fees</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" ng-show="IsShowT = IsShowQT === 0 ? false : true">
+            <div class="col-md-8 col-xs-12">
+                <div class="col-md-12 user-description-box  col-sm-6" style="margin:0px">
+                    <div class="col-md-6 pull-left" style="margin-top:-10px">
+                        <b>{{MnthName}}</b>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="user-profile-pic">
+                            <img width="69" height="69" src="{{vm.imgHost}}{{vm.regedusers[vm.indexLenth-1].ImageUrl}}" ng-if="vm.regedusers[vm.indexLenth-1].ImageUrl !== 'undefined' && vm.regedusers[vm.indexLenth-1].ImageUrl !== undefined && vm.regedusers[vm.indexLenth-1].ImageUrl !== 'null' && vm.regedusers[vm.indexLenth-1].ImageUrl !== null" />
+                            <img width="69" height="69" src="images/profiles/no-user-image.png" ng-if="vm.regedusers[vm.indexLenth-1].ImageUrl === 'undefined' || vm.regedusers[vm.indexLenth-1].ImageUrl === undefined || vm.regedusers[vm.indexLenth-1].ImageUrl === 'null' || vm.regedusers[vm.indexLenth-1].ImageUrl === null" />
+                        </div>
+                    </div>
+                    <p>
+                        <i class="fa fa-briefcase"></i>
+                        <b>Name : </b>{{vm.regedusers[vm.indexLenth-1].UserName}}, <b>Class : </b>{{vm.regedusers[vm.indexLenth-1].Class}}, <b>Section : </b>{{vm.regedusers[vm.indexLenth-1].Section}}, <b>Roll : </b>{{vm.regedusers[vm.indexLenth-1].RollNo}}
+                    </p>
+                    <p>
+                        <i class="fa fa-briefcase"></i>
+                        <b>Medium : </b>{{vm.regedusers[vm.indexLenth-1].Medium}}, <b>Shift : </b> {{vm.regedusers[vm.indexLenth-1].Shift}}, <b>Depertment : </b> {{vm.regedusers[vm.indexLenth-1].Department}}
+                    </p>
+                </div>
+
+                <div class="clearfix"></div>
+                <br />
+
+                <form class="newOvDiscount" name="pre">
+                    <table class="newDiscounts dynaRows table table-hover table-condensed" style=" max-height:450px !important; overflow-y:scroll !important; display:block !important">
+                        <thead>
+                            <tr>
+                                <th style="width:3%">SL</th>
+                                <th style="width:25%">Fees Type</th>
+                                <th style="width:25%">Fees Head</th>
+                                <th style="width:18%">Fees</th>
+                                <th style="width:5%">No of Month</th>
+                                <th style="width:20%">Total Fees</th>
+                                <th style="width:4%">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            <tr ng-repeat="value in feesDetails">
+                                <td>{{$index + 1}}</td>
+
+                                <td ng-repeat="field in value">
+                                    <ui-select ng-model="value[$index].feesTypeSelected" theme="bootstrap" ng-click="field.FeesTypeID = $select.selected.FeesTypeID"
+                                               on-select="vm.feesTypeSelected(value,field)">
+                                        <ui-select-match placeholder="-Select Fees Type-">
+                                            {{$select.selected.FeesType}}
+                                            <span style="float:right" ng-click="field.FeesTypeID = undefined; field.FeesSetupID = undefined; $select.selected=undefined">
+                                                <i class="fa fa-remove" aria-hidden="true"></i>
+                                            </span>
+                                        </ui-select-match>
+                                        <ui-select-choices repeat="feeType in vm.FeesTypeList | filter: $select.search">
+                                            <div ng-bind-html="feeType.FeesType | highlight: $select.search"></div>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </td>
+                                <td ng-repeat="field in value">
+                                    <ui-select ng-model="value[$index].feesHeadSelected" theme="bootstrap" ng-click="field.FeesHeadID = $select.selected.FeesHeadID"
+                                               on-select="vm.feesHeadTypeSelected(field)">
+                                        <ui-select-match placeholder="-Select Fees Head-">
+                                            {{$select.selected.FeesHead}}
+                                            <span style="float:right" ng-click="field.FeesHeadID = undefined; $select.selected=undefined; field.FeesSetupID = undefined">
+                                                <i class="fa fa-remove" aria-hidden="true"></i>
+                                            </span>
+                                        </ui-select-match>
+                                        <ui-select-choices repeat="feeHead in field.feesHeadddl | filter: $select.search">
+                                            <div ng-bind-html="feeHead.FeesHead | highlight: $select.search"></div>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </td>
+                                <td ng-repeat="field in value">
+                                    <input type="text" class="form-control" ng-model="field.Fee" ng-change="SetTotalFees(field)">
+
+                                    <!-- <pre>{{vm.citys[0] | json}}</pre>
+                                    <pre>{{value[$index].citySelected}}</pre> -->
+                                </td>
+
+                                <td ng-repeat="field in value">
+
+                                    {{field.NoOfMonth}}
+                                    <!-- <pre>{{vm.citys[0] | json}}</pre>
+                                    <pre>{{value[$index].citySelected}}</pre> -->
+                                </td>
+
+                                <td ng-repeat="field in value">
+
+                                    {{field.TotalFees}}
+                                    <!-- <pre>{{vm.citys[0] | json}}</pre>
+                                    <pre>{{value[$index].citySelected}}</pre> -->
+                                </td>
+
+                                <td ng-click="FeesDetailsRemoveRow($index)">
+                                    <i class="fa fa-times" ng-repeat="field in value" ng-hide="field.IsDeleted === true"></i>
+                                    <span ng-repeat="field in value" ng-show="field.IsDeleted === true" class="deleteTag">
+                                        Deleted
+                                    </span>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                    <div class="actions clearfix">
+                        <div class="pull-right">
+                            <div class="hungry-spacer"></div>
+                            <button type="button" class="addNewRow btn btn-white btn-cons btn-sm " ng-click="vm.addNewRowForMonthlyFee()">
+                                <i class="fa fa-plus"></i> Add more
+                            </button>
+                            <!-- <button type="submit" class="btn btn-primary btn-cons"ng-click="vm.postUserPresentAdderss()"><i class="icon-ok"></i> Save</button>
+                            <button type="button" class="btn btn-danger btn-cons reset">Cancel</button> -->
+                        </div>
+                    </div>
+                </form>
+                <!-- Fine Table Start-->
+                <form class="newOvDiscount" name="pre" ng-show="IsShowFine = fineDetails.length > 0 ? true : false">
+                    <table class="newDiscounts dynaRows table table-hover table-condensed">
+                        <thead>
+                            <tr>
+                                <th style="width:5%">SL</th>
+                                <th style="width:25%">Fine Head</th>
+                                <th style="width:25%">Details</th>
+                                <th style="width:25%">Fine Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- <pre>{{fineDetails | json}}</pre> -->
+                            <tr ng-repeat="value in fineDetails">
+                                <td>{{$index + 1}}</td>
+                                <td ng-repeat="field in value">
+                                    <span>{{field.FineHead}}</span>
+                                </td>
+                                <td ng-repeat="field in value">
+                                    {{field.FineHead +' '+ field.Days}} Days
+                                </td>
+                                <td ng-repeat="field in value">
+                                    <p style="text-align:right">{{field.TotalFineAmount}} TK</p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </form>
+
+            </div>
+
+            <div class="col-md-4 col-xs-12">
+                <div class="well well-small green" style="padding:5px !important; margin-bottom:10px !important">
+                    <div class="pull-left" style="font-size: 16px;margin-top: 10px;"> Total Fees : </div>
+                    <div class="pull-right" style="font-size: 25px;font-weight: bold;"> {{vm.TotalFees}} TK </div>
+                    <div class="clearfix"></div>
+                </div>
+                <table class="table table-bordered feesTable" style="margin-bottom:10px !important">
+                    <tbody>
+                        <tr>
+                            <td>{{vm.parcentOrAmount}} scholarship {{vm.scholarshipType}}</td>
+                            <td style="text-align:right">
+                                <b>{{vm.scholarshipAmmount}} TK</b>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Sub Total :</td>
+                            <td style="text-align:right">
+                                <b>{{vm.subTotal}} TK</b>
+                            </td>
+                        </tr>
+                        <tr ng-show="IsShowFine = fineDetails.length > 0 ? true : false">
+                            <td>Total Fine :</td>
+                            <td style="text-align:right">
+                                <b>{{vm.TotalFine}} TK</b>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>{{DueOrAdvancee = vm.totalPayableFees < 0 ? 'Advanced' : 'Previous Due'}} :</td>
+                            <td style="text-align:right">
+                                <b>{{vm.previousDue}} TK</b>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="well well-small green" style="background-color: #eeeeee; padding:5px !important; margin-bottom:10px !important">
+                    <div class="pull-left" style="font-size: 16px;margin-top: 5px;color: #777"> {{payFees = vm.totalPayableFees < 0 ? 'Balance' : 'Total Payable Fees'}} : </div>
+                    <div class="pull-right" style="font-size: 22px;color: #777">
+                        <b> {{ttlPFees = vm.totalPayableFees < 0 ? vm.totalPayableFees * -1 : vm.totalPayableFees}} TK</b>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <table class="table table-bordered feesTable" style="margin-bottom:10px !important">
+                    <tbody>
+                        <tr>
+                            <td style="width:50%">
+                                <p style="text-align:center;font-size:20px; text-align:left">Waiver</p>
+                            </td>
+                            <td style="width:40%">
+                                <input type="text" ng-model="vm.discountAmounts" style="text-align:right;font-size:18px;font-weight:bold; width: 90%" class="pull-right">
+                            </td>
+                            <td style="width:10%">
+                                <div class="checkbox check-primary" style="padding-top:8px">
+                                    <input id="5" type="checkbox" ng-model="vm.isPercent" ng-checked="vm.isPercent === true" ng-click="vm.isPercentValueSwitch(vm.isPercent)">
+                                    <label for="5"></label>
+                                    <p style="float:right;margin:-15px 39px 4px 0">
+                                        <b>%</b>
+                                    </p>
+                                </div>
+                            </td>
+                        </tr>
+                        <!-- <tr>
+                            <p>Discount Ammount <span>{{vm.DueOrAdvanceWithDiscount}}</span></p>
+                        </tr> -->
+                    </tbody>
+                </table>
+                <table class="table table-bordered feesTable" style="margin-bottom:10px !important">
+                    <tbody>
+                        <tr>
+                            <td>
+                                <p style="font-size: 20px; text-align:left">Waiver Amount</p>
+                            </td>
+                            <td style="color:#f35958;font-weight: bold;font-size:22px">
+                                {{vm.DueOrAdvanceWithDiscount}} TK
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="well well-small green" style="background-color: #af1d45; padding:5px !important; margin-bottom:10px !important">
+                    <div class="pull-left" style="font-size: 16px;margin-top: 5px;"> {{ttlpayFees = vm.totalAmount < 0 ? 'Total Balance' : 'Total Amount'}}: </div>
+                    <div class="pull-right" style="font-size: 22px;">
+                        <b> {{ttlAmts = vm.totalAmount < 0 ? (vm.totalAmount * -1) : vm.totalAmount}} TK</b>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <!--<div class="well well-small green" style="background-color: #eeeeee; margin-bottom:10px !important">-->
+                <table class="table table-bordered feesTable" style="margin-bottom:10px !important; background:#eee !important">
+                    <tbody>
+                        <tr>
+                            <td style="width:45%">
+                                <p style="margin-top:8px; text-align:left">Payment Type</p>
+                            </td>
+                            <td style="width:50%">
+                                <ui-select ng-model="vm.paymentMethod.selected" theme="bootstrap" ng-click="vm.PaymentMethodID = $select.selected.PaymentMethodID" on-select="CallPaymentModal(vm.PaymentMethodID, 0)">
+                                    <ui-select-match placeholder=" -Select Payment type-">
+                                        {{$select.selected.PaymentMethodName}}
+                                        <span style="float:right" ng-click="vm.PaymentMethodID = undefined; $select.selected=undefined">
+                                            <i class="fa fa-remove" aria-hidden="true"></i>
+                                        </span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="paymentMethod in vm.paymentMethods | filter: $select.search">
+                                        <div ng-bind-html="paymentMethod.PaymentMethodName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </td>
+                            <td style="width:5%">
+                                <button class="error pull-left" href="#" ng-click="CallPaymentModal(vm.PaymentMethodID, 1)" style="margin-top:4px">
+                                    <i class="glyphicon glyphicon-search" aria-hidden="true"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <table class="table table-bordered feesTable" style="margin-bottom:10px !important; background:#eee !important">
+                    <tbody>
+                        <tr>
+                            <td style="width:35%;">
+                                <p style="margin-top:8px; text-align:left">Paid Amount</p>
+                            </td>
+                            <td style="width:65%">
+                                <input type="text" class="pull-right" ng-model="vm.paidAmounts" style="text-align:right; font-weight:bold; width:90%">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="well well-small {{vm.css}}" style="padding:5px !important; margin-bottom:10px !important">
+                    <div class="pull-left" style="font-size: 20px;margin-top: 4px;"> {{vm.amountStatus}} : </div>
+                    <div class="pull-right" style="font-size: 25px;font-weight: bold;"> {{vm.DueOrAdvance = vm.DueOrAdvance === 'NaN' ? ttlAmts : vm.DueOrAdvance}} TK</div>
+                    <div class="clearfix"></div>
+                </div>
+                <table>
+                    <tr>
+                        <td>
+                            <div class="checkbox check-primary" style="margin-top: -15px;">
+                                <input id="isTake" type="checkbox" ng-model="vm.isAdvance" ng-disabled="IsCheckDis = vm.DueOrAdvance<= 0? true : false">
+                                <label for="isTake"></label>
+                            </div>
+                        </td>
+                        <td>
+                            <p style="float:right;margin:-5px 0px 3px 10px">
+                                <b>Take As Advance</b>
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+
+                <table>
+                    <tr>
+                        <td style="width:30%">
+                            <button type="button" class="btn btn-info btn-cons" style="min-width:83px !important" ng-click="vm.printDiv('print')">
+                                <span class="glyphicon glyphicon-print"></span> Print
+                            </button>
+                        </td>
+                        <td style="width:30%">
+                            <button type="button" class="btn btn-success btn-cons" style="min-width:83px !important" ng-click="vm.setMonthlyFeesCollection()">
+                                <i class="fa fa-save"></i> Save
+                            </button>
+                        </td>
+                        <td style="width:40%">
+                            <button type="button" class="btn btn-primary btn-cons" ng-click="vm.printDiv('print'); vm.setMonthlyFeesCollection()">
+                                <span class="fa fa-print"></span> Save & Print
+                            </button>
+                        </td>
+                    </tr>
+                </table>
+
+
+
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- ---------------------------------------------------- Start UI-Grid ------------------------------------------------ -->
+<div class="grid simple col-md-12" ng-show="showStudentFeesInfo">
+    <div class="col-md-12">
+        <div class="grid-title">
+            <div class="row">
+                <div class="col-md-11">
+                    <div class="page-title">
+                        <!--<i class="fa fa-keyboard-o" aria-hidden="true"></i>-->
+                        <h3>
+                            Student's Fees -
+                            <span class="semi-bold">Information</span>
+                        </h3>
+                    </div>
+                </div>
+
+                <div class="col-md-1 marginOff">
+                    <button type="submit" class="btn btn-primary btn-block saveBtn" ng-click="itemEvent()">Create</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="grid-body">
+        <div class="row">
+            <div class="col-md-12" style="text-align:right">
+                <input type="text" ng-model="SearchProperty" placeholder="Search By Student ID" ng-keyup="$event.keyCode == 13 ? SearchNow(SearchProperty) : null" />
+                <button type="button" class="close" aria-label="Close" ng-click="SearchCancel('')">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div ui-grid="gridOptions" ui-grid-resize-columns ui-grid-auto-resize ui-grid-move-columns ui-grid-exporter ui-grid-pinning
+                     class="grid" style="height:550px"></div>
+
+                <div class="loadmore">
+                    <div ng-show="loaderMore" ng-class="result">
+                        <!-- <img src="~/Content/img/ng-loader.gif" /> -->
+                        {{lblMessage}}
+                    </div>
+                </div>
+                <div class="row"></div>
+                <div role="contentinfo" style="margin-bottom: -20px;" class="ui-grid-pager-panel ng-scope">
+                    <div role="navigation" class="ui-grid-pager-container">
+                        <div role="menubar" class="ui-grid-pager-control">
+                            <!-- Start Page -->
+                            <button type="button" role="menuitem" class="ui-grid-pager-first" ui-grid-one-bind-title="aria.pageToFirst" ui-grid-one-bind-aria-label="aria.pageToFirst"
+                                    ng-click="pagination.firstPage()" ng-disabled="cantPageBackward()" title="Page to first" aria-label="Page to first"
+                                    disabled="disabled">
+                                <div class="first-triangle">
+                                    <div class="first-bar"></div>
+                                </div>
+                            </button>
+
+                            <!-- Prev Page -->
+                            <button type="button" role="menuitem" class="ui-grid-pager-previous" ui-grid-one-bind-title="aria.pageBack" ui-grid-one-bind-aria-label="aria.pageBack"
+                                    ng-click="pagination.previousPage()" ng-disabled="cantPageBackward()" title="Page back" aria-label="Page back"
+                                    disabled="disabled">
+                                <div class="first-triangle prev-triangle"></div>
+                            </button>
+
+                            <input type="number" ui-grid-one-bind-title="aria.pageSelected" ui-grid-one-bind-aria-label="aria.pageSelected" class="ui-grid-pager-control-input ng-pristine ng-untouched ng-valid ng-not-empty ng-valid-min ng-valid-max ng-valid-required"
+                                   ng-model="pagination.pageNumber" min="1" max="{{pagination.getTotalPages()}}" required="" title="Selected page"
+                                   aria-label="Selected page" />
+
+                            <span class="ui-grid-pager-max-pages-number ng-binding" ng-show="pagination.getTotalPages() > 0">
+                                <abbr ui-grid-one-bind-title="paginationOf" title="of">/</abbr>{{pagination.getTotalPages()}}
+                            </span>
+
+                            <!-- Next Page -->
+                            <button type="button" role="menuitem" class="ui-grid-pager-next" ui-grid-one-bind-title="aria.pageForward" ui-grid-one-bind-aria-label="aria.pageForward"
+                                    ng-click="pagination.nextPage()" ng-disabled="cantPageForward()" title="Page forward" aria-label="Page forward">
+                                <div class="last-triangle next-triangle"></div>
+                            </button>
+
+                            <!-- Last Page -->
+                            <button type="button" role="menuitem" class="ui-grid-pager-last" ui-grid-one-bind-title="aria.pageToLast" ui-grid-one-bind-aria-label="aria.pageToLast"
+                                    ng-click="pagination.lastPage()" ng-disabled="cantPageToLast()" title="Page to last" aria-label="Page to last">
+                                <div class="last-triangle">
+                                    <div class="last-bar"></div>
+                                </div>
+                            </button>
+                        </div>
+                        <!-- ngIf: grid.options.paginationPageSizes.length > 1 -->
+
+                        <div class="ui-grid-pager-row-count-picker ng-scope">
+                            <select ng-model="pagination.ddlpageSize" ng-options="o as o for o in pagination.paginationPageSizes" ng-change="pagination.pageSizeChange()"
+                                    class="ng-pristine ng-untouched ng-valid ng-not-empty"></select>
+                            <span class="ui-grid-pager-row-count-label ng-binding">&nbsp;items per page</span>
+                        </div>
+                        <!-- end ngIf: grid.options.paginationPageSizes.length > 1 -->
+                        <!-- ngIf: grid.options.paginationPageSizes.length <= 1 -->
+                    </div>
+                    <div class="ui-grid-pager-count-container">
+                        <div class="ui-grid-pager-count">
+                            <span ng-show="pagination.totalItems > 0" class="ng-binding">
+                                {{pagination.pageNumber}}
+                                <abbr ui-grid-one-bind-title="paginationThrough" title="through">-</abbr>
+                                {{pagination.ddlpageSize}} of {{pagination.totalItems}} items
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ----------------------------------------------------- End UI-Grid ------------------------------------------------- -->
+<!-- Fine Student PopUP -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="page-title">
+                            <i class="fa fa-keyboard-o" aria-hidden="true"></i>
+                            <h3>
+                                Student -
+                                <span class="semi-bold">List</span>
+                            </h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="grid-body">
+                    <!--<div class="row">
+                        <div class="col-md-12" style="margin-top:-29px; margin-left:2px; font-weight:bold; font-size:15px">
+                            <p>Month: {{MnthName}}</p>
+                        </div>
+                    </div>-->
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th style="width:1px">SL</th>
+                                        <th style="width:1px">Student</th>
+                                        <th style="width:1px">StudentID</th>
+                                        <th style="width:1px">Roll</th>
+                                        <th style="width:1px">Board</th>
+                                        <th style="width:1px">Session</th>
+                                        <th style="width:1px">Branch</th>
+                                        <th style="width:1px">Shift</th>
+                                        <th style="width:1px">Medium</th>
+                                        <th style="width:1px">Depertment</th>
+                                        <th style="width:1px">Class</th>
+                                        <th style="width:1px">Section</th>
+                                        <th style="width:1px">Action</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                            <div id="table-wrapper">
+                                <div id="table-scroll" style="margin-top: -21px;">
+                                    <table class="table table-bordered">
+                                        <tbody>
+                                            <tr ng-repeat="monthlyFee in vm.StudentList">
+                                                <td style="width:1px">
+                                                    {{$index + 1}}
+                                                </td>
+                                                <td style="width:150px">
+                                                    {{monthlyFee.UserName}}
+                                                </td>
+                                                <td style="width:100px">
+                                                    {{monthlyFee.RFID}}
+                                                </td>
+                                                <td style="width:60px">
+                                                    {{monthlyFee.RollNo}}
+                                                </td>
+                                                <td style="width:60px">
+                                                    {{monthlyFee.Board}}
+                                                </td>
+                                                <td style="width:60px">
+                                                    {{monthlyFee.Session}}
+                                                </td>
+                                                <td style="width:120px">
+                                                    {{monthlyFee.Brunch}}
+                                                </td>
+                                                <td style="width:75px">
+                                                    {{monthlyFee.Shift}}
+                                                </td>
+                                                <td style="width:100px">
+                                                    {{monthlyFee.Medium}}
+                                                </td>
+                                                <td style="width:100px">
+                                                    {{monthlyFee.Department}}
+                                                </td>
+                                                <td style="width:80px">
+                                                    {{monthlyFee.Class}}
+                                                </td>
+                                                <td style="width:60px">
+                                                    {{monthlyFee.Section}}
+                                                </td>
+                                                <td style="width:60px; text-align:center">
+                                                    <button class="btn btn-primary btn-block showBtn" style="width:75px; text-align:center" data-dismiss="modal" ng-click="SetRFID(monthlyFee.RFID, monthlyFee.UserID)">Select</button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+<!-- Fine Student PopUP -->
+<div class="modal fade" id="ModalPaymentExtension" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" style="float:left">Payment Information</h4>
+            </div>
+            <div class="modal-body">
+                <!--<div class="row">
+                    <div class="col-md-12">
+                        <div class="page-title">
+                            <i class="fa fa-keyboard-o" aria-hidden="true"></i>
+                            <h3>
+                                Payment -
+                                <span class="semi-bold">Info</span>
+                            </h3>
+                        </div>
+                    </div>
+                </div>-->
+                <div class="grid-body">
+                    <div class="row">
+                        <form class="form-horizontal col-md-12 col-xs-12" name="vm.PaymentInfo">
+                            <div class="col-md-12">
+                                <div ng-if="IfShow = vm.PaymentMethodID === '2' || vm.PaymentMethodID === '3' ? true : false">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label class="col-sm-5 control-label">Bank Name</label>
+                                            <div class="col-sm-7">
+                                                <ui-select ng-model="vm.bank.selected" theme="bootstrap" ng-click="vm.BankID = $select.selected.BankID">
+                                                    <ui-select-match placeholder="-Select Bank-">
+                                                        {{$select.selected.BankName}}
+                                                        <span class="pull-right" ng-click="vm.BankID = null; $select.selected=undefined"><i class="fa fa-remove" aria-hidden="true"></i></span>
+                                                    </ui-select-match>
+                                                    <ui-select-choices repeat="bank in vm.AllBanks | filter: $select.search">
+                                                        <div ng-bind-html="bank.BankName | highlight: $select.search"></div>
+                                                    </ui-select-choices>
+                                                </ui-select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4" ng-if="IfShowCheque = vm.PaymentMethodID === '3' ? true : false">
+                                        <div class="form-group">
+                                            <label class="col-sm-5 control-label">Account No</label>
+                                            <div class="col-sm-7">
+                                                <input type="text" class="form-control" ng-model="vm.AccountNo" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4" ng-if="IfShowCheque = vm.PaymentMethodID === '3' ? true : false">
+                                        <div class="form-group">
+                                            <label class="col-sm-5 control-label">Cheque No</label>
+                                            <div class="col-sm-7">
+                                                <input type="text" class="form-control" ng-model="vm.ChequeNo" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4" ng-if="IfShowCheque = vm.PaymentMethodID === '2' ? true : false">
+                                        <div class="form-group">
+                                            <label class="col-sm-5 control-label">Card No</label>
+                                            <div class="col-sm-7">
+                                                <input type="text" class="form-control" ng-model="vm.CardNo" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div ng-if="IfShow = vm.PaymentMethodID === '4' ? true : false">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label class="col-sm-5 control-label">M. Bank Name</label>
+                                            <div class="col-sm-7">
+                                                <ui-select ng-model="vm.Mbank.selected" theme="bootstrap" ng-click="vm.MBankID = $select.selected.MBankID">
+                                                    <ui-select-match placeholder="-Select Mobile Bank-">
+                                                        {{$select.selected.MBankName}}
+                                                        <span class="pull-right" ng-click="vm.MBankID = null; $select.selected=undefined"><i class="fa fa-remove" aria-hidden="true"></i></span>
+                                                    </ui-select-match>
+                                                    <ui-select-choices repeat="Mbank in vm.AllMBanks | filter: $select.search">
+                                                        <div ng-bind-html="Mbank.MBankName | highlight: $select.search"></div>
+                                                    </ui-select-choices>
+                                                </ui-select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label class="col-sm-5 control-label">M. Account No</label>
+                                            <div class="col-sm-7">
+                                                <input type="text" class="form-control" ng-model="vm.MAccountNo" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label class="col-sm-5 control-label">Transaction No</label>
+                                            <div class="col-sm-7">
+                                                <input type="text" class="form-control" ng-model="vm.TransactionNo" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+
+<div class="row font" id="print" ng-show="invoice">
+
+    <table width=100%>
+        <tr>
+            <td width=50%>
+                <div>
+                    <img alt="" height="70px" width="90px" ng-src="{{InstituteLogoUrl}}" />
+                    <br /><span style="font-weight:bold">{{InstituteName}}</span>
+                    <!--<br/><span style="font-size:13px">{{InsAddress}}</span>-->
+                </div>
+            </td>
+            <td>
+                <div class="col-md-5 pull-right">
+                    <div style="float:right;">
+                        <p>
+                            Phone: {{InsPhoneNo}}
+                            <br> Email: {{InsEmail}}
+                            <br> Web: {{InsWeb}}
+                        </p>
+                    </div>
+                </div>
+            </td>
+
+        </tr>
+    </table>
+
+
+    <br />
+    <br />
+
+    <div class="row">
+
+        <table width=90%; style="margin-left: 60px; border: 1px solid gray;">
+            <tr>
+                <td width=6%; height="30px" style=" color: black">Student</td>
+                <td width=2%; height="30px" style=" color: black">:</td>
+
+                <td style=" color: black;text-align:left; font-weight: bold" width=35%;>
+                    {{vm.regedusers[vm.indexLenth-1].UserName}}
+                </td>
+
+                <td width=6%; style=" color: black">Class</td>
+                <td width=2%; style=" color: black">:</td>
+
+                <td style=" color: black; text-align:left; font-weight: bold">
+                    {{vm.regedusers[vm.indexLenth-1].Class}}
+                </td>
+
+
+
+            </tr>
+            <tr>
+                <td width=6%; style=" color: black">Roll: </td>
+                <td width=2%; style=" color: black">:</td>
+
+                <td style=" color: black;text-align:left; font-weight: bold" width=35%;>
+                    {{vm.regedusers[vm.indexLenth-1].RollNo}}
+                </td>
+
+                <td width=6%; style=" color: black">Section</td>
+                <td width=2%; style=" color: black">:</td>
+
+                <td style=" color: black;text-align:left; font-weight: bold">
+                    {{vm.regedusers[vm.indexLenth-1].Section}}
+                </td>
+
+
+            </tr>
+            <tr>
+                <td width=6%; height="30px" style=" color: black">Medium</td>
+                <td width=2%; height="30px" style=" color: black">:</td>
+
+                <td style=" color: black;text-align:left; font-weight: bold" width=35%;>
+                    {{vm.regedusers[vm.indexLenth-1].Medium}}
+                </td>
+
+
+                <td width=6%; height="30px" style=" color: black">Department</td>
+                <td width=2%; height="30px" style=" color: black">:</td>
+
+                <td style=" color: black;text-align:left; font-weight: bold">
+                    {{vm.regedusers[vm.indexLenth-1].Department}}
+                </td>
+            </tr>
+
+
+        </table>
+    </div>
+
+
+
+    <div class="row">
+        <div style="margin-top : 50px">
+            <i aria-hidden="true"></i>
+            <h3 style="text-align:center">
+                Monthly Fee Report
+                <span class="semi-bold">&nbsp;&nbsp; {{vm.mon.selected.MonthName}}</span>
+            </h3>
+        </div>
+    </div>
+
+    <div class="">
+        <div class="row">
+            <div class="col-md-11">
+                <div class="grid simple">
+                    <div class="grid-body no-border invoice-body">
+                        <table class="table1">
+                            <thead>
+                                <tr>
+                                    <th style="width:60px;text-align:right" class="unseen text-center">SL</th>
+                                    <th style="text-align:right;width:240px;">Fees Type</th>
+                                    <th style="width:240px;text-align:right" class="text-right">FEES HEAD</th>
+                                    <th style="width:165px;text-align:right" class="text-right" colspan="2">FEES</th>
+                                    <th style="width:165px;text-align:right" class="text-right" colspan="2">NO OF MONTH</th>
+                                    <th style="width:165px;text-align:right" class="text-right" colspan="2">TOTAL</th>
+                                    <!-- <th style="width:90px" class="text-right">TOTAL</th> -->
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="monthWiseFe in vm.monthWiseFee" style="border-bottom:solid 1px #999999;text-align:right">
+                                    <td class="unseen text-center" style="border-bottom:solid 1px #999999;text-align:right">{{$index + 1}}</td>
+                                    <td class="text-right" style="border-bottom:solid 1px #999999;text-align:right">
+                                        <span>{{monthWiseFe.FeesType}}</span>
+                                    </td>
+                                    <td style="border-bottom:solid 1px #999999;text-align:right">
+                                        {{monthWiseFe.FeesHead}}
+                                    </td>
+                                    <td class="text-right" colspan="2" style="border-bottom:solid 1px #999999;text-align:right">
+                                        <p style="text-align:right">{{monthWiseFe.NoOfMonth}} TK</p>
+                                    </td>
+                                    <td class="text-right" colspan="2" style="border-bottom:solid 1px #999999;text-align:right">
+                                        <p style="text-align:right">{{monthWiseFe.Fee}} TK</p>
+                                    </td>
+                                    <td class="text-right" colspan="2" style="border-bottom:solid 1px #999999;text-align:right">
+                                        <p style="text-align:right">{{monthWiseFe.TotalFees}} TK</p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <br>
+                        <br>
+                        <table class="table" ng-if="IsShowFine = fineDetails.length > 0 ? true : false">
+                            <thead>
+                                <tr>
+                                    <th style="width:60px;text-align:right" class="text-center">SL</th>
+                                    <th style="text-align:right;width:240px;" class="text-left">FINE HEAD</th>
+                                    <th style="width:240px;text-align:right" class="text-right">DETAILS</th>
+                                    <th style="width:165px;text-align:right" class="text-right" colspan="2">FINE AMOUNT</th>
+                                    <!-- <th style="width:90px" class="text-right">TOTAL</th> -->
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="value in fineDetails" style="border-bottom:solid 1px #999999;text-align:right">
+                                    <td class="unseen text-center" style="border-bottom:solid 1px #999999;text-align:right">{{$index + 1}}</td>
+                                    <td class="text-right" ng-repeat="field in value" style="border-bottom:solid 1px #999999;text-align:right">
+                                        <span>{{field.FineHead}}</span>
+                                    </td>
+                                    <td ng-repeat="field in value" style="border-bottom:solid 1px #999999;text-align:right">
+                                        {{field.FineHead +' '+ field.Days}} Days
+                                    </td>
+                                    <td class="text-right" colspan="2" ng-repeat="field in value" style="border-bottom:solid 1px #999999;text-align:right">
+                                        <p style="text-align:right">{{field.TotalFineAmount}} TK</p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <table class="table" style="float:right">
+                            <tbody>
+                                <tr>
+                                    <td class="text-right" style="text-align:left; width:60%">
+                                        <strong>Total Fees</strong>
+                                    </td>
+                                    <td class="text-right" style="border-bottom:solid 1px #999999;text-align:right; float:right; width:40%">{{vm.TotalFees}}</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-right no-border" style="text-align:left;">
+                                        <strong>Scholarship</strong>
+                                    </td>
+                                    <td class="text-right" style="border-bottom:solid 1px #999999;text-align:right; float:right">{{vm.scholarshipAmmount}}</td>
+                                </tr>
+                                <tr ng-if="IsShowFine = fineDetails.length > 0 ? true : false">
+                                    <td class="text-right no-border" style="text-align:left">
+                                        <strong>Total Fine</strong>
+                                    </td>
+                                    <td class="text-right" style="border-bottom:solid 1px #999999;text-align:right; float:right">{{vm.TotalFine }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-right no-border" style="text-align:left">
+                                        <div class="well well-small green">
+                                            <strong>{{DueOrAdvancee}}</strong>
+                                        </div>
+                                    </td>
+                                    <td class="text-right " style="border-bottom:solid 1px #999999;text-align:right; float:right">
+                                        <strong>{{vm.previousDue}}</strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-right no-border" style="text-align:left">
+                                        <div class="well well-small green">
+                                            <strong>{{payFees}}</strong>
+                                        </div>
+                                    </td>
+                                    <td class="text-right " style="border-bottom:solid 1px #999999;text-align:right; float:right">
+                                        <strong>{{ttlPFees}}</strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-right no-border" style="text-align:left">
+                                        <div class="well well-small green">
+                                            <strong>Weaver</strong>
+                                        </div>
+                                    </td>
+                                    <td class="text-right " style="border-bottom:solid 1px #999999;text-align:right; float:right">
+                                        <strong>{{vm.DueOrAdvanceWithDiscount}}</strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-right no-border" style="text-align:left">
+                                        <div class="well well-small green">
+                                            <strong>{{ttlpayFees}}</strong>
+                                        </div>
+                                    </td>
+                                    <td class="text-right " style="border-bottom:solid 1px #999999;text-align:right; float:right">
+                                        <strong>{{ttlAmts}}</strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-right no-border" style="text-align:left">
+                                        <div class="well well-small green">
+                                            <strong>{{vm.amountStatus}}</strong>
+                                        </div>
+                                    </td>
+                                    <td class="text-right " style="border-bottom:solid 1px #999999;text-align:right; float:right">
+                                        <strong>{{vm.DueOrAdvance}}</strong>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-1">
+
+            </div>
+        </div>
+    </div>
+    <br>
+    <br>
+    <br>
+
+    <pre>______________________            _______________________               ______________________</pre>
+    <pre>     Signed by                            Approved by                           Final approved</pre>
+    <!--<br />
+    <p>
+        Powered by : OnAir Int'l Ltd
+    </p>-->
+
+</div>
+<!-- ng-show="printthis" -->
+<!-- Fine Student PopUP -->
+
+
+
+<style>
+    .thumb {
+        width: 24px;
+        height: 24px;
+        float: none;
+        position: relative;
+        top: 7px;
+    }
+
+    .modal-content {
+        width: 1500px;
+        margin-left: -367px;
+    }
+
+    .no-margin {
+        padding-top: 11px;
+    }
+
+    .studentInfo h4 {
+        font-size: 14px;
+    }
+
+    .table thead tr th {
+        background: #333;
+        color: #fff;
+        text-align: center;
+        border-right: solid 1px #ffffff52;
+    }
+
+    .feesTable tbody tr td {
+        /*font-size: 16px;*/
+        color: #1b1e24;
+        margin-bottom: 10px !important;
+    }
+
+    .actions {
+        margin-bottom: 35px;
+    }
+
+    .background td {
+        color: #fff;
+        background: #505458;
+    }
+
+    p {
+        margin: 0 0 -7px;
+    }
+
+    .red {
+        background: #f35958;
+        color: #fff;
+    }
+
+    .green {
+        background: #0aa699;
+        color: #fff;
+    }
+
+    .yellow {
+        background: #a8ab1b;
+        color: #fff;
+    }
+
+    .label {
+        font-weight: bold;
+    }
+
+    .tag {
+        background: #eeeeee;
+    }
+
+    .Htag {
+        background-color: #428bca;
+        color: #fff;
+    }
+
+    /* .table tbody tr td{
+            width: 12%;
+        } */
+
+    .btn-mini {
+        padding: 8px 10px;
+        font-size: 11.5px;
+    }
+</style>

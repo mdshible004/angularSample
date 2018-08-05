@@ -1,0 +1,229 @@
+<div class="grid simple col-lg-12 col-sm-12 col-xs-12" ng-show="createItem">
+
+    <div class="grid-title">
+        <div class="row">
+            <div class="col-lg-9 col-sm-7 col-xs-7">
+                <div class="page-title">
+                    <i class="fa fa-keyboard-o" aria-hidden="true"></i>
+                    <h3>
+                        Fine -
+                        <span class="semi-bold">Settings</span>
+                    </h3>
+                </div>
+            </div>
+            <div class="col-lg-1 col-sm-2 col-xs-2 marginOff">
+                <button type="submit" class="btn btn-primary btn-block showBtn" ng-click="itemEvent()">Show List</button>
+            </div>
+            <div class="col-lg-1 col-sm-2 col-xs-2 marginOff">
+                <button type="submit" class="btn btn-primary btn-block resetBtn" ng-click="clearField()">Reset</button>
+            </div>
+            <div class="col-lg-1 col-sm-1 col-xs-1 marginOff">
+                <button type="submit" class="btn btn-primary btn-block saveBtn" ng-click="vm.AddFine()" ng-disabled="vm.FineSetup.$invalid">Save</button>
+            </div>
+        </div>
+    </div>
+    <div class="grid-body">
+        <div class="row">
+
+            <form class="form-horizontal col-lg-8 col-sm-9 col-xs-9" name="vm.FineSetup">
+                <div class="row">
+                    <div class="col-lg-12 col-sm-12 col-xs-12">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Fine Head</label>
+                            <div class="col-sm-7">
+                                <ui-select ng-model="vm.Fine.selected" name="drpFineHed" theme="bootstrap" ng-click="vm.FineHeadID = $select.selected.FineHeadID" on-select="ChangeLabelName(vm.FineHeadID)"
+                                           required>
+                                    <ui-select-match placeholder="- Select Fine Head -">
+                                        {{$select.selected.FineHead}}
+                                        <span style="float:right" ng-click="vm.FineHeadID = null; $select.selected=undefined">
+                                            <i class="fa fa-remove" aria-hidden="true"></i>
+                                        </span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="Fine in   vm.FineTypes | filter: $select.search">
+                                        <div ng-bind-html="Fine.FineHead | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+
+                                <span class="error" ng-show="(vm.FineSetup.$dirty||submitted) && vm.FineSetup.drpFineHed.$error.required">*</span>
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Fine Amount</label>
+                            <div class="col-sm-7">
+                                <input type="number" class="form-control" placeholder="Fine Amount" name="FAmount" ng-model="vm.FineSetup.FineAmount" min=0 oninput="validity.valid||(value=null);" required>
+                            </div>
+                            <span class="error" ng-show="(vm.FineSetup.$dirty||submitted) && vm.FineSetup.FAmount.$error.required">*</span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">{{FineSubDays}}</label>
+                            <div class="col-sm-7">
+                                <input type="number" class="form-control" name="FSD" placeholder="{{FineSubDays}}" ng-model="vm.FineSetup.minDays" min=0 oninput="validity.valid||(value=null);" required>
+                            </div>
+                            <span class="error" ng-show="(vm.FineSetup.$dirty||submitted) && vm.FineSetup.FSD.$error.required">*</span>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Item Entry List Grid -->
+
+<div class="grid simple col-md-12" ng-show="showItem">
+    <div class="grid-title">
+        <div class="row">
+            <div class="col-md-11">
+                <div class="page-title">
+                    <i class="fa fa-keyboard-o" aria-hidden="true"></i>
+                    <h3>
+                        All Fine -
+                        <span class="semi-bold">List</span>
+                    </h3>
+                </div>
+            </div>
+
+            <div class="col-md-1 marginOff">
+                <button type="submit" class="btn btn-primary btn-block saveBtn" ng-click="listEvent()">Create</button>
+            </div>
+        </div>
+    </div>
+    <div class="grid-body">
+        <div class="row">
+            <div class="col-md-12">
+                <table st-table="rowCollection" class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th st-sort="ItemID">SL</th>
+                            <th st-sort="ItemName">Fine Head</th>
+                            <th st-sort="ItemBrandID">Fine Amount</th>
+                            <th st-sort="ItemBrandID">Minimum Days</th>
+                            <th st-sort="">Edit</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="fine in vm.FineList">
+                            <td>{{$index+1}}</td>
+                            <td>{{fine.FineHead}}</td>
+                            <td>{{fine.FineAmount}}</td>
+                            <td>{{fine.MinimumDays}}</td>
+                            <td>
+                                <button href="#" class="btn btn-info btn-xs btn-mini" data-toggle="modal" data-target="#myModal" ng-click="vm.getFineByID(fine.InsFineID)">Edit</button>
+                                <button href="#" class="btn btn-primary btn-xs btn-mini" data-toggle="modal" ng-click="vm.deleteFine(fine.InsFineID)">Delete</button>
+
+                            </td>
+                        </tr>
+                    </tbody>
+                    <!--<tfoot>
+                        <tr>
+                            <td colspan="5" class="text-center">
+                                <div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="7"></div>
+                            </td>
+                        </tr>
+                    </tfoot>-->
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade col-lg-12 col-sm-12 col-xs-12" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="page-title">
+                            <i class="fa fa-keyboard-o" aria-hidden="true"></i>
+                            <h3>
+                                Edit Fees -
+                                <span class="semi-bold">Entry</span>
+                            </h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="grid-body">
+                    <div class="row">
+                        <form class="form-horizontal col-lg-8 col-sm-8 col-xs-8" name="vm.FineSetupUpdate">
+                            <div class="row">
+
+                                <div class="col-lg-12 col-sm-12 col-xs-12">
+                                    <div class="form-group">
+                                        <label class="col-sm-4 control-label">Fine Head</label>
+                                        <div class="col-sm-7">
+                                            <ui-select ng-model="vm.Fine.selected" name="drpUpdateFine" theme="bootstrap" ng-click="vm.FineHeadID = $select.selected.FineHeadID" on-select="ChangeLabelName(vm.FineHeadID)" required>
+                                                <ui-select-match placeholder="- Select Fine Head -">
+                                                    {{$select.selected.FineHead}}
+                                                    <span style="float:right" ng-click="vm.FineHeadID = null; $select.selected=undefined">
+                                                        <i class="fa fa-remove" aria-hidden="true"></i>
+                                                    </span>
+                                                </ui-select-match>
+                                                <ui-select-choices repeat="Fine in   vm.FineTypes | filter: $select.search">
+                                                    <div ng-bind-html="Fine.FineHead | highlight: $select.search"></div>
+                                                </ui-select-choices>
+                                            </ui-select>
+                                            <span class="error" ng-show="(vm.FineSetupUpdate.$dirty||submitted) && vm.FineSetupUpdate.drpUpdateFine.$error.required">*</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-4 control-label">Fine Amount</label>
+                                        <div class="col-sm-7">
+                                            <input type="number" class="form-control" placeholder="Fine Amount" ng-model="vm.FineSetup.FineAmount" name="FAmount" min=0 oninput="validity.valid||(value=null);" required>
+                                        </div>
+                                        <span class="error" ng-show="(vm.FineSetupUpdate.$dirty||submitted) && vm.FineSetupUpdate.FAmount.$error.required">*</span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-4 control-label">{{FineSubDays}}</label>
+                                        <div class="col-sm-7">
+                                            <input type="number" class="form-control" placeholder="{{FineSubDays}}" ng-model="vm.FineSetup.minDays" name="FSD" min=0 oninput="validity.valid||(value=null);" required>
+                                            <input type="hidden" ng-model="vm.FineSetup.classID">
+                                        </div>
+                                        <span class="error" ng-show="(vm.FineSetupUpdate.$dirty||submitted) && vm.FineSetupUpdate.FSD.$error.required">*</span>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="LoadGrid()">Close</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="vm.updateFine()" ng-disabled="vm.FineSetupUpdate.$invalid">Save changes</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+    .thumb {
+        width: 24px;
+        height: 24px;
+        float: none;
+        position: relative;
+        top: 7px;
+    }
+</style>

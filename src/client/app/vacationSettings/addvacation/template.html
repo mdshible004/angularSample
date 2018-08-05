@@ -1,0 +1,287 @@
+<div class="grid simple col-md-12" ng-show="createItem" ng-hide="Item">
+
+    <div class="grid-title">
+        <div class="row">
+            <div class="col-md-9">
+                <div class="page-title">
+                    <i class="fa fa-keyboard-o" aria-hidden="true"></i>
+                    <h3>
+                        Vacation -
+                        <span class="semi-bold">Settings</span>
+                    </h3>
+                </div>
+            </div>
+            <div class="col-md-1 marginOff">
+                <button type="submit" class="btn btn-primary btn-block showBtn" ng-click="itemEvent()">Show List</button>
+                <!-- <button type="submit" class="btn btn-primary btn-block" ng-click="">Update</button> -->
+            </div>
+            <div class="col-md-1 marginOff">
+                <button type="submit" class="btn btn-primary btn-block resetBtn" ng-click="clearField()">Reset</button>
+            </div>
+            <div class="col-md-1 marginOff">
+                <button type="submit" class="btn btn-primary btn-block saveBtn" ng-click="vm.saveVacation()" ng-disabled="vm.addVacation.$invalid">Save</button>
+            </div>
+        </div>
+    </div>
+    <div class="grid-body">
+        <div class="row">
+            <form class="form-horizontal col-sm-11" name="vm.addVacation">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label">Institute</label>
+                            <div class="col-sm-3">
+                                <ui-select ng-disabled="isReadOnly" ng-model="vm.Institute.selected" theme="bootstrap" name="inst" ng-click="vm.instituteID = $select.selected.InstituteID" required>
+                                    <ui-select-match placeholder=" -Select-">
+                                        {{$select.selected.InstituteName}}
+                                        <span class="pull-right" ng-click="vm.instituteID = null; $select.selected=undefined"><i class="fa fa-remove" aria-hidden="true"></i></span>
+                                    </ui-select-match>
+
+                                    <ui-select-choices value="Please select" repeat="Institute in vm.Institutes | filter: $select.search">
+                                        <div ng-bind-html="Institute.InstituteName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            <span class="error" ng-show="(vm.addVacation.$dirty||submitted) && vm.addVacation.inst.$error.required">*</span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label"> Vacation Type </label>
+                            <div class="col-sm-3">
+                                <ui-select ng-model="vm.vacation.selected" theme="bootstrap" name="VType" ng-click="vm.vacationTypeID = $select.selected.VacationTypeID" required>
+                                    <ui-select-match placeholder="-Select Vacation-">
+                                        {{$select.selected.VacationType}}
+                                        <span class="pull-right" ng-click="vm.vacationTypeID = null; $select.selected=undefined"><i class="fa fa-remove" aria-hidden="true"></i></span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="vacation in vm.vacations| filter: $select.search">
+                                        <div ng-bind-html="vacation.VacationType | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            <span class="error" ng-show="(vm.addVacation.$dirty||submitted) && vm.addVacation.VType.$error.required">*</span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label">From Date</label>
+                            <div class="col-sm-3 input-groups margin-bottom-sm">
+                                <datepicker date-format="MM-dd-yyyy" selector="form-control" ng-click="dateValidation()">
+                                    <div class="input-group">
+                                        <input class="form-control" placeholder="Choose a date" ng-model="vm.formDateSetup" ng-change="CheckIfBlank()" />
+                                        <span class="input-group-addon" style="cursor: pointer">
+                                            <i class="fa fa-lg fa-calendar"></i>
+                                        </span>
+                                    </div>
+                                </datepicker>
+                            </div>
+                            <br>
+                            <br>
+                            <br>
+                            <div class="form-group">
+                                <label class="col-sm-5 control-label"> To Date </label>
+                                <div class="col-sm-3 input-groups margin-bottom-sm">
+                                    <datepicker date-format="MM-dd-yyyy" selector="form-control" ng-click="dateValidation()">
+                                        <div class="input-group">
+                                            <input class="form-control" placeholder="Choose a date" ng-model="vm.toDateSetup" ng-change="CheckIfBlank()" />
+                                            <span class="input-group-addon" style="cursor: pointer">
+                                                <i class="fa fa-lg fa-calendar"></i>
+                                            </span>
+                                        </div>
+                                    </datepicker>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-5 control-label"> No Of Day </label>
+                                <div class="col-sm-3">
+                                    <input type="text" class="form-control" name="noOfDay" placeholder="Day" ng-model="vm.diffDays" disabled required>
+                                </div>
+                                <span class="error" ng-show="(vm.addVacation.$dirty||submitted) && vm.addVacation.noOfDay.$error.required">*</span>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-5 control-label"> Description </label>
+                                <div class="col-sm-3">
+                                    <!--<input type="text" class="form-control" placeholder="Remarks" ng-model="vm.remarks">-->
+                                    <textarea class="form-control" placeholder="Description" ng-model="vm.remarks"></textarea>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div class="grid simple col-md-12" ng-show="fun">
+    <div class="grid-title">
+        <div class="row">
+            <div class="col-md-11">
+                <div class="page-title">
+                    <i class="fa fa-keyboard-o" aria-hidden="true"></i>
+                    <h3>
+                        Vacation -
+                        <span class="semi-bold">List</span>
+                    </h3>
+                </div>
+            </div>
+
+            <div class="col-md-1 marginOff">
+                <button type="submit" class="btn btn-primary btn-block saveBtn" ng-click="listEvent()">Create</button>
+            </div>
+        </div>
+    </div>
+    <div class="grid-body">
+        <div class="row">
+            <div class="col-md-12">
+
+                <table st-table="rowCollection" class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Sl</th>
+                            <th>Vacation Type</th>
+                            <th>From Date</th>
+                            <th>To Date</th>
+                            <th>No Of Date</th>
+                            <th>Remarks</th>
+                            <th>Institute</th>
+                            <th>Edit</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="vacation in vm.vacationDate">
+                            <td>{{$index+1}}</td>
+                            <td>{{vacation.VacationType}}</td>
+                            <td>{{vacation.FromDate|date:"MM-dd-yyyy"}}</td>
+                            <td>{{vacation.ToDate |date:"MM-dd-yyyy"}}</td>
+                            <td>{{vacation.NoOfDay}}</td>
+                            <td>{{vacation.Remarks}}</td>
+                            <td>{{vacation.InstituteName}}</td>
+                            <td>
+                                <button href="#" class="btn btn-info btn-xs btn-mini" data-toggle="modal" data-target="#myModal" ng-click="vm.editVacation(vacation.VacationID)">Edit</button>
+                                <button href="/manage-deliveryman-info/edit/1" class="btn btn-primary btn-xs btn-mini" ng-click="vm.deleteVacation(vacation.VacationID)">Delete</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="page-title">
+                            <i class="fa fa-keyboard-o" aria-hidden="true"></i>
+                            <h3>Edit Vacation - <span class="semi-bold">Entry</span></h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="grid-body">
+                    <div class="row">
+                        <form class="form-horizontal col-sm-11" name="vm.addVacationUp">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label class="col-sm-5 control-label">Institute</label>
+                                        <div class="col-sm-3">
+                                            <ui-select ng-disabled="isReadOnly" ng-model="vm.Institute.selected" theme="bootstrap" name="Inst" ng-click="vm.instituteID = $select.selected.InstituteID" required>
+                                                <ui-select-match placeholder=" -Select-">
+                                                    {{$select.selected.InstituteName}}
+                                                    <span class="pull-right" ng-click="vm.instituteID = null; $select.selected=undefined"><i class="fa fa-remove" aria-hidden="true"></i></span>
+                                                </ui-select-match>
+                                                <ui-select-choices value="Please select" repeat="Institute in vm.Institutes | filter: $select.search">
+                                                    <div ng-bind-html="Institute.InstituteName | highlight: $select.search"></div>
+                                                </ui-select-choices>
+                                            </ui-select>
+                                        </div>
+                                        <span class="error" ng-show="(vm.addVacationUp.$dirty||submitted) && vm.addVacationUp.Inst.$error.required">*</span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-5 control-label"> Vacation Type </label>
+                                        <div class="col-sm-3">
+                                            <ui-select ng-model="vm.vacation.selected" theme="bootstrap" name="VType" ng-click="vm.vacationTypeID = $select.selected.VacationTypeID" required>
+                                                <ui-select-match placeholder="-Select Vacation-">
+                                                    {{$select.selected.VacationType}}
+                                                    <span class="pull-right" ng-click="vm.vacationTypeID = null; $select.selected=undefined"><i class="fa fa-remove" aria-hidden="true"></i></span>
+                                                </ui-select-match>
+                                                <ui-select-choices repeat="vacation in vm.vacations| filter: $select.search">
+                                                    <div ng-bind-html="vacation.VacationType | highlight: $select.search"></div>
+                                                </ui-select-choices>
+                                            </ui-select>
+                                        </div>
+                                        <span class="error" ng-show="(vm.addVacationUp.$dirty||submitted) && vm.addVacationUp.VType.$error.required">*</span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-5 control-label">Start Date From</label>
+                                        <div class="col-sm-3 input-groups margin-bottom-sm">
+                                            <datepicker date-format="MM-dd-yyyy" selector="form-control" ng-click="dateValidation()">
+                                                <div class="input-group">
+                                                    <input class="form-control" placeholder="Choose a date" ng-model="vm.formDateSetup" ng-change="CheckIfBlank()" />
+                                                    <span class="input-group-addon" style="cursor: pointer">
+                                                        <i class="fa fa-lg fa-calendar"></i>
+                                                    </span>
+                                                </div>
+                                            </datepicker>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-5 control-label"> End Date </label>
+                                        <div class="col-sm-3 input-groups margin-bottom-sm">
+                                            <datepicker date-format="MM-dd-yyyy" selector="form-control" ng-click="dateValidation()">
+                                                <div class="input-group">
+                                                    <input class="form-control" placeholder="Choose a date" ng-model="vm.toDateSetup" ng-change="CheckIfBlank()" />
+                                                    <span class="input-group-addon" style="cursor: pointer">
+                                                        <i class="fa fa-lg fa-calendar"></i>
+                                                    </span>
+                                                </div>
+                                            </datepicker>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-5 control-label"> Number Of Day </label>
+                                        <div class="col-sm-3">
+                                            <input type="text" class="form-control" name="noOfDay" placeholder="Day" ng-model="vm.diffDays" disabled required>
+                                        </div>
+                                        <span class="error" ng-show="(vm.addVacationUp.$dirty||submitted) && vm.addVacationUp.noOfDay.$error.required">*</span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-5 control-label"> Remarks </label>
+                                        <div class="col-sm-3">
+                                            <input type="text" class="form-control" placeholder="Remarks" ng-model="vm.remarks">
+                                            <input type="hidden" class="form-control" placeholder="Remarks" ng-model="vm.VacationID">
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" ng-click="vm.updateVacation()" data-dismiss="modal" ng-disabled="vm.addVacationUp.$invalid">Save changes</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+
+</div>
+
+
+<style>
+    .thumb {
+        width: 24px;
+        height: 24px;
+        float: none;
+        position: relative;
+        top: 7px;
+    }
+
+    .modal-content {
+        width: 1660px;
+        margin-left: -405px;
+    }
+</style>

@@ -1,0 +1,464 @@
+<div class="grid simple col-md-12" ng-show="createItem">
+
+    <div class="grid-title">
+        <div class="row">
+            <div class="col-md-9">
+                <div class="page-title">
+                    <i class="fa fa-keyboard-o" aria-hidden="true"></i>
+                    <h3>Cash Flow -
+                        <span class="semi-bold">Setting</span>
+                    </h3>
+                </div>
+            </div>
+            <div class="col-md-1 marginOff">
+				<button type="submit" class="btn btn-primary btn-block showBtn" ng-click="itemEvent()">Show List</button>
+				<!-- <button type="submit" class="btn btn-primary btn-block" ng-click="">Update</button> -->
+			</div>
+            <div class="col-md-1 marginOff">
+                <button type="submit" class="btn btn-primary btn-block resetBtn" ng-click="clearField()">Reset</button>
+            </div>
+            <div class="col-md-1 marginOff">
+                <button type="submit" class="btn btn-primary btn-block saveBtn" ng-click="vm.savePeriod()">Save</button>
+            </div>
+        </div>
+    </div>
+    <div class="grid-body">
+        <div class="row">
+            <form class="form-horizontal col-sm-12" name="vm.attendance">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label">Coustome Code</label>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control" placeholder="Coustome Code" ng-model="vm.eventSetup.eventname">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label">Method</label>
+                            <div class="col-sm-6">
+                                <ui-select ng-model="vm.class.selected" theme="bootstrap" ng-click="vm.ClassID = $select.selected.ClassID" on-select="vm.ClassSelected(vm.class.selected.ClassID)">
+                                    <ui-select-match allow-clear="true" placeholder="-Select method-">{{$select.selected.ClassName}}</ui-select-match>
+                                    <ui-select-choices repeat="class in vm.classes | filter: $select.search">
+                                        <div ng-bind-html="class.ClassName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label">Cash Flow Class</label>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control" placeholder="Cash Flow Class" ng-model="vm.eventSetup.eventname">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label">Description</label>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control" placeholder="Description" ng-model="vm.eventSetup.eventname">
+                            </div>
+                        </div>
+                      
+
+                    </div>
+
+
+                    <div class="col-md-6">
+                            <div class="form-group">
+                                    <label class="col-sm-3 control-label">Sequence No</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" class="form-control" placeholder="Sequence No" ng-model="vm.eventSetup.eventname">
+                                    </div>
+                                </div>
+                        <!-- <div class="form-group">
+                            <label class="col-sm-3 control-label">Project</label>
+                            <div class="col-sm-6">
+                                <ui-select ng-model="vm.section.selected" theme="bootstrap" ng-click="vm.SectionID = $select.selected.SectionID">
+                                    <ui-select-match allow-clear="true" placeholder="-Select Project-">{{$select.selected.SectionName}}</ui-select-match>
+                                    <ui-select-choices repeat="section in vm.sections | filter: $select.search">
+                                        <div ng-bind-html="section.SectionName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                        </div> -->
+
+
+                        <!-- <div class="form-group">
+                            <label class="col-sm-3 control-label">Cost Center</label>
+                            <div class="col-sm-6">
+                                <ui-select ng-model="vm.shift.selected" theme="bootstrap" ng-click="vm.ShiftID = $select.selected.ShiftID">
+                                    <ui-select-match allow-clear="true" placeholder="-Select Center-">{{$select.selected.ShiftName}}</ui-select-match>
+                                    <ui-select-choices repeat="shift in vm.shifts | filter: $select.search">
+                                        <div ng-bind-html="shift.ShiftName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                        </div> -->
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Cash flow Sub Class</label>
+                            <div class="col-sm-6">
+                                <ui-select ng-model="vm.medium.selected" theme="bootstrap" ng-click="vm.MediumID = $select.selected.MediumID">
+                                    <ui-select-match allow-clear="true" placeholder="-Select">{{$select.selected.MameName}}</ui-select-match>
+                                    <ui-select-choices repeat="medium in vm.mediums | filter: $select.search">
+                                        <div ng-bind-html="medium.MameName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Chart Of Account</label>
+                            <div class="col-sm-6">
+                                <ui-select ng-model="vm.medium.selected" theme="bootstrap" ng-click="vm.MediumID = $select.selected.MediumID">
+                                    <ui-select-match allow-clear="true" placeholder="-Select-">{{$select.selected.MameName}}</ui-select-match>
+                                    <ui-select-choices repeat="medium in vm.mediums | filter: $select.search">
+                                        <div ng-bind-html="medium.MameName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Leaf Lead</label>
+                            <div class="col-sm-6">
+                                <ui-select ng-model="vm.medium.selected" theme="bootstrap" ng-click="vm.MediumID = $select.selected.MediumID">
+                                    <ui-select-match allow-clear="true" placeholder="-Select">{{$select.selected.MameName}}</ui-select-match>
+                                    <ui-select-choices repeat="medium in vm.mediums | filter: $select.search">
+                                        <div ng-bind-html="medium.MameName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-sm-3 control-label">
+                        <div class="checkbox check-primary">
+                            <input id="{{$index + 100}}" type="checkbox" ng-model="vm.IsPresent" ng-checked="vm.IsPresent===1">
+                            <label for="{{$index + 100}}">IsAcctive</label>
+                        </div>
+
+                    </div>
+                </div>
+               
+            </form>
+        </div>
+    </div>
+
+
+
+
+    <div class="row">
+        <div class="col-md-8 col-md-offset-1">
+            <div>
+        <ul class="nav nav-tabs">
+            <li class="active">
+                <a data-toggle="tab" href="#0" ng-click="tabClick1()">Cash Flow Sub Class</a>
+            </li>
+            <li>
+                <a data-toggle="tab" href="#1" ng-click="tabClick2()">Cash Flow COA map</a>
+            </li>
+        
+        </ul>
+        </div>
+            <div class="tab-content">
+                <div  class="grid-body">
+                        <div>
+                                <div class="col-md-1 marginOff">
+                                    <button href="#" class="btn btn-info btn-xs btn-mini" data-toggle="modal" data-target="#myModal" ng-click="">ADD</button>
+                                </div>
+                                <div class="col-md-1 marginOff">
+                                    <button href="#" class="btn btn-info btn-xs btn-mini" data-toggle="modal" data-target="#myModal" ng-click="">Clear</button>
+                                </div>
+                            </div>
+                <div class="tab-pane fade in active" ng-show="cashFlowsubclass">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>SL</th>
+                                <th>Cash Flow Sub Class</th>
+                                <th>Description</th>
+                                <th>Sequence</th>
+                                <th>IsActive</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>{{$index+1}}</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td ng-click="openPeriodIndex($index)">
+                                    <div class="checkbox check-primary">
+                                        <input id="{{period.ClsPeriodID}}" type="checkbox" ng-model="period.IsActive" ng-checked="period.IsActive===1" ng-click="switch(period.IsActive)">
+                                        <label for="{{period.ClsPeriodID}}"></label>
+                                    </div>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+                <div class="tab-pane fade in active" ng-show="CashFlowCOAmap">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>SL</th>
+                                <th>Cash Flow Sub Class</th>
+                                <th>Chart Of Account</th>
+                                <th>Description</th>
+                                <th>Is Carry Forword</th>
+                                <th>Is Begining</th>
+                                <th>Effective Date</th>
+                                <th>IsActive</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="FeeDetail in month.FeeDetails">
+                                <td>{{$index+1}}</td>
+                                <td>Cash Flow Sub Class</td>
+                                <td>Chart Of Account</td>
+                                <td>Description</td>
+                                <td ng-click="openPeriodIndex($index)">
+                                    <div class="checkbox check-primary">
+                                        <input id="{{period.ClsPeriodID}}" type="checkbox" ng-model="period.IsActive" ng-checked="period.IsActive===1" ng-click="switch(period.IsActive)">
+                                        <label for="{{period.ClsPeriodID}}"></label>
+                                    </div>
+                                </td>
+                                <td ng-click="openPeriodIndex($index)">
+                                    <div class="checkbox check-primary">
+                                        <input id="{{period.ClsPeriodID}}" type="checkbox" ng-model="period.IsActive" ng-checked="period.IsActive===1" ng-click="switch(period.IsActive)">
+                                        <label for="{{period.ClsPeriodID}}"></label>
+                                    </div>
+                                </td>
+                                <td>Effective Date</td>
+                                <td ng-click="openPeriodIndex($index)">
+                                    <div class="checkbox check-primary">
+                                        <input id="{{period.ClsPeriodID}}" type="checkbox" ng-model="period.IsActive" ng-checked="period.IsActive===1" ng-click="switch(period.IsActive)">
+                                        <label for="{{period.ClsPeriodID}}"></label>
+                                    </div>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+                </div>
+            </div>
+            <!-- End of Tab Content -->
+
+        </div>
+    </div>
+</div>
+    
+    
+    
+    <div class="grid simple col-md-12" ng-show="showItem">
+        <div class="grid-title">
+            <div class="row">
+                <div class="col-md-11">
+                    <div class="page-title">
+                        <i class="fa fa-keyboard-o" aria-hidden="true"></i>
+                        <h3>Cash Flow-
+                            <span class="semi-bold">List</span>
+                        </h3>
+                    </div>
+                </div>
+    
+                <div class="col-md-1 marginOff">
+                    <button type="submit" class="btn btn-primary btn-block saveBtn" ng-click="listEvent()">Create</button>
+                </div>
+            </div>
+        </div>
+        <div class="grid-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <table st-table="rowCollection" class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>SL</th>
+                                <th>Custome Code</th>
+                                <th>Method</th>
+                                <th>Cash Flow Class</th>
+                                <th>Description</th>
+                                <th>Sequence No</th>
+                                <th>Project</th>
+                                <th>Cost Center</th>
+                                <th>Active</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="branch in vm.branches">
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td ng-click="openPeriodIndex($index)">
+                                    <div class="checkbox check-primary">
+                                        <input id="{{period.ClsPeriodID}}" type="checkbox" ng-model="period.IsActive" ng-checked="period.IsActive===1" ng-click="switch(period.IsActive)">
+                                        <label for="{{period.ClsPeriodID}}"></label>
+                                    </div>
+                                </td>
+    
+                                <td>
+    
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+        <!-- End Item Entry List Grid -->
+        
+        <!-- <div class="grid simple col-md-12" ng-show="EditItem">
+            <div class="grid-body">
+                <div class="row">
+                    <form class="form-horizontal col-sm-12" name="vm.attendance">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="col-sm-5 control-label">Coustome Code</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" class="form-control" placeholder="Coustome Code" ng-model="vm.eventSetup.eventname">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-5 control-label">Method</label>
+                                    <div class="col-sm-6">
+                                        <ui-select ng-model="vm.class.selected" theme="bootstrap" ng-click="vm.ClassID = $select.selected.ClassID" on-select="vm.ClassSelected(vm.class.selected.ClassID)">
+                                            <ui-select-match allow-clear="true" placeholder="-Select-">{{$select.selected.ClassName}}</ui-select-match>
+                                            <ui-select-choices repeat="class in vm.classes | filter: $select.search">
+                                                <div ng-bind-html="class.ClassName | highlight: $select.search"></div>
+                                            </ui-select-choices>
+                                        </ui-select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-5 control-label">Cash Flow Class</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" class="form-control" placeholder="Cash Flow Class" ng-model="vm.eventSetup.eventname">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-5 control-label">Description</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" class="form-control" placeholder="Description" ng-model="vm.eventSetup.eventname">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-5 control-label">Sequence No</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" class="form-control" placeholder="Sequence No" ng-model="vm.eventSetup.eventname">
+                                    </div>
+                                </div>
+        
+                            </div>
+        
+        
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Project</label>
+                                    <div class="col-sm-6">
+                                        <ui-select ng-model="vm.section.selected" theme="bootstrap" ng-click="vm.SectionID = $select.selected.SectionID">
+                                            <ui-select-match allow-clear="true" placeholder="-Select">{{$select.selected.SectionName}}</ui-select-match>
+                                            <ui-select-choices repeat="section in vm.sections | filter: $select.search">
+                                                <div ng-bind-html="section.SectionName | highlight: $select.search"></div>
+                                            </ui-select-choices>
+                                        </ui-select>
+                                    </div>
+                                </div>
+        
+        
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Cost Center</label>
+                                    <div class="col-sm-6">
+                                        <ui-select ng-model="vm.shift.selected" theme="bootstrap" ng-click="vm.ShiftID = $select.selected.ShiftID">
+                                            <ui-select-match allow-clear="true" placeholder="-Select">{{$select.selected.ShiftName}}</ui-select-match>
+                                            <ui-select-choices repeat="shift in vm.shifts | filter: $select.search">
+                                                <div ng-bind-html="shift.ShiftName | highlight: $select.search"></div>
+                                            </ui-select-choices>
+                                        </ui-select>
+                                    </div>
+                                </div>
+        
+        
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Cash flow Sub Class</label>
+                                    <div class="col-sm-6">
+                                        <ui-select ng-model="vm.medium.selected" theme="bootstrap" ng-click="vm.MediumID = $select.selected.MediumID">
+                                            <ui-select-match allow-clear="true" placeholder="-Select">{{$select.selected.MameName}}</ui-select-match>
+                                            <ui-select-choices repeat="medium in vm.mediums | filter: $select.search">
+                                                <div ng-bind-html="medium.MameName | highlight: $select.search"></div>
+                                            </ui-select-choices>
+                                        </ui-select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Chart Of Account</label>
+                                    <div class="col-sm-6">
+                                        <ui-select ng-model="vm.medium.selected" theme="bootstrap" ng-click="vm.MediumID = $select.selected.MediumID">
+                                            <ui-select-match allow-clear="true" placeholder="-Select">{{$select.selected.MameName}}</ui-select-match>
+                                            <ui-select-choices repeat="medium in vm.mediums | filter: $select.search">
+                                                <div ng-bind-html="medium.MameName | highlight: $select.search"></div>
+                                            </ui-select-choices>
+                                        </ui-select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Leaf Lead</label>
+                                    <div class="col-sm-6">
+                                        <ui-select ng-model="vm.medium.selected" theme="bootstrap" ng-click="vm.MediumID = $select.selected.MediumID">
+                                            <ui-select-match allow-clear="true" placeholder="-Select">{{$select.selected.MameName}}</ui-select-match>
+                                            <ui-select-choices repeat="medium in vm.mediums | filter: $select.search">
+                                                <div ng-bind-html="medium.MameName | highlight: $select.search"></div>
+                                            </ui-select-choices>
+                                        </ui-select>
+                                    </div>
+                                </div>
+        
+                            </div>
+        
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-3 control-label">
+                                <div class="checkbox check-primary">
+                                    <input id="{{$index + 100}}" type="checkbox" ng-model="vm.IsPresent" ng-checked="vm.IsPresent===1">
+                                    <label for="{{$index + 100}}">IsAcctive</label>
+                                </div>
+        
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-1 control-label">
+                                <button type="submit" class="btn btn-primary btn-block showBtn" ng-click="vm.itemEvent()">Add</button>
+                                <!-- <button type="submit" class="btn btn-primary btn-block" ng-click="">Update</button> -->
+                            <!-- </div>
+                            <div class="col-md-1 control-label">
+                                <button type="submit" class="btn btn-primary btn-block resetBtn" ng-click="clearField()">Clear</button>
+                            </div>
+                        </div>
+        
+                    </form>
+                </div>
+            </div>
+       </div>  -->
+  
+  <style>
+            .thumb {
+            width: 24px;
+            height: 24px;
+            float: none;
+            position: relative;
+            top: 7px;
+        }
+        .modal-content{
+            width: 1660px;
+            margin-left: -405px;
+        }
+        </style>

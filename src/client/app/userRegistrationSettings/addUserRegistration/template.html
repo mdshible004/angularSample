@@ -1,0 +1,567 @@
+
+
+<div class="grid simple col-md-12" ng-show="createItem">
+
+    <div class="grid-title">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="page-title">
+                    <i class="fa fa-keyboard-o" aria-hidden="true"></i>
+                    <h3>Student Registration </h3>
+                </div>
+            </div>
+            <div class="col-md-1">
+                <button type="button" class="btn btn-primary btn-block resetBtn" ng-click="clearField()">Reset</button>
+            </div>
+            <div class="col-md-1 marginOff">
+                <button type="button" class="btn btn-primary btn-block saveBtn" ng-click="vm.AddStudent()" ng-disabled="vm.registrationSetup.$invalid">Save</button>
+            </div>
+        </div>
+    </div>
+    <div class="grid-body">
+        <div class="row">
+
+            <form class="form-horizontal col-sm-12" name="vm.registrationSetup">
+                <div class="row">
+                    <div class="col-md-4">
+
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">Institute</label>
+                            <div class="col-md-7">
+                                <ui-select ng-model="vm.institute.selected" required name="InsID" theme="bootstrap" ng-click="vm.instituteID = $select.selected.InstituteID" ng-disabled="vm.InstituteID!==1?true:false" ng-change="hideList()" on-select="vm.getmediumNameDdl($select.selected.InstituteID, ''); vm.getAllShift($select.selected.InstituteID, ''); vm.getmediumNameDdl($select.selected.InstituteID, ''); vm.getCmnBranchDdl($select.selected.InstituteID, '')">
+                                    <ui-select-match placeholder="-Select Institute-">
+                                        {{$select.selected.InstituteName}}
+                                        <span style="float:right" ng-click="vm.instituteID = null; $select.selected=undefined; ReloadDll()">
+                                            <i class="fa fa-remove" aria-hidden="true"></i>
+                                        </span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="institute in vm.institutes | filter: $select.search">
+                                        <div ng-bind-html="institute.InstituteName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            <span class="error" ng-show="(vm.registrationSetup.$dirty||submitted) && vm.registrationSetup.InsID.$error.required">*</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Student</label>
+                            <div class="col-sm-5">
+                                <input type="text" class="form-control" placeholder="Student" ng-model="vm.StudentName" ng-value="" disabled>
+                                <input type="hidden" class="form-control" placeholder="Articel No" ng-model="vm.MenuCode">
+
+                            </div>
+                            <div class="col-md-2 marginOff">
+                                <!-- <button href="#" class="btn btn-primary btn-block showBtn" data-toggle="modal" data-target="#myModal" ng-click="vm.itemEvent()">Edit</button> -->
+                                <button href="#" title="Select first" class="btn btn-primary btn-block " style="background-color:#205a39cf" data-toggle="modal" data-target="#myModal"
+                                        ng-click="RefreshList()">
+                                    <i class="fa fa-search" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">ID Card No</label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" placeholder="Student ID" ng-model="vm.RFID" name="stuID" required min=0 oninput="validity.valid||(value=null);" ng-keydown="$event.keyCode == 13 ? $event.preventDefault() : null">
+                            </div>
+                            <span class="error" ng-show="(vm.registrationSetup.$dirty||submitted) && vm.registrationSetup.stuID.$error.required">*</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Student No</label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" placeholder="Student No" ng-model="vm.StudentNo" name="stuNo" ng-keydown="$event.keyCode == 13 ? $event.preventDefault() : null">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Roll</label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" placeholder="Roll" ng-model="vm.RollNo" name="rl" required min=0 oninput="validity.valid||(value=null);" ng-keydown="$event.keyCode == 13 ? $event.preventDefault() : null">
+                            </div>
+                            <span class="error" ng-show="(vm.registrationSetup.$dirty||submitted) && vm.registrationSetup.ManualVoucherNo.$error.required">*</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Shift</label>
+                            <div class="col-sm-7">
+                                <ui-select ng-model="vm.shift.selected" theme="bootstrap" ng-click="vm.ShiftID = $select.selected.ShiftID" ng-keydown="$event.keyCode == 13 ? $event.preventDefault() : null">
+                                    <ui-select-match placeholder="-Select-">
+                                        {{$select.selected.ShiftName}}
+                                        <span style="float:right" ng-click="vm.ShiftID = null; $select.selected=undefined"><i class="fa fa-remove" aria-hidden="true"></i></span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="shift in vm.shifts | filter: $select.search">
+                                        <div ng-bind-html="shift.ShiftName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-md-4">
+
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Medium</label>
+                            <div class="col-sm-7">
+                                <ui-select ng-model="vm.medium.selected" theme="bootstrap" ng-click="vm.MediumID = $select.selected.MediumID" ng-keydown="$event.keyCode == 13 ? $event.preventDefault() : null" on-select="vm.MediumWiseClassDDL($select.selected.MediumID, '')">
+                                    <ui-select-match placeholder="-Select-">
+                                        {{$select.selected.MameName}}
+                                        <span style="float:right" ng-click="vm.MediumID = null; $select.selected=undefined; ReloadMedium(0)"><i class="fa fa-remove" aria-hidden="true"></i></span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="medium in vm.mediums | filter: $select.search">
+                                        <div ng-bind-html="medium.MameName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Class</label>
+                            <div class="col-sm-7">
+                                <ui-select ng-model="vm.class.selected" theme="bootstrap" ng-click="vm.ClassID = $select.selected.ClassID" on-select="vm.ClassWiseDepartmentDDL(vm.ClassID, '')" ng-keydown="$event.keyCode == 13 ? $event.preventDefault() : null">
+                                    <ui-select-match placeholder="-Select-">
+                                        {{$select.selected.ClassName}}
+                                        <span style="float:right" ng-click="vm.ClassID = null; vm.section=undefined; $select.selected=undefined; ReloadClass(0)"><i class="fa fa-remove" aria-hidden="true"></i></span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="class in vm.classes | filter: $select.search">
+                                        <div ng-bind-html="class.ClassName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Department</label>
+                            <div class="col-sm-7">
+                                <ui-select ng-model="vm.department.selected" theme="bootstrap" ng-click="vm.DepartmentID = $select.selected.DepartmentID" ng-keydown="$event.keyCode == 13 ? $event.preventDefault() : null" on-select="vm.ClassSelected(0, '')">
+                                    <ui-select-match placeholder="-Select-">
+                                        {{$select.selected.DepartmentName}}
+                                        <span style="float:right" ng-click="vm.DepartmentID = null; $select.selected=undefined; ReloadDept(0)"><i class="fa fa-remove" aria-hidden="true"></i></span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="department in vm.departments | filter: $select.search">
+                                        <div ng-bind-html="department.DepartmentName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Section</label>
+                            <div class="col-sm-7">
+                                <ui-select ng-model="vm.section.selected" theme="bootstrap" ng-click="vm.SectionID = $select.selected.SectionID" ng-keydown="$event.keyCode == 13 ? $event.preventDefault() : null">
+                                    <ui-select-match placeholder="-Select-">
+                                        {{$select.selected.SectionName}}
+                                        <span style="float:right" ng-click="vm.SectionID = null; $select.selected=undefined"><i class="fa fa-remove" aria-hidden="true"></i></span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="section in vm.sections | filter: $select.search">
+                                        <div ng-bind-html="section.SectionName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Session</label>
+                            <div class="col-sm-7">
+                                <ui-select ng-model="vm.session.selected" theme="bootstrap" ng-click="vm.SessionID = $select.selected.SessionID" ng-keydown="$event.keyCode == 13 ? $event.preventDefault() : null">
+                                    <ui-select-match placeholder="-Select-">
+                                        {{$select.selected.SessionName}}
+                                        <span style="float:right" ng-click="vm.SessionID = null; $select.selected=undefined"><i class="fa fa-remove" aria-hidden="true"></i></span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="session in vm.sessions | filter: $select.search">
+                                        <div ng-bind-html="session.SessionName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Branch</label>
+                            <div class="col-sm-7">
+                                <ui-select ng-model="vm.branch.selected" theme="bootstrap" ng-click="vm.BrunchID = $select.selected.BrunchID" ng-keydown="$event.keyCode == 13 ? $event.preventDefault() : null">
+                                    <ui-select-match placeholder="-Select-">
+                                        {{$select.selected.BrunchName}}
+                                        <span style="float:right" ng-click="vm.BrunchID = null; $select.selected=undefined"><i class="fa fa-remove" aria-hidden="true"></i></span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="branch in vm.branchDdls | filter: $select.search">
+                                        <div ng-bind-html="branch.BrunchName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-4">
+
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Board</label>
+                            <div class="col-sm-7">
+                                <ui-select ng-model="vm.board.selected" theme="bootstrap" ng-click="vm.BoardID = $select.selected.BoardID" ng-keydown="$event.keyCode == 13 ? $event.preventDefault() : null">
+                                    <ui-select-match placeholder="-Select-">
+                                        {{$select.selected.BoardName}}
+                                        <span style="float:right" ng-click="vm.BoardID = null; $select.selected=undefined"><i class="fa fa-remove" aria-hidden="true"></i></span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="board in vm.boards | filter: $select.search">
+                                        <div ng-bind-html="board.BoardName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Compulsory</label>
+                            <div class="col-sm-7">
+                                <ui-select ng-model="vm.comp.selected" theme="bootstrap" ng-click="vm.CompulsorySubjectID = $select.selected.SubjectID" ng-keydown="$event.keyCode == 13 ? $event.preventDefault() : null">
+                                    <ui-select-match placeholder="-Select-">
+                                        {{$select.selected.SubjectName}}
+                                        <span class="pull-right" ng-click="vm.CompulsorySubjectID = null; $select.selected=undefined"><i class="fa fa-remove" aria-hidden="true"></i></span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="comp in vm.OpCompulsoryList | filter: $select.search">
+                                        <div ng-bind-html="comp.SubjectName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Optional</label>
+                            <div class="col-sm-7">
+                                <ui-select ng-model="vm.opt.selected" theme="bootstrap" ng-click="vm.OptionalSubjectID = $select.selected.SubjectID" ng-keydown="$event.keyCode == 13 ? $event.preventDefault() : null">
+                                    <ui-select-match placeholder="-Select-">
+                                        {{$select.selected.SubjectName}}
+                                        <span class="pull-right" ng-click="vm.OptionalSubjectID = null; $select.selected=undefined"><i class="fa fa-remove" aria-hidden="true"></i></span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="opt in vm.OpCompulsoryList | filter: $select.search">
+                                        <div ng-bind-html="opt.SubjectName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Remarks</label>
+                            <div class="col-sm-7">
+                                <textarea type="text" cols="3" rows="7" class="form-control" placeholder="Remarks" ng-model="vm.Remarks" ng-keydown="$event.keyCode == 13 ? $event.preventDefault() : null"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<!-- Item Entry List Grid -->
+
+<div class="grid simple col-md-12" ng-show="showItem">
+
+    <div class="grid-body">
+
+        <!-- Item Entry List Grid with picture Info -->
+        <div class="row">
+            <div class="col-md-3 col-sm-3">
+                <div class="user-profile-pic">
+                    <!--<img width="69" height="69" data-src-retina="images/profiles/avatar_small.jpg" data-src="images/profiles/avatar_small.jpg" src="images/profiles/avatar_small.jpg" alt="">-->
+                    <img width="69" height="69" src="{{vm.imgHost}}{{vm.ImageUrl}}" ng-if="vm.ImageUrl !== 'undefined' && vm.ImageUrl !== undefined && vm.ImageUrl !== 'null' && vm.ImageUrl !== null" />
+                    <img width="69" height="69" src="images/profiles/no-user-image.png" ng-if="vm.ImageUrl === 'undefined' || vm.ImageUrl === undefined || vm.ImageUrl === 'null' || vm.ImageUrl === null" />
+                </div>
+                <div class="user-mini-description">
+                    <h3 class="text-success semi-bold">
+                        {{vm.regedusersShow.RollNo}}
+                    </h3>
+                    <h5>Roll Number</h5>
+                    <h3 class="text-success semi-bold">
+                        {{vm.regedusersShow.Class}}
+                    </h3>
+                    <h5>Class</h5>
+                    <h3 class="text-success semi-bold">
+                        {{vm.regedusersShow.Section}}
+                    </h3>
+                    <h5>Section</h5>
+                </div>
+            </div>
+            <div class="col-md-5 user-description-box  col-sm-5">
+                <h4 class="semi-bold no-margin">{{vm.regedusersShow.UserName}}</h4>
+                <h6 class="no-margin">Student</h6>
+                <br>
+                <p><i class="fa fa-briefcase"></i> <b>Medium --</b>{{vm.regedusersShow.Medium}}</p>
+                <p><i class="fa fa-globe"></i> <b>Session --</b> {{vm.regedusersShow.Session}} </p>
+                <p><i class="fa fa-file-o"></i> <b>Shift --</b>  {{vm.regedusersShow.Shift}}</p>
+                <p><i class="fa fa-envelope"></i> <b>Depertment --</b>  {{vm.regedusersShow.Department}}</p>
+            </div>
+            <div class="col-md-3  col-sm-3">
+
+            </div>
+        </div>
+        <!-- End Item Entry List Grid with picture Info -->
+        <!-- Start table of Item Entry List Grid -->
+        <div class="row">
+            <div class="col-md-12">
+                <!--<table st-table="rowCollection" class="table table-bordered" style="width:300px !important; max-width:350px !important">
+                    <thead>
+                        <tr>
+                            <th st-sort="ItemID">SL</th>
+                            <th st-sort="ItemName">Student</th>
+                            <th st-sort="ItemBrandID">StudentID</th>
+                            <th st-sort="ItemCategoryID">Roll No</th>
+                            <th st-sort="ItemGroupID">Board</th>
+                            <th st-sort="ItemSeasonID">Session</th>
+                            <th st-sort="Unit">Branch</th>
+                            <th st-sort="UOMID">Shift</th>
+                            <th st-sort="">Medium</th>
+                            <th st-sort="">Department</th>
+                            <th st-sort="">Class</th>
+                            <th st-sort="">Section</th>
+                            <th st-sort="">Compulsory</th>
+                            <th st-sort="">Optional</th>
+                            <th st-sort="">IsActive</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="user in vm.regedusers">
+                            <td>{{$index + 1}}</td>
+                            <td>{{user.UserName}}</td>
+                            <td>{{user.RFID}}</td>
+                            <td>{{user.RollNo}}</td>
+                            <td>{{user.Board}}</td>
+                            <td>{{user.Session}}</td>
+                            <td>{{user.Brunch}}</td>
+                            <td>{{user.Shift}}</td>
+                            <td>{{user.Medium}}</td>
+                            <td>{{user.Department}}</td>
+                            <td>{{user.Class}}</td>
+                            <td>{{user.Section}}</td>
+                            <td>{{user.CompulsorySubjectName}}</td>
+                            <td>{{user.OptionalSubjectName}}</td>
+                            <td>
+                                <div class="checkbox check-primary">
+                                    <input type="checkbox" ng-checked="{{user.IsActive}}">
+                                    <label for="b"></label>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+
+                </table>-->
+
+                <table st-table="rowCollection" class="table1" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th style="background: #333; color: #fff; text-align: center; border-right: solid 1px #333;" st-sort="ItemID">SL</th>
+                            <th style="background: #333; color: #fff; text-align: center; border-right: solid 1px #333;" st-sort="ItemName">Student</th>
+                            <th style="background: #333; color: #fff; text-align: center; border-right: solid 1px #333;" st-sort="ItemBrandID">StudentID</th>
+                            <th style="background: #333; color: #fff; text-align: center; border-right: solid 1px #333;" st-sort="ItemCategoryID">Roll No</th>
+                            <th style="background: #333; color: #fff; text-align: center; border-right: solid 1px #333;" st-sort="ItemGroupID">Board</th>
+                            <th style="background: #333; color: #fff; text-align: center; border-right: solid 1px #333;" st-sort="ItemSeasonID">Session</th>
+                            <th style="background: #333; color: #fff; text-align: center; border-right: solid 1px #333;" st-sort="Unit">Branch</th>
+                            <th style="background: #333; color: #fff; text-align: center; border-right: solid 1px #333;" st-sort="UOMID">Shift</th>
+                            <th style="background: #333; color: #fff; text-align: center; border-right: solid 1px #333;" st-sort="">Medium</th>
+                            <th style="background: #333; color: #fff; text-align: center; border-right: solid 1px #333;" st-sort="">Department</th>
+                            <th style="background: #333; color: #fff; text-align: center; border-right: solid 1px #333;" st-sort="">Class</th>
+                            <th style="background: #333; color: #fff; text-align: center; border-right: solid 1px #333;" st-sort="">Section</th>
+                            <th style="background: #333; color: #fff; text-align: center; border-right: solid 1px #333;" st-sort="">Compulsory</th>
+                            <th style="background: #333; color: #fff; text-align: center; border-right: solid 1px #333;" st-sort="">Optional</th>
+                            <th style="background: #333; color: #fff; text-align: center; border-right: solid 1px #333;" st-sort="">IsActive</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="user in vm.regedusers">
+                            <td style="border: 1px solid #ddd; border-spacing: 1px; border-color: #E8EDF1 !important; padding: 10px 12px !important; color: #576475; font-size: 13px;">{{$index + 1}}</td>
+                            <td style="border: 1px solid #ddd; border-spacing: 1px; border-color: #E8EDF1 !important; padding: 10px 12px !important; color: #576475; font-size: 13px;">{{user.UserName}}</td>
+                            <td style="border: 1px solid #ddd; border-spacing: 1px; border-color: #E8EDF1 !important; padding: 10px 12px !important; color: #576475; font-size: 13px;">{{user.RFID}}</td>
+                            <td style="border: 1px solid #ddd; border-spacing: 1px; border-color: #E8EDF1 !important; padding: 10px 12px !important; color: #576475; font-size: 13px;">{{user.RollNo}}</td>
+                            <td style="border: 1px solid #ddd; border-spacing: 1px; border-color: #E8EDF1 !important; padding: 10px 12px !important; color: #576475; font-size: 13px;">{{user.Board}}</td>
+                            <td style="border: 1px solid #ddd; border-spacing: 1px; border-color: #E8EDF1 !important; padding: 10px 12px !important; color: #576475; font-size: 13px;">{{user.Session}}</td>
+                            <td style="border: 1px solid #ddd; border-spacing: 1px; border-color: #E8EDF1 !important; padding: 10px 12px !important; color: #576475; font-size: 13px;">{{user.Brunch}}</td>
+                            <td style="border: 1px solid #ddd; border-spacing: 1px; border-color: #E8EDF1 !important; padding: 10px 12px !important; color: #576475; font-size: 13px;">{{user.Shift}}</td>
+                            <td style="border: 1px solid #ddd; border-spacing: 1px; border-color: #E8EDF1 !important; padding: 10px 12px !important; color: #576475; font-size: 13px;">{{user.Medium}}</td>
+                            <td style="border: 1px solid #ddd; border-spacing: 1px; border-color: #E8EDF1 !important; padding: 10px 12px !important; color: #576475; font-size: 13px;">{{user.Department}}</td>
+                            <td style="border: 1px solid #ddd; border-spacing: 1px; border-color: #E8EDF1 !important; padding: 10px 12px !important; color: #576475; font-size: 13px;">{{user.Class}}</td>
+                            <td style="border: 1px solid #ddd; border-spacing: 1px; border-color: #E8EDF1 !important; padding: 10px 12px !important; color: #576475; font-size: 13px;">{{user.Section}}</td>
+                            <td style="border: 1px solid #ddd; border-spacing: 1px; border-color: #E8EDF1 !important; padding: 10px 12px !important; color: #576475; font-size: 13px;">{{user.CompulsorySubjectName}}</td>
+                            <td style="border: 1px solid #ddd; border-spacing: 1px; border-color: #E8EDF1 !important; padding: 10px 12px !important; color: #576475; font-size: 13px;">{{user.OptionalSubjectName}}</td>
+                            <td style="border: 1px solid #ddd; border-spacing: 1px; border-color: #E8EDF1 !important; padding: 10px 12px !important; color: #576475; font-size: 13px;">
+                                <div class="checkbox check-primary">
+                                    <input type="checkbox" ng-checked="{{user.IsActive}}">
+                                    <label for="b"></label>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+
+                </table>
+
+            </div>
+        </div>
+        <!-- End of table view -->
+    </div>
+</div>
+<!-- End of Item Entry List Grid -->
+<!-- Modal Start from here -->
+<!-- ---------------------------------------------------- Start UI-Grid ------------------------------------------------ -->
+<div class="modal fade " id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" style="float:left">Student List</h4>
+            </div>
+            <div class="modal-body">
+                <div class="grid-body">
+                    <div class="row">
+                        <div class="col-md-12" style="text-align:right">
+                            <input type="text" ng-model="SearchProperty" placeholder="Search Student" ng-keyup="$event.keyCode == 13 ? SearchNow(SearchProperty) : null" />
+                            <button type="button" class="close" aria-label="Close" ng-click="SearchCancel('')">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div ui-grid="gridOptions" ui-grid-resize-columns ui-grid-auto-resize ui-grid-move-columns ui-grid-exporter ui-grid-pinning
+                                 class="grid" style="height:550px"></div>
+
+                            <div class="loadmore">
+                                <div ng-show="loaderMore" ng-class="result">
+                                    <!-- <img src="~/Content/img/ng-loader.gif" /> -->
+                                    {{lblMessage}}
+                                </div>
+                            </div>
+                            <div class="row"></div>
+                            <div role="contentinfo" style="margin-bottom: -20px;" class="ui-grid-pager-panel ng-scope">
+                                <div role="navigation" class="ui-grid-pager-container">
+                                    <div role="menubar" class="ui-grid-pager-control">
+                                        <!-- Start Page -->
+                                        <button type="button" role="menuitem" class="ui-grid-pager-first" ui-grid-one-bind-title="aria.pageToFirst" ui-grid-one-bind-aria-label="aria.pageToFirst"
+                                                ng-click="pagination.firstPage()" ng-disabled="cantPageBackward()" title="Page to first" aria-label="Page to first"
+                                                disabled="disabled">
+                                            <div class="first-triangle">
+                                                <div class="first-bar"></div>
+                                            </div>
+                                        </button>
+
+                                        <!-- Prev Page -->
+                                        <button type="button" role="menuitem" class="ui-grid-pager-previous" ui-grid-one-bind-title="aria.pageBack" ui-grid-one-bind-aria-label="aria.pageBack"
+                                                ng-click="pagination.previousPage()" ng-disabled="cantPageBackward()" title="Page back" aria-label="Page back"
+                                                disabled="disabled">
+                                            <div class="first-triangle prev-triangle"></div>
+                                        </button>
+
+                                        <input type="number" ui-grid-one-bind-title="aria.pageSelected" ui-grid-one-bind-aria-label="aria.pageSelected" class="ui-grid-pager-control-input ng-pristine ng-untouched ng-valid ng-not-empty ng-valid-min ng-valid-max ng-valid-required"
+                                               ng-model="pagination.pageNumber" min="1" max="{{pagination.getTotalPages()}}" required="" title="Selected page"
+                                               aria-label="Selected page" />
+
+                                        <span class="ui-grid-pager-max-pages-number ng-binding" ng-show="pagination.getTotalPages() > 0">
+                                            <abbr ui-grid-one-bind-title="paginationOf" title="of">/</abbr>{{pagination.getTotalPages()}}
+                                        </span>
+
+                                        <!-- Next Page -->
+                                        <button type="button" role="menuitem" class="ui-grid-pager-next" ui-grid-one-bind-title="aria.pageForward" ui-grid-one-bind-aria-label="aria.pageForward"
+                                                ng-click="pagination.nextPage()" ng-disabled="cantPageForward()" title="Page forward" aria-label="Page forward">
+                                            <div class="last-triangle next-triangle"></div>
+                                        </button>
+
+                                        <!-- Last Page -->
+                                        <button type="button" role="menuitem" class="ui-grid-pager-last" ui-grid-one-bind-title="aria.pageToLast" ui-grid-one-bind-aria-label="aria.pageToLast"
+                                                ng-click="pagination.lastPage()" ng-disabled="cantPageToLast()" title="Page to last" aria-label="Page to last">
+                                            <div class="last-triangle">
+                                                <div class="last-bar"></div>
+                                            </div>
+                                        </button>
+                                    </div>
+                                    <!-- ngIf: grid.options.paginationPageSizes.length > 1 -->
+
+                                    <div class="ui-grid-pager-row-count-picker ng-scope">
+                                        <select ng-model="pagination.ddlpageSize" ng-options="o as o for o in pagination.paginationPageSizes" ng-change="pagination.pageSizeChange()"
+                                                class="ng-pristine ng-untouched ng-valid ng-not-empty"></select>
+                                        <span class="ui-grid-pager-row-count-label ng-binding">&nbsp;items per page</span>
+                                    </div>
+                                    <!-- end ngIf: grid.options.paginationPageSizes.length > 1 -->
+                                    <!-- ngIf: grid.options.paginationPageSizes.length <= 1 -->
+                                </div>
+                                <div class="ui-grid-pager-count-container">
+                                    <div class="ui-grid-pager-count">
+                                        <span ng-show="pagination.totalItems > 0" class="ng-binding">
+                                            {{pagination.pageNumber}}
+                                            <abbr ui-grid-one-bind-title="paginationThrough" title="through">-</abbr>
+                                            {{pagination.ddlpageSize}} of {{pagination.totalItems}} items
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ----------------------------------------------------- End UI-Grid ------------------------------------------------- -->
+<!--<div class="modal fade " id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+
+                <div class="grid-body">
+                        <div class="row">
+                            <div class="col-md-12">
+
+                                 <label for="items">items by page</label>
+                                <input class="input-sm form-control" name="items" id="items" type="number" ng-model="itemsByPage" />
+                                <table st-table="rowCollection" class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th st-sort="ItemID">SL</th>
+                                            <th st-sort="ItemName">Student</th>
+                                            <th st-sort="ItemBrandID">Gender</th>
+                                            <th st-sort="ItemCategoryID">Date of Birth</th>
+                                            <th st-sort="ItemGroupID">Birth Certificate No</th>
+                                            <th st-sort="ItemSeasonID">Father's Name</th>
+                                            <th st-sort="Unit">Phone No</th>
+                                            <th st-sort="">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="student in vm.students">
+                                            <td>{{$index+1}}</td>
+                                            <td>{{student.UserFullName}}</td>
+                                            <td>{{student.Gender}}</td>
+                                            <td>{{student.DOB | date: 'dd/MM/yyyy'}}</td>
+                                            <td>{{student.BirthCertificate}}</td>
+                                            <td>{{student.Guardian}}</td>
+                                            <td>{{student.PhoneNo}}</td>
+                                            <td ng-hide="true">{{student.UserID}}</td>
+                                            <td><button type="submit" class="btn btn-primary btn-block saveBtn" ng-click="selectedEvent(student.UserID,student.UserFullName)" data-dismiss="modal">Select</button></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>-->
+<!-- End Modal -->
+<style>
+    .thumb {
+        width: 20px;
+        height: 24px;
+        float: none;
+        position: relative;
+        top: 7px;
+    }
+
+    /*.modal-content {
+        width: 1150px;
+        margin-left: -205px;
+    }*/
+</style>

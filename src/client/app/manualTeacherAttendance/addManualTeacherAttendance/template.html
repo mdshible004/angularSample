@@ -1,0 +1,204 @@
+<div class="grid simple col-md-12" ng-show="createItem">
+
+    <div class="grid-title">
+        <div class="row">
+            <div class="col-md-9">
+                <div class="page-title">
+                    <i class="fa fa-keyboard-o" aria-hidden="true"></i>
+                    <h3>
+                        Manual Teacher Attendance
+                    </h3>
+                </div>
+            </div>
+
+            <div class="col-md-1 marginOff">
+                <button type="button" class="btn btn-primary btn-block showBtn" ng-click="getAllTeacherMAList()">Show</button>
+            </div>
+            <div class="col-md-1 marginOff" ng-hide="btnHide">
+                <button type="button" class="btn btn-primary btn-block saveBtn" ng-disabled="btnDis" ng-click="vm.postManualTeacherAttendance()">Save</button>
+            </div>
+            <div class="col-md-1 marginOff">
+                <button type="button" class="btn btn-primary btn-block resetBtn" ng-click="clearField()">Reset</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Input Parameter Start from here -->
+    <div class="grid-body">
+        <div class="row">
+
+            <form class="form-horizontal col-sm-12" name="vm.attendance">
+                <div class="row">
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Branch</label>
+                            <div class="col-sm-8">
+                                <ui-select ng-model="vm.brunch.selected" theme="bootstrap" ng-click="vm.BrunchID = $select.selected.BrunchID" ng-change="changeGrid()">
+                                    <ui-select-match placeholder="-Select Branch-">
+                                        {{$select.selected.BrunchName}}
+                                        <span style="float:right" ng-click="vm.BrunchID = null; $select.selected=undefined"><i class="fa fa-remove" aria-hidden="true"></i></span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="branch in vm.branches | filter: $select.search">
+                                        <div ng-bind-html="branch.BrunchName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Department</label>
+                            <div class="col-sm-8">
+                                <ui-select ng-model="vm.department.selected" theme="bootstrap" ng-click="vm.DepartmentID = $select.selected.DepartmentID" ng-change="changeGrid()">
+                                    <ui-select-match placeholder="-Select Department-">
+                                        {{$select.selected.DepartmentName}}
+                                        <span style="float:right" ng-click="vm.DepartmentID = null; $select.selected=undefined"><i class="fa fa-remove" aria-hidden="true"></i></span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="department in vm.departments | filter: $select.search">
+                                        <div ng-bind-html="department.DepartmentName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label class="col-sm-4 control-label">Date</label>
+                                        <div class="col-sm-8">
+                                            <datepicker date-format="dd-MM-yyyy" selector="form-control">
+                                                <div class="input-group">
+                                                    <input class="form-control" placeholder="Choose a date" ng-model="vm.dateSetup.dateName" required ng-change="changeGrid()">
+                                                    <span class="input-group-addon" style="cursor: pointer">
+                                                        <i class="fa fa-lg fa-calendar"></i>
+                                                    </span>
+                                                </div>
+                                            </datepicker>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                       
+                    </div>
+                    
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- End Input Parameter -->
+</div>
+
+<!-- ---------------------------------------------------- Start UI-Grid ------------------------------------------------ -->
+<div class="grid simple col-md-12" ng-show="showItem" style="margin-top:-24px">
+    <!--<div class="grid-title">
+        <div class="row">
+            <div class="col-md-11">
+                <div class="page-title">
+                    <i class="fa fa-keyboard-o" aria-hidden="true"></i>
+                    <h3>
+                        Mannual Student Attendance -
+                        <span class="semi-bold">List</span>
+                    </h3>
+                </div>
+            </div>
+        </div>
+    </div>-->
+    <div class="grid-body">
+        <div class="row">
+            <div class="col-md-12" style="text-align:right" ng-hide="true">
+                <input type="text" ng-model="SearchProperty" placeholder="Search Account No" ng-keyup="$event.keyCode == 13 ? SearchNow(SearchProperty) : null" />
+                <button type="button" class="close" aria-label="Close" ng-click="SearchCancel('')">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="col-md-12">
+                <div class="checkbox check-primary pull-right">
+                    <input id="{{$index + 300}}" type="checkbox" ng-model="IsCheck" ng-click="allSelectCheckBox(IsCheck)">
+                    <label for="{{$index + 300}}">Is Present All</label>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div ui-grid="gridOptions" ui-grid-resize-columns ui-grid-auto-resize ui-grid-move-columns ui-grid-exporter ui-grid-pinning ui-grid-edit
+                     class="grid" style="height:550px"></div>
+
+                <div class="loadmore">
+                    <div ng-show="loaderMore" ng-class="result">
+                        <!-- <img src="~/Content/img/ng-loader.gif" /> -->
+                        {{lblMessage}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ----------------------------------------------------- End UI-Grid ------------------------------------------------- -->
+<!-- Daily Teacher Attendance Report table Start from here(1st table) -->
+<!-- <pre>{{vm.teacherAttendances | json}}</pre> -->
+<!--<div class="grid simple col-md-12" ng-show="showItem">
+    <div class="grid-body">
+        <div class="row">
+            <div class="col-md-12">
+                <table st-table="rowCollection" class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th st-sort="ItemID">SL</th>
+                            <th st-sort="ItemID">Branch</th>
+                            <th st-sort="ItemName">Department</th>
+                            <th st-sort="ItemBrandID">Teacher Name</th>
+                            <th st-sort="ItemBrandID">Teacher ID</th>
+                            <th st-sort="ItemBrandID">Email</th>
+                            <th st-sort="ItemBrandID">Phone No</th>
+                            <th>Present <input id="{{$index + 1000000000}}" type="checkbox" ng-model="vm.Present112" ng-click="allSelectCheckBox()" >
+                                <label for="{{$index + 1000000000}}"></label></th>
+                            <th st-sort="ItemBrandID">In Time</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="attendance in vm.teacherAttendances">
+                            <td>{{$index+1}}</td>
+                            <td>{{attendance.Brunch}}</td>
+                            <td>{{attendance.Department}}</td>
+                            <td>{{attendance.Name}}</td>
+                            <td>{{attendance.RFID}}</td>
+                            <td>{{attendance.EmailID}}</td>
+                            <td>{{attendance.PhoneNo}}</td>
+                            <td ng-click="openPresentIndex($index)">
+                                <div class="checkbox check-primary">
+                                    <input id="{{$index + 10000}}" type="checkbox" ng-model="attendance.Present" ng-checked="attendance.Present===1" ng-click="switch(attendance.Present)" >
+                                    <label for="{{$index + 10000}}"></label>
+                                </div>
+                            </td>
+                            <td valign="center" style="width:20%" ng-click="openTextIndex($index)">
+                                <input type="time" id="{{$index + attendance.RFID}}" ng-model="vm.teacherAttendances[$index].Intime" ng-readonly="attendance.Present===0"    >
+                                <label for="{{$index + attendance.RFID}}"></label>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>-->
+<!-- End Item Entry List Grid -->
+
+
+<style>
+    .thumb {
+        width: 24px;
+        height: 24px;
+        float: none;
+        position: relative;
+        top: 7px;
+    }
+
+    .modal-content {
+        width: 1660px;
+        margin-left: -405px;
+    }
+</style>

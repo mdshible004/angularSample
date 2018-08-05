@@ -1,0 +1,160 @@
+
+
+
+<div class="grid simple col-md-12" ng-show="createItem">
+
+    <div class="grid-title">
+        <div class="row">
+            <div class="col-md-9">
+                <div class="page-title">
+                    <i class="fa fa-keyboard-o" aria-hidden="true"></i>
+                    <h3>
+                        Payment Info
+
+                    </h3>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="grid-body" ng-show="showDDL">
+        <div class="row">
+
+            <form class="form-horizontal col-md-12" name="vm.attendance">
+                <div class="row">
+                    <div class="col-md-6 col-md-offset-2">
+                        <div class="form-group">
+                            <label class="col-md-4 control-label" style="font-weight:bold; margin-top:5px">Select Your Student</label>
+                            <div class="col-md-8">
+                                <ui-select ng-model="vm.user.selected" theme="bootstrap" ng-click="vm.UserID = $select.selected.UserID" on-select="studentInfo(vm.UserID)" ng-disabled="dis">
+
+                                    <ui-select-match placeholder="-Select Your Student-">
+                                        {{$select.selected.UserFullName}}
+                                        <span style="float:right" ng-click="vm.UserID = null; showItem=false; $select.selected=undefined">
+                                            <i class="fa fa-remove" aria-hidden="true"></i>
+                                        </span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="user in vm.UserInfoList | filter: $select.search">
+                                        <div ng-bind-html="user.UserFullName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            <span class="error" ng-show="(vm.PeriodSetup.$dirty||submitted) && vm.PeriodSetup.InsID.$error.required">*</span>
+                        </div>
+                    </div>
+
+
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+
+<!-- Item Entry List Grid -->
+
+<div class="grid simple col-md-12" ng-show="showItem">
+
+    <div class="grid-body">
+
+        <!-- Item Entry List Grid with picture Info -->
+        <div class="row">
+            <div class="col-md-3 col-sm-3">
+                <div class="user-profile-pic">
+                    <!--<img width="69" height="69" data-src-retina="images/profiles/avatar_small.jpg" data-src="images/profiles/avatar_small.jpg" src="images/profiles/avatar_small.jpg" alt="">-->
+                    <img width="69" height="69" src="{{vm.imgHost}}{{vm.ImageUrl}}" ng-if="vm.ImageUrl !== 'undefined' && vm.ImageUrl !== undefined && vm.ImageUrl !== 'null' && vm.ImageUrl !== null" />
+                    <img width="69" height="69" src="images/profiles/no-user-image.png" ng-if="vm.ImageUrl === 'undefined' || vm.ImageUrl === undefined || vm.ImageUrl === 'null' || vm.ImageUrl === null" />
+                </div>
+                <div class="user-mini-description">
+                    <h3 class="text-success semi-bold">
+                        {{vm.regedusersShow.RollNo}}
+                    </h3>
+                    <h5>Roll Number</h5>
+                    <h3 class="text-success semi-bold">
+                        {{vm.regedusersShow.Class}}
+                    </h3>
+                    <h5>Class</h5>
+                    <h3 class="text-success semi-bold">
+                        {{vm.regedusersShow.Section}}
+                    </h3>
+                    <h5>Section</h5>
+                </div>
+            </div>
+            <div class="col-md-5 user-description-box  col-sm-5">
+                <h4 class="semi-bold no-margin">{{vm.regedusersShow.UserName}}</h4>
+                <h6 class="no-margin">Student</h6>
+                <br>
+                <p><i class="fa fa-briefcase"></i> <b>Medium --</b>{{vm.regedusersShow.Medium}}</p>
+                <p><i class="fa fa-globe"></i> <b>Session --</b> {{vm.regedusersShow.Session}} </p>
+                <p><i class="fa fa-file-o"></i> <b>Shift --</b>  {{vm.regedusersShow.Shift}}</p>
+                <p><i class="fa fa-envelope"></i> <b>Depertment --</b>  {{vm.regedusersShow.Department}}</p>
+            </div>
+            <div class="col-md-3  col-sm-3">
+
+            </div>
+        </div>
+        <!-- End Item Entry List Grid with picture Info -->
+        <!-- Start table of Item Entry List Grid -->
+        <div class="row">
+            <div class="col-md-12">
+                <table st-table="rowCollection" class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th st-sort="ItemID">SL</th>
+                            <th st-sort="">Total Payable</th>
+                            <th st-sort="">Total Paid</th>
+                            <th st-sort="">Total Due</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="payment in vm.paymentInfos">
+                            <td>{{$index + 1}}</td>
+                            <td>{{payment.TotalPayable}}</td>
+                            <td>{{payment.TotalPaid}}</td>
+                            <td>{{payment.TotalDue}}</td>
+                        </tr>
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+        <!-- End of table view -->
+        <p><b>Please, pay {{vm.paymentInfos[0].TotalDue}}TK. Before 24-01-2019</b></p>
+    </div>
+</div>
+
+
+<style>
+    .thumb {
+        width: 24px;
+        height: 24px;
+        float: none;
+        position: relative;
+        top: 7px;
+    }
+
+    .modal-content {
+        width: 1500px;
+        margin-left: -367px;
+    }
+
+    .no-margin {
+        padding-top: 11px;
+    }
+
+    .studentInfo h4 {
+        font-size: 14px;
+    }
+
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        margin: 0;
+    }
+</style>
+
+<script src="https://rawgithub.com/eligrey/FileSaver.js/master/FileSaver.js" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.debug.js"></script>
+<script src="http://mrrio.github.io/jsPDF/dist/jspdf.debug.js"></script>

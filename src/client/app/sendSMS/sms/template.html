@@ -1,0 +1,163 @@
+<div class="grid simple col-md-12" ng-show="createItem">
+
+    <div class="grid-title">
+        <div class="row">
+            <div class="col-md-9">
+                <div class="page-title">
+                    <i class="fa fa-keyboard-o" aria-hidden="true"></i>
+                    <h3>
+                        Order Bulk -
+                        <span class="semi-bold">SMS</span>
+                    </h3>
+                </div>
+            </div>
+            <div class="col-md-1 marginOff">
+                <button type="submit" class="btn btn-primary btn-block showBtn" ng-click="itemEvent()">Show</button>
+                <!-- <button type="submit" class="btn btn-primary btn-block" ng-click="">Update</button> -->
+            </div>
+            <div class="col-md-1 marginOff">
+                <button type="submit" class="btn btn-primary btn-block resetBtn" ng-click="clearField()">Reset</button>
+            </div>
+            <div class="col-md-1 marginOff">
+                <button type="submit" class="btn btn-primary btn-block saveBtn" ng-click="vm.orderSMS()" ng-disabled="vm.orderSms.$invalid">Order SMS</button>
+            </div>
+        </div>
+    </div>
+    <div class="grid-body">
+        <div class="row">
+            <form class="form-horizontal col-sm-12" name="vm.orderSms">
+                <div class="row">
+                    <div class="col-md-12">
+                        <center>
+                            <div class="orderSmsContainer">
+                                <h4>Order SMS</h4>
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label"> SMS Quantity</label>
+                                    <div class="col-sm-7">
+                                        <input type="number" class="form-control" placeholder="SMS Quantity" ng-model="vm.smsQuantity" ng-click="QuantityInput()" name="nh" required>
+                                    </div>
+                                    <span class="error" ng-show="(vm.orderSms.$dirty||submitted) && vm.orderSms.nh.$error.required"><i class="fa fa-unlock-alt"></i></span>
+                                </div>
+                                <div class="alert alert-error warning" ng-show="vm.smsQuantity < 500">
+                                    <button class="close" data-dismiss="alert"></button>
+                                    Note:&nbsp;Minimum Order 500 SMS.
+                                </div>
+                                <div class="alert alert-info warning" ng-show="vm.smsQuantity >= 500">
+                                    <button class="close" data-dismiss="alert"></button>
+                                    Price:&nbsp; {{vm.smsTotalPiceCalculation}} TK Only
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label"> Payment Method </label>
+                                    <div class="col-sm-7">
+                                        <ui-select ng-model="vm.pm.selected" name="nf" theme="bootstrap" ng-click="vm.paymentTypeID = $select.selected.id;vm.getPaymentRule($select.selected.id)" required>
+                                            <ui-select-match placeholder="-Select-">
+                                                {{$select.selected.methodName}}
+                                                <span style="float:right" ng-click="vm.userTypeID = null; $select.selected=undefined">
+                                                    <i class="fa fa-remove" aria-hidden="true"></i>
+                                                </span>
+                                            </ui-select-match>
+                                            <ui-select-choices repeat="pm in vm.paymentMethod | filter: $select.search">
+                                                <div ng-bind-html="pm.methodName | highlight: $select.search"></div>
+                                            </ui-select-choices>
+                                        </ui-select>
+                                    </div>
+                                    <span class="error" ng-show="(vm.orderSms.$dirty||submitted) && vm.orderSms.nf.$error.required"><i class="fa fa-unlock-alt"></i></span>
+                                </div>
+
+                                <div class="orderDiscription" ng-show="vm.paymentRule !== undefined">
+                                    <p><span ng-show="vm.paymentRule !== undefined"><i class="fa fa-certificate"></i></span>{{vm.paymentRule.dailNumber}}</p>
+                                    <p><span ng-show="vm.paymentRule !== undefined"><i class="fa fa-certificate"></i></span>{{vm.paymentRule.sendType}}</p>
+                                    <p><span ng-show="vm.paymentRule !== undefined"><i class="fa fa-certificate"></i></span>{{vm.paymentRule.paymentSendNum}}</p>
+                                    <p><span ng-show="vm.paymentRule !== undefined"><i class="fa fa-certificate"></i></span>{{vm.paymentRule.rule1}}</p>
+                                    <p><span ng-show="vm.paymentRule !== undefined"><i class="fa fa-certificate"></i></span>{{vm.paymentRule.rule2}}</p>
+                                    <p><span ng-show="vm.paymentRule !== undefined"><i class="fa fa-certificate"></i></span>{{vm.paymentRule.rule3}}</p>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">TrxID/TxnID:</label>
+                                    <div class="col-sm-7">
+                                        <input type="text" class="form-control" placeholder="TrxID/TxnID" ng-model="vm.TrxID" name="nh" required>
+                                    </div>
+                                    <span class="error" ng-show="(vm.orderSms.$dirty||submitted) && vm.orderSms.nh.$error.required"><i class="fa fa-unlock-alt"></i></span>
+                                </div>
+                            </div>
+                            
+                        </center>
+                        
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Send mail and SMS to all absent student's Parent -->
+
+<div class="grid simple col-md-12" ng-show="showItem">
+    <div class="grid-title">
+        <div class="row">
+            <div class="col-md-11">
+                <!-- <div class="page-title"> <i class="fa fa-keyboard-o" aria-hidden="true"></i>
+                    <h3>Department Name - <span class="semi-bold">List</span></h3>
+                </div> -->
+            </div>
+
+            <div class="col-md-1 marginOff">
+
+            </div>
+        </div>
+    </div>
+    <div class="grid-body">
+        <div class="row">
+            <div class="col-md-12">
+                <table st-table="rowCollection" class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>SL</th>
+                            <th>Order No</th>
+                            <th>OrderdSMS</th>
+                            <th>Paid Amount</th>
+                            <th>TrxID</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="smsList in vm.insSMSOrderList">
+                            <td>{{$index + 1}}</td>
+                            <td>{{smsList.SMSOrderNo}}</td>
+                            <td>{{smsList.OrderdSMS}}</td>
+                            <td>{{smsList.PaidAmount}}</td>
+                            <td>{{smsList.TrxID}}</td>
+                            <td>
+                                <button href="#" class="btn btn-info btn-xs btn-mini" data-toggle="modal" data-target="#myModal" ng-click="vm.editInsInstituteSMSOrde(smsList.SMSOrderID)">Edit</button>  <!--ng-disabled="list.IsSelected"-->
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Item Entry List Grid -->
+
+
+
+<style>
+    .thumb {
+        width: 24px;
+        height: 24px;
+        float: none;
+        position: relative;
+        top: 7px;
+    }
+
+    .modal-content {
+        width: 1660px;
+        margin-left: -405px;
+    }
+    .fa-unlock-alt {
+        margin: 13px 41px 0 0px;
+    }
+</style>

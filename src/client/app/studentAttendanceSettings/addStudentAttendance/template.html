@@ -1,0 +1,559 @@
+<div class="grid simple col-md-12" ng-show="createItem">
+
+    <div class="grid-title">
+        <div class="row">
+            <div class="col-md-9">
+                <div class="page-title">
+                    <i class="fa fa-keyboard-o" aria-hidden="true"></i>
+                    <h3>
+                        Student Attendance -
+                        <span class="semi-bold">Report</span>
+                    </h3>
+                </div>
+            </div>
+            <div class="col-md-2 marginOff">
+                <button type="button" class="btn btn-primary btn-block showBtn" ng-click="vm.itemEvent()" ng-disabled="vm.attendance.$invalid">Show</button>
+            </div>
+            <div class="col-md-1 marginOff">
+                <button type="button" class="btn btn-primary btn-block resetBtn" ng-click="clearField()">Reset</button>
+            </div>
+        </div>
+    </div>
+    <div class="grid-body">
+        <div class="row">
+            <form class="form-horizontal col-sm-12" name="vm.attendance">
+                <div class="row">
+                    <div class="col-md-4">
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Medium</label>
+                            <div class="col-sm-8">
+                                <ui-select ng-model="vm.medium.selected" theme="bootstrap" name="Med" ng-click="vm.MediumID = $select.selected.MediumID" ng-keydown="$event.keyCode == 13 ? $event.preventDefault() : null" ng-change="changeGrid()" on-select="vm.MediumWiseClassDDL($select.selected.MediumID, '')" required>
+                                    <!-- <ui-select ng-model="vm.medium.selected" name="Med" on-select="vm.MediumWiseClassDDL(vm.MediumID)" theme="bootstrap" ng-click="vm.MediumID = $select.selected.MediumID" ng-change="changeGrid()" required>-->
+                                    <ui-select-match placeholder="-Select-">
+                                        {{$select.selected.MameName}}
+                                        <span style="float:right" ng-click="vm.MediumID = null; DisBtn(); vm.class=undefined; vm.classes=[]; vm.department=undefined;vm.departments=[]; vm.section=undefined; vm.sections=[]; $select.selected=undefined">
+                                            <i class="fa fa-remove" aria-hidden="true"></i>
+                                        </span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="medium in vm.mediums | filter: $select.search">
+                                        <div ng-bind-html="medium.MameName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            <span class="error" ng-show="(vm.attendance.$dirty||submitted) && vm.attendance.Med.$error.required">*</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Section</label>
+                            <div class="col-sm-8">
+                                <ui-select ng-model="vm.section.selected" theme="bootstrap" name="sec" ng-click="vm.SectionID = $select.selected.SectionID" ng-keydown="$event.keyCode == 13 ? $event.preventDefault() : null" ng-change="changeGrid()">
+                                    <!--<ui-select ng-model="vm.section.selected" theme="bootstrap" name="sec" ng-click="vm.SectionID = $select.selected.SectionID" ng-keydown="$event.keyCode == 13 ? $event.preventDefault() : null" ng-change="changeGrid()" ng-required="IsRequiredSec">  -->
+                                    <ui-select-match placeholder="-Select-">
+                                        {{$select.selected.SectionName}}
+                                        <span style="float:right" ng-click="vm.SectionID = null; $select.selected=undefined"><i class="fa fa-remove" aria-hidden="true"></i></span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="section in vm.sections | filter: $select.search">
+                                        <div ng-bind-html="section.SectionName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Class</label>
+                            <div class="col-sm-8">
+                                <ui-select ng-model="vm.class.selected" theme="bootstrap" name="Cls" ng-click="vm.ClassID = $select.selected.ClassID" ng-change="changeGrid()" on-select="vm.ClassWiseDepartmentDDL(vm.ClassID, '')" ng-keydown="$event.keyCode == 13 ? $event.preventDefault() : null">
+                                    <!--<ui-select ng-model="vm.class.selected" name="Cls" on-select="vm.ClassWiseDepartmentDDL(vm.ClassID)" theme="bootstrap" ng-click="vm.ClassID = $select.selected.ClassID" ng-change="changeGrid()" required>-->
+                                    <ui-select-match placeholder="-Select-">
+                                        {{$select.selected.ClassName}}
+                                        <span style="float:right" ng-click="vm.ClassID = null; DisBtn(); vm.department=undefined;vm.departments=[]; vm.section=undefined; vm.sections=[]; $select.selected=undefined">
+                                            <i class="fa fa-remove" aria-hidden="true"></i>
+                                        </span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="class in vm.classes | filter: $select.search">
+                                        <div ng-bind-html="class.ClassName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Shift</label>
+                            <div class="col-sm-8">
+                                <ui-select ng-model="vm.shift.selected" theme="bootstrap" ng-click="vm.ShiftID = $select.selected.ShiftID" ng-change="changeGrid()" ng-keydown="$event.keyCode == 13 ? $event.preventDefault() : null">
+                                    <ui-select-match placeholder="-Select-">
+                                        {{$select.selected.ShiftName}}
+                                        <span style="float:right" ng-click="vm.ShiftID = null; $select.selected=undefined"><i class="fa fa-remove" aria-hidden="true"></i></span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="shift in vm.shifts | filter: $select.search">
+                                        <div ng-bind-html="shift.ShiftName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Department</label>
+                            <div class="col-sm-8">
+                                <ui-select ng-model="vm.department.selected" theme="bootstrap" name="Dep" ng-click="vm.DepartmentID = $select.selected.DepartmentID" ng-keydown="$event.keyCode == 13 ? $event.preventDefault() : null" ng-change="changeGrid()" on-select="vm.ClassSelected(0, '')">
+                                    <!--<ui-select ng-model="vm.department.selected" name="Dep" theme="bootstrap" ng-click="vm.DepartmentID = $select.selected.DepartmentID" ng-change="changeGrid()" on-select="vm.ClassSelected(0, '')" ng-required="IsRequired">-->
+                                    <ui-select-match placeholder="-Select-">
+                                        {{$select.selected.DepartmentName}}
+                                        <span style="float:right" ng-click="vm.DepartmentID = null; DisBtn(); vm.section=undefined; vm.sections=[]; $select.selected=undefined">
+                                            <i class="fa fa-remove" aria-hidden="true"></i>
+                                        </span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="department in vm.departments | filter: $select.search">
+                                        <div ng-bind-html="department.DepartmentName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Date</label>
+                            <div class="col-sm-8">
+                                <datepicker date-format="dd-MM-yyyy" selector="form-control">
+                                    <div class="input-group">
+                                        <input class="form-control" placeholder="Choose a date" ng-model="vm.dateSetup" ng-change="changeGrid()" required>
+                                        <span class="input-group-addon" style="cursor: pointer">
+                                            <i class="fa fa-lg fa-calendar"></i>
+                                        </span>
+                                    </div>
+                                </datepicker>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="row">
+                    <div class="col-md-2 col-md-offset-1">
+                        <div class="checkbox check-primary">
+                            <input id="{{$index + 100}}" type="checkbox" ng-model="vm.IsPresent" ng-click="SetStatusWiseData()" ng-checked="vm.IsPresent===true">
+                            <label for="{{$index + 100}}">Is Present</label>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="checkbox check-primary">
+                            <input id="{{$index + 200}}" type="checkbox" ng-model="vm.IsAbsent" ng-click="SetStatusWiseData()" ng-checked="vm.IsAbsent === true">
+                            <label for="{{$index + 200}}">Is Absent</label>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="checkbox check-primary">
+                            <input id="{{$index + 300}}" type="checkbox" ng-model="vm.IsLate" ng-click="SetStatusWiseData()" ng-checked="vm.IsLate === true">
+                            <label for="{{$index + 300}}">Is Late</label>
+                        </div>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Send mail and SMS to all absent student's Parent -->
+<!-- Item Entry List Grid -->
+
+<div class="grid simple col-md-12" ng-show="showItem">
+    <div class="grid-title">
+        <div class="row">
+            <div class="col-md-10">
+
+            </div>
+            <div class="col-md-1 marginOff">
+                <button type="button" class="btn btn-primary btn-block saveBtn" ng-click="vm.printDiv('print')">
+                    <span class="glyphicon glyphicon-print"></span> Print
+                </button>
+            </div>
+
+        </div>
+    </div>
+    <div class="grid simple col-md-12" ng-show="showItem">
+        <div class="grid-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <table st-table="rowCollection" class="table table-bordered">
+                        <thead>
+                            <tr>
+
+                                <th st-sort="ItemID">Total Student</th>
+                                <th st-sort="ItemName">Present</th>
+                                <th st-sort="ItemBrandID">Absent</th>
+                                <th st-sort="ItemBrandID">Late</th>
+                                <th>Send SMS All(Present)</th>
+                                <th>Send SMS All(Absent)</th>
+                                <th st-sort="ItemBrandID">Send Mail All(Absent)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="totalattendance in vm.totalattendances">
+
+                                <td>{{totalattendance.TotalStudent}}</td>
+                                <td>{{totalattendance.Present}}</td>
+                                <td>{{totalattendance.TotalStudent-totalattendance.Present}}</td>
+                                <td>{{vm.LateStudent}}</td>
+                                <td>
+                                    <button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#myModal" ng-click="vm.getAllPresentStudent(11)">
+                                        <span class="glyphicon glyphicon-send"></span> Send
+                                    </button>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#myModal" ng-click="vm.getAllAbsenStudent(1)">
+                                        <span class="glyphicon glyphicon-send"></span> Send
+                                    </button>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#myModalMail" ng-click="vm.getAllAbsenStudentForMail()">
+                                        <span class="glyphicon glyphicon-send"></span> Send
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="grid-body">
+        <div class="row">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th scope="col">SL</th>
+                            <th scope="col">Student Name</th>
+                            <th scope="col">Student ID</th>
+                            <th scope="col">Parent email</th>
+                            <th scope="col">Parent phone</th>
+                            <th scope="col">Roll</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">InTime</th>
+                            <th scope="col">OutTime</th>
+                            <th scope="col">Send SMS</th>
+                            <th scope="col">Send email</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="attendance in vm.attendances">
+                            <td scope="row">{{$index+1}}</td>
+                            <td scope="row">{{attendance.Name}}</td>
+                            <td scope="row">{{attendance.RFID}}</td>
+                            <td scope="row">{{attendance.GurdianEmail}}</td>
+                            <td scope="row">{{attendance.GurdianPhoneNo}}</td>
+                            <td scope="row">{{attendance.RollNo}}</td>
+                            <!--<td scope="row">
+        <div class="checkbox check-primary">
+            <input type="checkbox" ng-checked="{{attendance.Present}}">
+
+
+            <label for="b"></label>
+
+
+        </div>
+    </td>-->
+                            <td scope="row">{{attendance.APLStatus}}</td>
+                            <td scope="row">
+                                {{attendance.Intime}}
+                            </td>
+
+                            <td scope="row">{{attendance.Outtime  }}</td>
+                            <td scope="row">
+                                <button type="button" class="btn btn-default btn-sm" ng-click="smsSend($index)">
+                                    <span class="glyphicon glyphicon-send"></span> Send
+                                </button>
+                            </td>
+                            <td scope="row">
+                                <button type="button" class="btn btn-default btn-sm" ng-click="mailEvent($index)">
+                                    <span class="glyphicon glyphicon-send"></span> Send
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+        </div>
+    </div>
+</div>
+
+<div class="grid-body" id="print" ng-show="printthis">
+    <!-- logo title -->
+    <table width=100%>
+        <tr>
+            <td width=6%>
+                <div>
+                    <img alt="" height="70px" width="90px" ng-src="{{imgHost}}{{InstituteLogo}}" />
+                </div>
+            </td>
+            <td>
+                <div>
+                    <b style="color: #131212;">
+                        {{InstituteName}}
+                        <!--<br />{{Address}}-->
+                    </b>
+                </div>
+            </td>
+            <td>
+                <div class="col-md-5 pull-right">
+                    <div style="float:right;">
+                        <p style="color: #131212;">
+                            Phone : {{InsPhoneNo}}
+                            <br style="color: #131212;"> Email : {{InsEmail}}
+                            <br style="color: #131212;"> Web :{{InsWeb}}
+                        </p>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </table>
+    <br>
+    <div id="export">
+        <div class="row">
+            <table align="center" width="100%" style="  border-collapse: collapse; border-spacing: 10px; border: 1px solid gray; ">
+                <tr>
+                    <td width=6%; height="30px" style=" color: black">Medium </td>
+                    <td width=2%; style=" color: black">: </td>
+                    <td style=" color: black;text-align:left; font-weight: bold" width=20%;>
+                        {{vm.medium.selected.MameName}}
+                    </td>
+
+                    <td width=6%; style=" color: black">Class </td>
+                    <td width=2%; style=" color: black">: </td>
+                    <td style="color: black;text-align:left; font-weight: bold" width=20%;>
+                        {{vm.class.selected.ClassName}}
+                    </td>
+                </tr>
+                <tr>
+                    <td height="30px" style=" color: black">Department </td>
+                    <td width=2%; style=" color: black">: </td>
+                    <td style=" color: black;text-align:left; font-weight: bold">
+                        {{vm.department.selected.DepartmentName}}
+                    </td>
+                    <td style=" color: black">Section </td>
+                    <td width=2%; style=" color: black">: </td>
+                    <td style=" color: black;text-align:left; font-weight: bold">
+                        {{vm.section.selected.SectionName}}
+                    </td>
+                </tr>
+                <tr>
+                    <td height="30px" style=" color: black">Shift </td>
+                    <td width=2%; style=" color: black">: </td>
+                    <td style=" color: black;text-align:left; font-weight: bold">
+                        {{vm.shift.selected.ShiftName}}
+                    </td>
+                    <td style=" color: black">Date </td>
+                    <td width=2%; style=" color: black">: </td>
+                    <td style=" color: black;text-align:left; font-weight: bold">
+                        {{vm.dateSetup}}
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="row">
+            <div style="margin-top : 50px">
+                <i aria-hidden="true"></i>
+
+                <h3>
+                    <pre>                 <font size="6"><b><u>Daily Student Attendance Report</u></b></font>
+</pre>
+                </h3>
+
+            </div>
+        </div>
+
+
+
+        <table class="table1" style="  border-collapse: collapse; border-spacing: 10px; border: 1px solid gray; " width=100%>
+            <thead>
+                <tr>
+                    <th style=" border: 1px solid gray; color: #131212;text-align:center">Sl </th>
+                    <th style=" border: 1px solid gray; color: #131212;text-align:center">Student</th>
+                    <th style=" border: 1px solid gray; color: #131212;text-align:center">Student ID</th>
+                    <th style=" border: 1px solid gray; color: #131212;text-align:center">Parent Mail</th>
+                    <th style=" border: 1px solid gray; color: #131212;text-align:center">Parent Phone</th>
+                    <th style=" border: 1px solid gray; color: #131212;text-align:center">Roll</th>
+                    <th style=" border: 1px solid gray; color: #131212;text-align:center">Status</th>
+                    <th style=" border: 1px solid gray; color: #131212;text-align:center">InTime</th>
+                    <th style=" border: 1px solid gray; color: #131212;text-align:center">OutTime</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                <tr style=" border: 1px solid gray;" ng-repeat="attendance in vm.attendances">
+                    <td style=" border: 1px solid gray;color: #131212" align="center">{{$index+1}}</td>
+                    <td style=" border: 1px solid gray;color: #131212" align="center">{{attendance.Name }}</td>
+                    <td style=" border: 1px solid gray;color: #131212" align="center">{{attendance.RFID}}</td>
+                    <td style=" border: 1px solid gray;color: #131212" align="center">{{attendance.GurdianEmail}}</td>
+                    <td style=" border: 1px solid gray;color: #131212" align="center">{{attendance.GurdianPhoneNo}}</td>
+                    <td style=" border: 1px solid gray;color: #131212" align="center">{{attendance.RollNo}}</td>
+                    <td style=" border: 1px solid gray;color: #131212" align="center">{{attendance.APLStatus}}</td>
+                    <td style=" border: 1px solid gray;color: #131212" align="center">{{attendance.Intime}}</td>
+                    <td style=" border: 1px solid gray;color: #131212" align="center">{{attendance.Outtime}}</td>
+                </tr>
+
+            </tbody>
+        </table><br><br>
+        <table class="table1" style="  border-collapse: collapse; border-spacing: 10px; border: 1px solid gray; " width=100%>
+            <thead>
+                <tr>
+                    <th style=" border: 1px solid gray; color: #131212;text-align:center">Total Student</th>
+                    <th style=" border: 1px solid gray; color: #131212;text-align:center">Present</th>
+                    <th style=" border: 1px solid gray; color: #131212;text-align:center">Absent</th>
+                    <th style=" border: 1px solid gray; color: #131212;text-align:center">Late</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr style=" border: 1px solid gray;" ng-repeat="totalattendance in vm.totalattendances">
+                    <td style=" border: 1px solid gray;color: #131212" align="center">{{totalattendance.TotalStudent}}</td>
+                    <td style=" border: 1px solid gray;color: #131212" align="center">{{totalattendance.Present}}</td>
+                    <td style=" border: 1px solid gray;color: #131212" align="center">{{totalattendance.TotalStudent-totalattendance.Present}}</td>
+                    <td style=" border: 1px solid gray;color: #131212" align="center">{{vm.LateStudent}}</td>
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+
+    <br>
+    <br>
+    <br>
+
+    <footer style="position: fixed;bottom: 70px;">
+        <pre style="bottom: 20px;">   ______________________            _______________________               ______________________</pre>
+        <pre style="bottom: 10px;">        Signed by                          Approved by                         Final approved</pre>
+        <br />
+    </footer>
+    <!-- <p>
+     Powered by : OnAir Int'l Ltd
+    </p> -->
+
+
+</div>
+<style>
+    .thumb {
+        width: 24px;
+        height: 24px;
+        float: none;
+        position: relative;
+        top: 7px;
+    }
+
+    .modal-content {
+        width: 1660px;
+        margin-left: -405px;
+    }
+</style>
+<script src="https://rawgithub.com/eligrey/FileSaver.js/master/FileSaver.js" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.debug.js"></script>
+<script src="http://mrrio.github.io/jsPDF/dist/jspdf.debug.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/2.3.2/jspdf.plugkkin.autotable.js"></script>
+<script src="http://kendo.cdn.telerik.com/2017.3.1026/js/kendo.all.min.js"></script>
+<script src="bower_components/pdfExport/kendo.all.min.js"></script>
+
+<div class="modal fade col-lg-12 col-sm-12 col-xs-12" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" style="float:left">Sent Bulk SMS</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+
+                    </div>
+                </div>
+                <div class="grid-body">
+                    <div class="row">
+                        <div class="col-md-9">
+                            <h4 class="modal-title smsCounter">Purchase SMS : <span style="color:#8b91a0;">{{vm.insPurchaseSMS}}</span></h4>
+                            <h4 class="modal-title smsCounter">Spent SMS : <span style="color:#f35958;margin-left: 22px;padding-right: 14px;">{{totalSepenSMSResult.counter}}</span></h4>
+                            <h4 class="modal-title smsCounter">Available SMS : <span style="color:#0aa699;">{{vm.insPurchaseSMS - totalSepenSMSResult.counter}}</span></h4>
+                        </div>
+                        <div class="col-md-3 buttonArea">
+                            <button type="button" class="btn btn-info" style="width:90px" data-dismiss="modal" ng-click="redirecttosms()">
+                                <i class="fa fa-shopping-cart"></i> Buy More
+                            </button>
+                            <button type="button" class="btn btn-primary" style="width:90px" data-dismiss="modal" ng-click="vm.sendBulkSMS()">
+                                <span class="glyphicon glyphicon-send" style="margin: 2px 0 0 -4px;"></span> Send All
+                            </button>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <!--<pre>{{vm.presentStudentInfo|json}}</pre>-->
+                            <!-- <pre>{{vm.guardianNumber|json}}</pre> -->
+                            <table class="table table-bordered tableMargin">
+                                <thead>
+                                    <tr>
+                                        <th>Sent To</th>
+                                        <th>Guardian Number</th>
+                                    </tr>
+                                </thead>
+                                <tbody ng-repeat="smsInfo in vm.presentStudentInfo">
+                                    <tr>
+                                        <td><span class="label label-success">{{smsInfo.Name}}</span> </td>
+                                        <td><span class="label label-info">{{smsInfo.GurdianPhoneNo}}</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+
+<div class="modal fade col-lg-12 col-sm-12 col-xs-12" id="myModalMail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" style="float:left;margin-top: 5px;">Send Email To All Absent</h4>
+                <button type="button" class="btn btn-primary" style="width:90px; margin-left: 636px;" data-dismiss="modal" ng-click="mailToAllAbsentStudent()">
+                    <span class="glyphicon glyphicon-send" style="margin: 2px 0 0 -4px;"></span> Send All
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="grid-body">
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table class="table table-bordered tableMargin">
+                                <thead>
+                                    <tr>
+                                        <th>Student</th>
+                                        <th>Guardian Mail</th>
+                                    </tr>
+                                </thead>
+                                <tbody ng-repeat="info in vm.studentInfo">
+                                    <tr>
+                                        <td><span class="label label-success">{{info.Name}}</span> </td>
+                                        <td><span class="label label-info">{{info.GurdianEmail}}</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>

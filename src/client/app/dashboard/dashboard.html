@@ -1,0 +1,558 @@
+<div class="grid simple col-md-12">
+    <div class="col-md-12" style="margin-bottom: -43px;">
+        <div class="col-md-5">
+            <div class="page-title">
+                <h3>{{vm.title}}</h3>
+            </div>
+        </div>
+        <div class="col-md-7" ng-show="vm.UserInfoList.length > 0 ? true : false">
+            <div class="form-group">
+                <label class="col-md-4 control-label" style="font-weight:bold; margin-top:5px">Select Your Student</label>
+                <div class="col-md-8">
+                    <ui-select ng-model="vm.user.selected" theme="bootstrap" ng-click="vm.UserID = $select.selected.UserID" on-select="getStudentPeriodByddl($select.selected.UserID)">
+                        <ui-select-match placeholder="-Select Your Student-">
+                            {{$select.selected.UserFullName}}
+                            <span style="float:right" ng-click="vm.UserID = null; $select.selected=undefined; vm.RoutinDetail = []">
+                                <i class="fa fa-remove" aria-hidden="true"></i>
+                            </span>
+                        </ui-select-match>
+                        <ui-select-choices repeat="user in vm.UserInfoList | filter: $select.search">
+                            <div ng-bind-html="user.UserFullName | highlight: $select.search"></div>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+                <span class="error" ng-show="(vm.PeriodSetup.$dirty||submitted) && vm.PeriodSetup.InsID.$error.required">*</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="grid simple col-md-12" style="margin-bottom:-38px;" ng-if="vm.UserTypeID===1 || vm.UserTypeID===2">
+    <div class="col-md-12">
+        <div class="grid simple">
+            <div class="row spacing-bottom 2col">
+                <div class="col-md-3 col-sm-6 spacing-bottom-sm spacing-bottom">
+                    <div class="tiles blue added-margin">
+                        <div class="tiles-body">
+                            <div class="row">
+                                <div class="col-md-6 col-sm-6 col-xs-6">
+                                    <div class="tiles-title"> TOTAL STUDENT </div>
+                                    <div class="heading">
+                                        <span class="animate-number" data-value="26.8" data-animation-duration="1200">
+                                            <i class="fa fa-users"></i>
+                                            {{vm.totalPresentAndAbsent.TotalStudent}}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-sm-6 col-xs-6">
+                                    <div class="tiles-title"> TOTAL ATTEND STUDENT </div>
+                                    <div class="heading">
+                                        <span class="animate-number" data-value="26.8" data-animation-duration="1200">
+                                            <i class="fa fa-check"></i>
+                                            {{vm.totalPresentAndAbsent.Present}}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 col-sm-6 col-xs-6">
+                                    <div class="tiles-title"> TOTAL ABSENT STUDENT </div>
+                                    <div class="heading">
+                                        <span class="animate-number" data-value="26.8" data-animation-duration="1200">
+                                            <i class="fa fa-times"></i>
+                                            {{vm.totalPresentAndAbsent.TotalStudent - vm.totalPresentAndAbsent.Present}}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-sm-6 col-xs-6">
+                                    <div class="tiles-title"> ATTENDENCE PERCENTAGE </div>
+                                    <div class="heading">
+                                        <span class="animate-number" data-value="26.8" data-animation-duration="1200">
+                                            <i class="fa fa-signal"></i>
+                                            {{vm.totalPresentAndAbsent.Present * 100 /vm.totalPresentAndAbsent.TotalStudent | number:2}} %
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6 spacing-bottom-sm spacing-bottom">
+                    <div class="tiles green added-margin">
+                        <div class="tiles-body">
+                            <div class="row">
+                                <div class="col-md-6 col-sm-6 col-xs-6">
+                                    <div class="tiles-title"> TOTAL TEACHER </div>
+                                    <div class="heading">
+                                        <span class="animate-number" data-value="26.8" data-animation-duration="1200">
+                                            <a href=""><i class="fa fa-users"></i></a>
+                                            {{vm.teacherPresentAndAbsent.TotalStudent}}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-sm-6 col-xs-6">
+                                    <div class="tiles-title"> TOTAL ATTEND TEACHER </div>
+                                    <div class="heading">
+                                        <span class="animate-number" data-value="26.8" data-animation-duration="1200">
+                                            <i class="fa fa-check"></i>
+                                            {{vm.teacherPresentAndAbsent.Present}}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 col-sm-6 col-xs-6">
+                                    <div class="tiles-title"> TOTAL ABSENT TEACHER </div>
+                                    <div class="heading">
+                                        <span class="animate-number" data-value="26.8" data-animation-duration="1200">
+                                            <i class="fa fa-times"></i>
+                                            {{vm.teacherPresentAndAbsent.TotalStudent - vm.teacherPresentAndAbsent.Present}}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-sm-6 col-xs-6">
+                                    <div class="tiles-title"> ATTENDENCE PERCENTAGE </div>
+                                    <div class="heading">
+                                        <span class="animate-number" data-value="26.8" data-animation-duration="1200">
+                                            <i class="fa fa-signal"></i>
+                                            {{ vm.teacherPresentAndAbsent.Present * 100 / vm.teacherPresentAndAbsent.TotalStudent | number:2}} %
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3 col-sm-6 spacing-bottom">
+                    <div class="tiles red added-margin">
+                        <div class="tiles-body">
+                            <div class="row">
+                                <div class="col-md-12 col-sm-6 col-xs-6">
+                                    <h6 class="monthHeaderTitle">Monthly Fees Collection</h6>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 col-sm-6 col-xs-6">
+                                    <div class="tiles-title"> TOTAL COLLECTION </div>
+                                    <div class="heading">
+                                        <span class="animate-number" data-value="26.8" data-animation-duration="1200">
+                                            <i class="fa fa-money"></i>
+                                            {{vm.totalCollectionAndDue.FeesCollection===null?0:vm.totalCollectionAndDue.FeesCollection}} TK
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-sm-6 col-xs-6">
+                                    <div class="tiles-title"> TOTAL DUE </div>
+                                    <div class="heading">
+                                        <span class="animate-number" data-value="26.8" data-animation-duration="1200">
+                                            <i class="fa fa-exchange"></i>
+                                            {{(vm.totalCollectionAndDue.TotalFee===null?0:vm.totalCollectionAndDue.TotalFee) - (vm.totalCollectionAndDue.FeesCollection===null?0:vm.totalCollectionAndDue.FeesCollection)}} TK
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <div class="tiles purple added-margin">
+                        <div class="tiles-body">
+                            <div class="row">
+                                <div class="col-md-12 col-sm-6 col-xs-6">
+                                    <h6 class="monthHeaderTitle">Total Expense</h6>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 col-sm-6 col-xs-6">
+                                    <div class="tiles-title"> Today's Expense </div>
+                                    <div class="heading">
+                                        <span class="animate-number" data-value="26.8" data-animation-duration="1200">
+                                            <i class="fa fa-money"></i>
+                                            {{ToDaysExpense}}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-sm-6 col-xs-6">
+                                    <div class="tiles-title"> Monthly Expense </div>
+                                    <div class="heading">
+                                        <span class="animate-number" data-value="26.8" data-animation-duration="1200">
+                                            <i class="fa fa-exchange"></i>
+                                            {{ToMonthsExpense}}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- <pre>{{vm.abc | json}}</pre>
+            <pre>{{vm.b}}</pre> -->
+        </div>
+    </div>
+</div>
+<div class="grid simple col-md-12" style="margin-bottom: 45px; margin-top:{{vm.UserTypeID===1 || vm.UserTypeID===2 ? '-3px' : '8px'}};">
+    <div class="col-md-12 col-sm-8">
+        <div id="carousel" class="carousel">
+            <div class="slides">
+                <div class="slide" data-state="active" ng-repeat="notice in NoticeHeadBodyList">
+                    <!--Inner Div will be Dynamic-->
+                    <div class="col-md-3 innerDiv" ng-repeat="ntc in notice.NoticeList" ng-if="vm.NoticeList.length > 0">
+                        <div class="col-md-12 noticeContainer">
+                            <i class="fa fa-tags noticeIcone"></i>
+                            <h6>
+                                {{ntc.NoticeHead}}
+                            </h6>
+                            <p>
+                                {{ntc.NoticeBody}}
+                            </p>
+                            <span class="noticeSpan">
+                                <i class="fa fa-calendar-o"></i>
+                                <span>{{ntc.NoticeDate}}</span>
+                            </span>
+                            <button type="button" href="#" data-toggle="modal" data-target="#modalNotice" class="btn btn-primary btn-xs btn-mini" ng-click="loadModalWithBody(ntc)">More</button>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 col-sm-8 slides innerDiv" style="text-align:center" ng-if="vm.NoticeList.length === 0">
+                        <span class="label label-inverse" style="font-weight:bolder; font-weight: bolder; padding: 18px 35px 24px 35px; font-size: 23px;">Notice not found</span>
+                    </div>
+                    <!--Inner Div end-->
+                    <!--<div class="col-md-3 innerDiv">
+                        <div class="col-md-12 noticeContainer">
+                            <i class="fa fa-tags noticeIcone"></i>
+                            <h6>
+                                Holiday and Various Programs 2018
+                            </h6>
+                            <p>
+                                We require a AC to DC triple output , open frame power supply board . The voltage and power ratings which we require from the output of the power supply is triple output - 24V 2A, 12V 200...
+                            </p>
+                            <span class="noticeSpan">
+                                <i class="fa fa-calendar-o"></i>
+                                <span>Dec 14</span>
+                            </span>
+                            <button type="button" class="btn btn-primary btn-xs btn-mini">More</button>
+                        </div>
+                    </div>
+                    <div class="col-md-3 innerDiv">
+                        <div class="col-md-12 noticeContainer">
+                            <i class="fa fa-tags noticeIcone"></i>
+                            <h6>
+                                Notice for Admission in Class VI, VII & VIII
+                            </h6>
+                            <p>
+                                I work on a team of developers and we are currently developing a project which requires VERY strong knowledge on python, HMAC, and cryptography. We currently have most of the program comp...I work on a team of developers and we are currently developing
+                            </p>
+                            <span class="noticeSpan">
+                                <i class="fa fa-calendar-o"></i>
+                                <span>Dec 14</span>
+                            </span>
+                            <button type="button" class="btn btn-primary btn-xs btn-mini">More</button>
+                        </div>
+                    </div>
+                    <div class="col-md-3 innerDiv">
+                        <div class="col-md-12 noticeContainer">
+                            <i class="fa fa-tags noticeIcone"></i>
+                            <h6>
+                                Results of Lottery for the admission of Class One for 2018
+                            </h6>
+                            <p>
+                                I work on a team of developers and we are currently developing a project which requires VERY strong knowledge on python, HMAC, and cryptography. We currently have most of the program comp...I work on a team of developers and we are currently developing
+                            </p>
+                            <span class="noticeSpan">
+                                <i class="fa fa-calendar-o"></i>
+                                <span>Dec 14</span>
+                            </span>
+                            <button type="button" class="btn btn-primary btn-xs btn-mini">More</button>
+                        </div>
+                    </div>-->
+                </div>
+                <!--<div class="slide" data-state="active">
+                    <div class="col-md-3 innerDiv">
+                        <div class="col-md-12 noticeContainer">
+                            <i class="fa fa-tags noticeIcone"></i>
+                            <h6>
+                                Admission English Version (Nursery) 2018
+                            </h6>
+                            <p>
+                                I work on a team of developers and we are currently developing a project which requires VERY strong knowledge on python, HMAC, and cryptography. We currently have most of the program comp...I work on a team of developers and we are currently developing
+                            </p>
+                            <span class="noticeSpan">
+                                <i class="fa fa-calendar-o"></i>
+                                <span>Dec 14</span>
+                            </span>
+                            <button type="button" class="btn btn-primary btn-xs btn-mini">More</button>
+                        </div>
+                    </div>
+                    <div class="col-md-3 innerDiv">
+                        <div class="col-md-12 noticeContainer">
+                            <i class="fa fa-tags noticeIcone"></i>
+                            <h6>
+                                Holiday and Various Programs 2018
+                            </h6>
+                            <p>
+                                We require a AC to DC triple output , open frame power supply board . The voltage and power ratings which we require from the output of the power supply is triple output - 24V 2A, 12V 200...
+                            </p>
+                            <span class="noticeSpan">
+                                <i class="fa fa-calendar-o"></i>
+                                <span>Dec 14</span>
+                            </span>
+                            <button type="button" class="btn btn-primary btn-xs btn-mini">More</button>
+                        </div>
+                    </div>
+                    <div class="col-md-3 innerDiv">
+                        <div class="col-md-12 noticeContainer">
+                            <i class="fa fa-tags noticeIcone"></i>
+                            <h6>
+                                Notice for Admission in Class VI, VII & VIII
+                            </h6>
+                            <p>
+                                I work on a team of developers and we are currently developing a project which requires VERY strong knowledge on python, HMAC, and cryptography. We currently have most of the program comp...I work on a team of developers and we are currently developing
+                            </p>
+                            <span class="noticeSpan">
+                                <i class="fa fa-calendar-o"></i>
+                                <span>Dec 14</span>
+                            </span>
+                            <button type="button" class="btn btn-primary btn-xs btn-mini">More</button>
+                        </div>
+                    </div>
+                    <div class="col-md-3 innerDiv">
+                        <div class="col-md-12 noticeContainer">
+                            <i class="fa fa-tags noticeIcone"></i>
+                            <h6>
+                                Results of Lottery for the admission of Class One for 2018
+                            </h6>
+                            <p>
+                                I work on a team of developers and we are currently developing a project which requires VERY strong knowledge on python, HMAC, and cryptography. We currently have most of the program comp...I work on a team of developers and we are currently developing
+                            </p>
+                            <span class="noticeSpan">
+                                <i class="fa fa-calendar-o"></i>
+                                <span>Dec 14</span>
+                            </span>
+                            <button type="button" class="btn btn-primary btn-xs btn-mini">More</button>
+                        </div>
+                    </div>
+                </div>-->
+
+            </div>
+            <div class="fc-button-group indicators" ng-if="vm.NoticeList.length > 0">
+                <button type="button" class="btnNextPrev" ng-click="PrevNotice()"><span style="font-weight:bolder;color:#000000;padding-top: 2px;" class="fc-icon fc-icon-left-single-arrow"></span></button>
+                <button type="button" class="btnNextPrev" ng-click="NextNotice()"><span style="font-weight:bolder;color:#000000;padding-top: 2px;" class="fc-icon fc-icon-right-single-arrow"></span></button>
+            </div>
+            <!--<div class="indicators">-->
+            <!--<input class="indicator" name="indicator" data-slide="1" ng-click="getntclist(0, 4)" data-state="active" checked type="radio" />
+            <input class="indicator" name="indicator" data-slide="2" ng-click="getntclist(4, 8)" type="radio" />-->
+            <!--<button type="button" class="fc-prev-button fc-button fc-state-default fc-corner-left" ng-click="getntclist(0, 4)"><span class="fc-icon fc-icon-left-single-arrow"></span></button>
+                <button type="button" class="fc-next-button fc-button fc-state-default fc-corner-right" ng-click="getntclist(4, 8)"><span class="fc-icon fc-icon-right-single-arrow"></span></button>
+            </div>-->
+        </div>
+    </div>
+    <!--<div class="col-md-12 col-sm-8 slides innerDiv" style="text-align:center" ng-if="vm.NoticeList.length === 0">
+        <span class="label label-inverse" style="font-weight:bolder">Notice not found</span>
+    </div>-->
+    <!--<div>
+        <p class="minimize">{{NoticeBodySlice}}<span>... </span><a href="#" data-toggle="modal" data-target="#modalNotice" class="more">More</a></p>
+    </div>-->
+</div>
+
+<div class="grid simple col-md-12" style="margin-top:-15px">
+
+    <!--<div class="col-md-6 uiCalender">
+        <div ui-calendar="uiConfig.calendar" ng-model="eventSources"></div>
+    </div>-->
+    <div class="col-md-{{vm.UserTypeID===3 || vm.UserTypeID===4 || vm.UserTypeID===5 ? '6' : '12'}}">
+        <div class="row">
+            <strong style="font-size:18px; margin-left:5px">{{ToMonthName}} &nbsp; {{ToYearName}}</strong>
+            <div class="pull-right">
+                <button typeof="button" class="btnNextPrev" style="padding-top: 2px; margin-right:30px" ng-click="CallToday()">today</button>
+                <button typeof="button" class="btnNextPrev" style="padding-left: 30px;" ng-click="PreviousMonthCalendar()"><strong><span style="font-weight:bolder;color:#000000;padding-top: 2px;margin-left: -26px;" class="fc-icon fc-icon-left-single-arrow"></span></strong></button>
+                <button typeof="button" class="btnNextPrev" style="padding-left: 30px;" ng-click="NextMonthCalendar()"><strong><span style="font-weight:bolder;color:#000000;padding-top: 2px;margin-left: -26px;" class="fc-icon fc-icon-right-single-arrow"></span></strong></button>
+            </div>
+        </div><br />
+        <div class="row">
+            <table st-table="rowCollection" style="border:.1px solid #f7f6f6; height:280px">
+                <thead>
+                    <tr>
+                        <th width="1000px" style="border:.1px solid #f7f6f6; text-align:center" st-sort="DayID" ng-repeat="CD in CalendarDayNameList">{{CD.DayName}}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="text-align:center; vertical-align:middle;" st-sort="Day" ng-repeat="CDL in CalendarDateList">
+                        <td st-sort="CDL.DayName" style="vertical-align:middle; background-color: {{(DS.IsDayOff === 1 || DS.IsDayOff === 2) && DS.CDate !== ToDate ? '#ff0000' : DS.IsDayOff === 3 && DS.CDate !== ToDate ? '#d9edd0' : (DS.IsDayOff === 1 || DS.IsDayOff === 2) && DS.CDate === ToDate ? '#912525' : DS.IsDayOff === 3 && DS.CDate === ToDate ? '#516648' : DS.IsDayOff === 0 && DS.CDate === ToDate?'#e5e5e5':''}}; color:{{DS.IsDayOff===1 || DS.IsDayOff===2 ?'#fff':''}}; border:.1px solid #f7f6f6; padding-bottom:5px" ng-repeat="DS in CDL.DaysSeries">
+                            <span> {{DS.Day}}</span><br />
+                            <a href="#" data-target="#modalCalendar" ng-click="loadModalCalendar(DS.HoliName, DS.HoliDetail, DS.Date)" data-toggle="modal" data-placement="top" onmouseenter="$(this).tooltip('show')" title="{{DS.HoliName}}" ng-if="DS.IsHoliday===true">
+                                <span class="label label-default">{{DS.HoliShow}}</span>
+                            </a>
+                            <div class="clearfix" style="margin-top:5px"></div>
+
+                            <a href="#" data-target="#modalCalendar" ng-click="loadModalCalendar(DS.EveName, DS.EveDetail, DS.Date)" data-toggle="modal" data-placement="top" onmouseenter="$(this).tooltip('show')" title="{{DS.EveName}}" ng-if="DS.IsEvent===true">
+                                <span style="text-align:center" class="label label-success">{{DS.EveShow}}</span>
+                                <div class="clearfix" style="margin-top:5px"></div>
+                                <span class="label label-info">{{DS.EventDuration}}</span>
+                            </a>
+                            <br />
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="col-md-6" ng-if="vm.UserTypeID===3 || vm.UserTypeID===4 || vm.UserTypeID===5">
+        <ul class="nav nav-tabs" id="tab-01">
+            <li ng-class="{ active: isSet(1) }"><a href="#" ng-click="setTab(1)">Sat</a></li>
+            <li ng-class="{ active: isSet(2) }"><a href="#" ng-click="setTab(2)">Sun</a></li>
+            <li ng-class="{ active: isSet(3) }"><a href="#" ng-click="setTab(3)">Mon</a></li>
+            <li ng-class="{ active: isSet(4) }"><a href="#" ng-click="setTab(4)">Tue</a></li>
+            <li ng-class="{ active: isSet(5) }"><a href="#" ng-click="setTab(5)">Wed</a></li>
+            <li ng-class="{ active: isSet(6) }"><a href="#" ng-click="setTab(6)">Thu</a></li>
+            <li ng-class="{ active: isSet(7) }"><a href="#" ng-click="setTab(7)">Fri</a></li>
+        </ul>
+
+        <div class="tab-content">
+            <div class="tab-pane active" ng-show="vm.RoutinDetail.length > 0 ? true : false">
+                <div class="row column-seperation">
+                    <table class="table table-bordered no-more-tables forPadding" style="margin-left: 5px; margin-top: -20px;">
+                        <thead>
+                            <tr>
+                                <th class="text-center">Period</th>
+                                <th class="text-center">Subject</th>
+                                <th class="text-center">Time</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="routine in vm.RoutinDetail">
+                                <td class="text-center">
+                                    <span class="label label-info">{{routine.PeriodName}}</span>
+                                </td>
+                                <td class="text-center">
+                                    <span class="label label-success">{{routine.SubjectName}}</span><br /><br />
+                                    <!--<span ng-if="vm.UserTypeID!==4" class="label label-info">{{routine.TeacherName}}</span>-->                                    
+                                    <span ng-if="vm.UserTypeID===4" class="label label-info">{{routine.ClassName}}</span>
+                                </td>
+                                <td class="text-center">
+                                    <span class="label label-inverse">{{routine.StartTime}}</span><br />
+                                    <span>To</span><br />
+                                    <span class="label label-inverse">{{routine.EndTime}}</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="tab-pane active" ng-show="vm.RoutinDetail.length === 0 ? true : false">
+                <label class="label-inverse" style="text-align:center">No period has been set up</label>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade in" id="modalNotice" role="dialog" aria-labelledby="ModalNotice" style="z-index: 1200;" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">{{NoticeHead}}</h4>
+            </div>
+            <div class="modal-body">
+                <div class="grid-body" style="overflow-wrap:break-word">
+                    {{NoticeBody}}
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default btn-xs" data-dismiss="modal">Close </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade in" id="modalCalendar" role="dialog" aria-labelledby="ModalNotice" style="z-index: 1200;" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" style="width:600px !important; max-height:500px !important; overflow:auto; margin-top:200px !important; margin-left:30px !important">
+            <div class="modal-body">
+                <div class="grid-body" style="overflow-wrap:break-word">
+                    <div class="row" style="margin-top:-30px">
+                        <div class="col-sm-3"></div>
+                        <div class="col-sm-5" style="text-align:center;">
+                            <strong><span>{{clndrName}}</span></strong>
+                        </div>
+                        <div class="col-sm-4">
+                            <span class="pull-right">{{clndrDate | date:dd-MM-yyyy}}</span>
+                        </div>
+                        <hr style="border:.5px solid #abaaee;" />
+                    </div>
+                    <div class="row">
+                        <p align="justify">{{clndrDetail}}</p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+
+    .btnNextPrev {
+        border: .3px solid #e5e5e5;
+        background: #f5f5f5; /* Old browsers */
+        /*border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);*/
+        /*background: #ffffff; /* Old browsers */
+        background: -moz-linear-gradient(top, #ffffff 0%, #e5e5e5 100%); /* FF3.6-15 */
+        background: -webkit-linear-gradient(top, #ffffff 0%,#e5e5e5 100%); /* Chrome10-25,Safari5.1-6 */
+        background: linear-gradient(to bottom, #ffffff 0%,#e5e5e5 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#e5e5e5',GradientType=0 ); /* IE6-9 */
+    }
+
+        .btnNextPrev:hover {
+            background: #f3ecec;
+        }
+
+        .btnNextPrev:active {
+            background: #d9d9d9;
+        }
+
+    .monthHeaderTitle {
+        text-align: center;
+        margin: 8px 0 33px 0px;
+        font-size: 18px;
+        color: #fff;
+        font-weight: bold;
+    }
+
+    .uiCalender {
+        background: #fff;
+        padding-bottom: 13px;
+        padding-top: 12px;
+        border-radius: 5px;
+    }
+
+    .fc-unthemed .fc-today {
+        background: #0aa699;
+        color: #fff;
+    }
+
+    a {
+        color: #fff;
+    }
+
+    .table > thead > tr > th {
+        padding: 8px;
+    }
+
+    .table tbody > tr > td {
+        -webkit-box-shadow: 1px 1px 1px 0px rgba(50, 50, 50, 0.65);
+        -moz-box-shadow: 1px 1px 1px 0px rgba(50, 50, 50, 0.65);
+        box-shadow: 1px 1px 1px 0px rgba(50, 50, 50, 0.65);
+    }
+
+    .label {
+        -webkit-box-shadow: -5px 10px 3px -9px rgba(128,118,128,1);
+        -moz-box-shadow: -5px 10px 3px -9px rgba(128,118,128,1);
+        box-shadow: -5px 10px 3px -9px rgba(128,118,128,1);
+    }
+</style>
+
+

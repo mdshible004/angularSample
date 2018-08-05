@@ -1,0 +1,14 @@
+E:\New folder\onEMS_AngularUI\onEMS_AngularUI\obj\Debug\onEMS_AngularUI.njsproj.CoreCompileInputs.cache
+E:\New folder\onEMS_AngularUI\onEMS_AngularUI\bin\Microsoft.NodejsTools.WebRole.dll
+E:\VSonEMS\onEMS_AngularUI\onEMS_AngularUI\obj\Debug\onEMS_AngularUI.njsproj.CoreCompileInputs.cache
+E:\VSonEMS\onEMS_AngularUI\onEMS_AngularUI\bin\Microsoft.NodejsTools.WebRole.dll
+E:\Tfs\Projects\EMSProjects\Development\onEMS_AngularUI\onEMS_AngularUI\obj\Debug\onEMS_AngularUI.njsproj.CoreCompileInputs.cache
+E:\Tfs\Projects\EMSProjects\Development\onEMS_AngularUI\onEMS_AngularUI\bin\Microsoft.NodejsTools.WebRole.dll
+E:\Tfs\Projects\EMSProjects\Development\onEMS_AngularUI_Dev\onEMS_AngularUI\obj\Debug\onEMS_AngularUI.njsproj.CoreCompileInputs.cache
+E:\Tfs\Projects\EMSProjects\Development\onEMS_AngularUI_Dev\onEMS_AngularUI\bin\Microsoft.NodejsTools.WebRole.dll
+D:\TFS\EMSProjects\Development\onEMS_AngularUI_Dev\onEMS_AngularUI\obj\Debug\onEMS_AngularUI.njsprojResolveAssemblyReference.cache
+D:\TFS\EMSProjects\Development\onEMS_AngularUI_Dev\onEMS_AngularUI\obj\Debug\onEMS_AngularUI.njsproj.CoreCompileInputs.cache
+D:\TFS\EMSProjects\Development\onEMS_AngularUI_Dev\onEMS_AngularUI\bin\Microsoft.NodejsTools.WebRole.dll
+D:\TFS\EMSProjects\Development\onEMS_UI\onEMS_AngularUI-Dev\onEMS_AngularUI\obj\Debug\onEMS_AngularUI.njsprojResolveAssemblyReference.cache
+D:\TFS\EMSProjects\Development\onEMS_UI\onEMS_AngularUI-Dev\onEMS_AngularUI\obj\Debug\onEMS_AngularUI.njsproj.CoreCompileInputs.cache
+D:\TFS\EMSProjects\Development\onEMS_UI\onEMS_AngularUI-Dev\onEMS_AngularUI\bin\Microsoft.NodejsTools.WebRole.dll

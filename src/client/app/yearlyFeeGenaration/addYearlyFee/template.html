@@ -1,0 +1,696 @@
+<div class="grid simple col-md-12" ng-show="createItem">
+
+    <div class="grid-title">
+        <div class="row">
+            <div class="col-md-10">
+                <div class="page-title">
+                    <i class="fa fa-keyboard-o" aria-hidden="true"></i>
+                    <h3> Yearly Fee Generation </h3>
+                </div>
+            </div>
+
+            <div class="col-md-1 marginOff">
+                <button type="submit" class="btn btn-primary btn-block showBtn" ng-click="vm.getInsYearlyFee()" ng-disabled="vm.yearlyFeesSetup.$invalid">Generate</button>
+            </div>
+            <!--<div class="col-md-1 marginOff">
+                <button type="submit" class="btn btn-primary btn-block saveBtn" ng-click="vm.postInsYearlyFee()" ng-disabled="btnDis">Save</button>
+            </div>-->
+            <div class="col-md-1 marginOff">
+                <button type="submit" class="btn btn-primary btn-block resetBtn" ng-click="clearField()">Reset</button>
+            </div>
+
+
+        </div>
+    </div>
+    <div class="grid-body">
+        <div class="row">
+            <form class="form-horizontal col-sm-12" name="vm.yearlyFeesSetup">
+                <div class="col-md-4">
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Medium</label>
+                        <div class="col-sm-8">
+                            <ui-select ng-model="vm.medium.selected" name="Med" on-select="vm.MediumWiseClassDDL(vm.MediumID)" theme="bootstrap" ng-click="vm.MediumID = $select.selected.MediumID" required>
+                                <ui-select-match placeholder=" -Select-">
+                                    {{$select.selected.MameName}}
+                                    <span style="float:right" ng-click="vm.mediumID = undefined; vm.class=undefined; vm.classes = []; vm.department=undefined; vm.departments = []; ; DisBtn(); $select.selected=undefined">
+                                        <i class="fa fa-remove" aria-hidden="true"></i>
+                                    </span>
+                                </ui-select-match>
+                                <ui-select-choices repeat="medium in vm.mediums | filter: $select.search">
+                                    <div ng-bind-html="medium.MameName | highlight: $select.search"></div>
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                        <span class="error" ng-show="(vm.yearlyFeesSetup.$dirty||submitted) && vm.yearlyFeesSetup.Med.$error.required">*</span>
+                    </div>
+
+                </div>
+
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Class</label>
+                        <div class="col-sm-8">
+                            <ui-select ng-model="vm.class.selected" name="Cls" on-select="vm.ClassWiseDepartmentDDL(vm.ClassID)" theme="bootstrap" ng-click="vm.ClassID = $select.selected.ClassID" required>
+                                <ui-select-match placeholder=" -Select-">
+                                    {{$select.selected.ClassName}}
+                                    <span style="float:right" ng-click="vm.ClassID = null; DisBtn(); vm.department=undefined; vm.departments = []; $select.selected=undefined">
+                                        <i class="fa fa-remove" aria-hidden="true"></i>
+                                    </span>
+                                </ui-select-match>
+                                <ui-select-choices repeat="class in vm.classes | filter: $select.search">
+                                    <div ng-bind-html="class.ClassName | highlight: $select.search"></div>
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                        <span class="error" ng-show="(vm.yearlyFeesSetup.$dirty||submitted) && vm.yearlyFeesSetup.Cls.$error.required">*</span>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Dept.</label>
+                        <div class="col-sm-8">
+                            <ui-select ng-model="vm.department.selected" name="Dep" theme="bootstrap" ng-click="vm.DepartmentID = $select.selected.DepartmentID" ng-required="IsRequired">
+                                <ui-select-match placeholder=" -Select-">
+                                    {{$select.selected.DepartmentName}}
+                                    <span style="float:right" ng-click="vm.DepartmentID = null; DisBtn(); $select.selected=undefined">
+                                        <i class="fa fa-remove" aria-hidden="true"></i>
+                                    </span>
+                                </ui-select-match>
+                                <ui-select-choices repeat="department in vm.departments | filter: $select.search">
+                                    <div ng-bind-html="department.DepartmentName | highlight: $select.search"></div>
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                        <span class="error" ng-show="(vm.yearlyFeesSetup.$dirty||submitted) && vm.yearlyFeesSetup.Dep.$error.required">*</span>
+                    </div>
+
+                    <div class="form-group" ng-if="false">
+                        <label class="col-sm-3 control-label">Shift</label>
+                        <div class="col-sm-8">
+                            <ui-select ng-model="vm.shift.selected" name="Shi" theme="bootstrap" ng-click="vm.shiftID = $select.selected.ShiftID">
+                                <ui-select-match placeholder=" -Select-">
+                                    {{$select.selected.ShiftName}}
+                                    <span style="float:right" ng-click="vm.shiftID = undefined; $select.selected=undefined">
+                                        <i class="fa fa-remove" aria-hidden="true"></i>
+                                    </span>
+                                </ui-select-match>
+                                <ui-select-choices repeat="shift in vm.shifts | filter: $select.search">
+                                    <div ng-bind-html="shift.ShiftName | highlight: $select.search"></div>
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                        <!--<span class="error" ng-show="(vm.yearlyFeesSetup.$dirty||submitted) && vm.yearlyFeesSetup.Shi.$error.required">*</span>-->
+                    </div>
+
+                </div>
+            </form>
+
+        </div>
+
+        <div class="row" ng-show="showItem">
+            <div class="col-md-12">
+                <ul class="nav nav-tabs">
+                    <li class="active col-md-1">
+                        <a data-toggle="tab" href="#0" ng-click="openFeesTabIndex(0)">Jan</a>
+                    </li>
+                    <li class="col-md-1">
+                        <a data-toggle="tab" href="#1" ng-click="openFeesTabIndex(1)">Feb</a>
+                    </li>
+                    <li class="col-md-1">
+                        <a data-toggle="tab" href="#2" ng-click="openFeesTabIndex(2)">Mar</a>
+                    </li>
+                    <li class="col-md-1">
+                        <a data-toggle="tab" href="#3" ng-click="openFeesTabIndex(3)">Apr</a>
+                    </li>
+                    <li class="col-md-1">
+                        <a data-toggle="tab" href="#4" ng-click="openFeesTabIndex(4)">May</a>
+                    </li>
+                    <li class="col-md-1">
+                        <a data-toggle="tab" href="#5" ng-click="openFeesTabIndex(5)">Jun</a>
+                    </li>
+                    <li class="col-md-1">
+                        <a data-toggle="tab" href="#6" ng-click="openFeesTabIndex(6)">Jul</a>
+                    </li>
+                    <li class="col-md-1">
+                        <a data-toggle="tab" href="#7" ng-click="openFeesTabIndex(7)">Aug</a>
+                    </li>
+                    <li class="col-md-1">
+                        <a data-toggle="tab" href="#8" ng-click="openFeesTabIndex(8)">Sep</a>
+                    </li>
+                    <li class="col-md-1">
+                        <a data-toggle="tab" href="#9" ng-click="openFeesTabIndex(9)">Oct</a>
+                    </li>
+                    <li class="col-md-1">
+                        <a data-toggle="tab" href="#10" ng-click="openFeesTabIndex(10)">Nov</a>
+                    </li>
+                    <li class="col-md-1">
+                        <a data-toggle="tab" href="#11" ng-click="openFeesTabIndex(11)">Dec</a>
+                    </li>
+                </ul>
+
+                <!-- Start Tab Content -->
+                <div class="tab-content">
+                    <div id="0" class="tab-pane fade in active">
+                        <div class="col-md-1 marginOff" style="float:right">
+                            <button type="submit" class="btn btn-primary btn-block showBtn" ng-click="openFeesTabIndex(0)" ng-show="IsShowMonthJan=vm.jan.length > 0 ? false : true" >Show</button>
+                        </div>
+
+                        <table st-table="rowCollection" class="table table-bordered" ng-show="IsShowMonthJan=vm.jan.length > 0 ? true : false">
+                            <thead>
+                                <tr>
+                                    <th st-sort="ItemID">SL</th>
+                                    <th st-sort="ItemID">IsActive</th>
+                                    <th st-sort="ItemName">Fees Type</th>
+                                    <th st-sort="ItemBrandID">Fees Head</th>
+                                    <th st-sort="ItemBrandID">Fees</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="FeeDetail in vm.jan">
+                                    <td>{{$index+1}}</td>
+                                    <td ng-repeat="value1 in FeeDetail">
+                                        <div class="checkbox check-primary">
+                                            <input id="{{$parent.$index + value}}a" type="checkbox" ng-model="value1.IsActive" ng-click="openFeesDetailsIndex($parent.$index,value1.IsActive)"
+                                                   ng-checked="value1.IsActive===1">
+                                            <label for="{{$parent.$index + value}}a"></label>
+
+                                        </div>
+                                    </td>
+                                    <td ng-repeat="value1 in FeeDetail">{{value1.FeesType}}</td>
+                                    <td ng-repeat="value1 in FeeDetail">{{value1.FeesHead}}</td>
+                                    <td ng-repeat="value1 in FeeDetail">{{value1.Fee}}</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" style="text-align: right;">Total Fees in January </td>
+                                    <td>{{totalArr[0]}}</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" style="text-align: right;border: none !important"></td>
+                                    <td style="border: none !important">
+                                        <button type="submit" class="btn btn-primary btn-block saveBtn" ng-click="vm.postInsYearlyFee()" ng-disabled="disButton">Save</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div id="1" class="tab-pane fade">
+                        <div class="col-md-1 marginOff" style="float:right">
+                            <button type="submit" class="btn btn-primary btn-block showBtn" ng-click="openFeesTabIndex(1)" ng-show="IsShowMonthFeb=vm.feb.length > 0 ? false : true">Show</button>
+                        </div>
+
+                        <table st-table="rowCollection" class="table table-bordered" ng-show="IsShowMonthFeb=vm.feb.length > 0 ? true : false">
+                            <thead>
+                                <tr>
+                                    <th st-sort="ItemID">SL</th>
+                                    <th st-sort="ItemID">IsActive</th>
+                                    <th st-sort="ItemName">Fees Type</th>
+                                    <th st-sort="ItemBrandID">Fees Head</th>
+                                    <th st-sort="ItemBrandID">Fees</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="FeeDetail in vm.feb">
+                                    <td>{{$index+1}}</td>
+                                    <td ng-repeat="value2 in FeeDetail">
+                                        <div class="checkbox check-primary">
+                                            <input id="{{$parent.$index + value}}b" type="checkbox" ng-model="value2.IsActive" ng-click="openFeesDetailsIndex($parent.$index,value2.IsActive)"
+                                                   ng-checked="value2.IsActive===1">
+                                            <label for="{{$parent.$index + value}}b"></label>
+
+                                        </div>
+                                    </td>
+                                    <td ng-repeat="value1 in FeeDetail">{{value1.FeesType}}</td>
+                                    <td ng-repeat="value1 in FeeDetail">{{value1.FeesHead}}</td>
+                                    <td ng-repeat="value1 in FeeDetail">{{value1.Fee}}</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" style="text-align: right;">Total Fees in February </td>
+                                    <td>{{totalArr[1]}}</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" style="text-align: right;border: none !important"></td>
+                                    <td style="border: none !important">
+                                        <button type="submit" class="btn btn-primary btn-block saveBtn" ng-click="vm.postInsYearlyFee()" ng-disabled="disButton">Save</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="2" class="tab-pane fade">
+                        <div class="col-md-1 marginOff" style="float:right">
+                            <button type="submit" class="btn btn-primary btn-block showBtn" ng-click="openFeesTabIndex(2)" ng-show="IsShowMonthMar=vm.mar.length > 0 ? false : true">Show</button>
+                        </div>
+
+                        <table st-table="rowCollection" class="table table-bordered" ng-show="IsShowMonthMar=vm.mar.length > 0 ? true : false">
+                            <thead>
+                                <tr>
+                                    <th st-sort="ItemID">SL</th>
+                                    <th st-sort="ItemID">IsActive</th>
+                                    <th st-sort="ItemName">Fees Type</th>
+                                    <th st-sort="ItemBrandID">Fees Head</th>
+                                    <th st-sort="ItemBrandID">Fees</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="FeeDetail in vm.mar">
+                                    <td>{{$index+1}}</td>
+                                    <td ng-repeat="value3 in FeeDetail">
+                                        <div class="checkbox check-primary">
+                                            <input id="{{$parent.$index + value}}c" type="checkbox" ng-model="value3.IsActive" ng-click="openFeesDetailsIndex($parent.$index,value3.IsActive)"
+                                                   ng-checked="value3.IsActive===1">
+                                            <label for="{{$parent.$index + value}}c"></label>
+
+                                        </div>
+                                    </td>
+                                    <td ng-repeat="value1 in FeeDetail">{{value1.FeesType}}</td>
+                                    <td ng-repeat="value1 in FeeDetail">{{value1.FeesHead}}</td>
+                                    <td ng-repeat="value1 in FeeDetail">{{value1.Fee}}</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" style="text-align: right;">Total Fees in March </td>
+                                    <td>{{totalArr[2]}}</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" style="text-align: right;border: none !important"></td>
+                                    <td style="border: none !important">
+                                        <button type="submit" class="btn btn-primary btn-block saveBtn" ng-click="vm.postInsYearlyFee()" ng-disabled="disButton">Save</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="3" class="tab-pane fade">
+                        <div class="col-md-1 marginOff" style="float:right">
+                            <button type="submit" class="btn btn-primary btn-block showBtn" ng-click="openFeesTabIndex(3)" ng-show="IsShowMonthApr=vm.apr.length > 0 ? false : true">Show</button>
+                        </div>
+
+                        <table st-table="rowCollection" class="table table-bordered" ng-show="IsShowMonthApr=vm.apr.length > 0 ? true : false">
+                            <thead>
+                                <tr>
+                                    <th st-sort="ItemID">SL</th>
+                                    <th st-sort="ItemID">IsActive</th>
+                                    <th st-sort="ItemName">Fees Type</th>
+                                    <th st-sort="ItemBrandID">Fees Head</th>
+                                    <th st-sort="ItemBrandID">Fees</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="FeeDetail in vm.apr">
+                                    <td>{{$index+1}}</td>
+                                    <td ng-repeat="value4 in FeeDetail">
+                                        <div class="checkbox check-primary">
+                                            <input id="{{$parent.$index + value}}d" type="checkbox" ng-model="value4.IsActive" ng-click="openFeesDetailsIndex($parent.$index,value4.IsActive)"
+                                                   ng-checked="value4.IsActive===1">
+                                            <label for="{{$parent.$index + value}}d"></label>
+
+                                        </div>
+                                    </td>
+                                    <td ng-repeat="value1 in FeeDetail">{{value1.FeesType}}</td>
+                                    <td ng-repeat="value1 in FeeDetail">{{value1.FeesHead}}</td>
+                                    <td ng-repeat="value1 in FeeDetail">{{value1.Fee}}</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" style="text-align: right;">Total Fees in April </td>
+                                    <td>{{totalArr[3]}}</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" style="text-align: right;border: none !important"></td>
+                                    <td style="border: none !important">
+                                        <button type="submit" class="btn btn-primary btn-block saveBtn" ng-click="vm.postInsYearlyFee()" ng-disabled="disButton">Save</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="4" class="tab-pane fade">
+                        <div class="col-md-1 marginOff" style="float:right">
+                            <button type="submit" class="btn btn-primary btn-block showBtn" ng-click="openFeesTabIndex(4)" ng-show="IsShowMonthMay=vm.may.length > 0 ? false : true">Show</button>
+                        </div>
+
+                        <table st-table="rowCollection" class="table table-bordered" ng-show="IsShowMonthMay=vm.may.length > 0 ? true : false">
+                            <thead>
+                                <tr>
+                                    <th st-sort="ItemID">SL</th>
+                                    <th st-sort="ItemID">IsActive</th>
+                                    <th st-sort="ItemName">Fees Type</th>
+                                    <th st-sort="ItemBrandID">Fees Head</th>
+                                    <th st-sort="ItemBrandID">Fees</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="FeeDetail in vm.may">
+                                    <td>{{$index+1}}</td>
+                                    <td ng-repeat="value5 in FeeDetail">
+                                        <div class="checkbox check-primary">
+                                            <input id="{{$parent.$index + value}}e" type="checkbox" ng-model="value5.IsActive" ng-click="openFeesDetailsIndex($parent.$index,value5.IsActive)"
+                                                   ng-checked="value5.IsActive===1">
+                                            <label for="{{$parent.$index + value}}e"></label>
+
+                                        </div>
+                                    </td>
+                                    <td ng-repeat="value1 in FeeDetail">{{value1.FeesType}}</td>
+                                    <td ng-repeat="value1 in FeeDetail">{{value1.FeesHead}}</td>
+                                    <td ng-repeat="value1 in FeeDetail">{{value1.Fee}}</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" style="text-align: right;">Total Fees in May </td>
+                                    <td>{{totalArr[4]}}</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" style="text-align: right;border: none !important"></td>
+                                    <td style="border: none !important">
+                                        <button type="submit" class="btn btn-primary btn-block saveBtn" ng-click="vm.postInsYearlyFee()" ng-disabled="disButton">Save</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="5" class="tab-pane fade">
+                        <div class="col-md-1 marginOff" style="float:right">
+                            <button type="submit" class="btn btn-primary btn-block showBtn" ng-click="openFeesTabIndex(5)" ng-show="IsShowMonthJun=vm.june.length > 0 ? false : true">Show</button>
+                        </div>
+
+                        <table st-table="rowCollection" class="table table-bordered" ng-show="IsShowMonthJun=vm.june.length > 0 ? true : false">
+                            <thead>
+                                <tr>
+                                    <th st-sort="ItemID">SL</th>
+                                    <th st-sort="ItemID">IsActive</th>
+                                    <th st-sort="ItemName">Fees Type</th>
+                                    <th st-sort="ItemBrandID">Fees Head</th>
+                                    <th st-sort="ItemBrandID">Fees</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="FeeDetail in vm.june">
+                                    <td>{{$index+1}}</td>
+                                    <td ng-repeat="value6 in FeeDetail">
+                                        <div class="checkbox check-primary">
+                                            <input id="{{$parent.$index + value}}f" type="checkbox" ng-model="value6.IsActive" ng-click="openFeesDetailsIndex($parent.$index,value6.IsActive)"
+                                                   ng-checked="value6.IsActive===1">
+                                            <label for="{{$parent.$index + value}}f"></label>
+
+                                        </div>
+                                    </td>
+                                    <td ng-repeat="value1 in FeeDetail">{{value1.FeesType}}</td>
+                                    <td ng-repeat="value1 in FeeDetail">{{value1.FeesHead}}</td>
+                                    <td ng-repeat="value1 in FeeDetail">{{value1.Fee}}</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" style="text-align: right;">Total Fees in June </td>
+                                    <td>{{totalArr[5]}}</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" style="text-align: right;border: none !important"></td>
+                                    <td style="border: none !important">
+                                        <button type="submit" class="btn btn-primary btn-block saveBtn" ng-click="vm.postInsYearlyFee()" ng-disabled="disButton">Save</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="6" class="tab-pane fade">
+                        <div class="col-md-1 marginOff" style="float:right">
+                            <button type="submit" class="btn btn-primary btn-block showBtn" ng-click="openFeesTabIndex(6)" ng-show="IsShowMonthJul=vm.july.length > 0 ? false : true">Show</button>
+                        </div>
+
+                        <table st-table="rowCollection" class="table table-bordered" ng-show="IsShowMonthJul=vm.july.length > 0 ? true : false">
+                            <thead>
+                                <tr>
+                                    <th st-sort="ItemID">SL</th>
+                                    <th st-sort="ItemID">IsActive</th>
+                                    <th st-sort="ItemName">Fees Type</th>
+                                    <th st-sort="ItemBrandID">Fees Head</th>
+                                    <th st-sort="ItemBrandID">Fees</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="FeeDetail in vm.july">
+                                    <td>{{$index+1}}</td>
+                                    <td ng-repeat="value7 in FeeDetail">
+                                        <div class="checkbox check-primary">
+                                            <input id="{{$parent.$index + value}}g" type="checkbox" ng-model="value7.IsActive" ng-click="openFeesDetailsIndex($parent.$index,value7.IsActive)"
+                                                   ng-checked="value7.IsActive===1">
+                                            <label for="{{$parent.$index + value}}g"></label>
+
+                                        </div>
+                                    </td>
+                                    <td ng-repeat="value1 in FeeDetail">{{value1.FeesType}}</td>
+                                    <td ng-repeat="value1 in FeeDetail">{{value1.FeesHead}}</td>
+                                    <td ng-repeat="value1 in FeeDetail">{{value1.Fee}}</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" style="text-align: right;">Total Fees in July </td>
+                                    <td>{{totalArr[6]}}</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" style="text-align: right;border: none !important"></td>
+                                    <td style="border: none !important">
+                                        <button type="submit" class="btn btn-primary btn-block saveBtn" ng-click="vm.postInsYearlyFee()" ng-disabled="disButton">Save</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="7" class="tab-pane fade">
+                        <div class="col-md-1 marginOff" style="float:right">
+                            <button type="submit" class="btn btn-primary btn-block showBtn" ng-click="openFeesTabIndex(7)" ng-show="IsShowMonthAug=vm.aug.length > 0 ? false : true">Show</button>
+                        </div>
+
+                        <table st-table="rowCollection" class="table table-bordered" ng-show="IsShowMonthAug=vm.aug.length > 0 ? true : false">
+                            <thead>
+                                <tr>
+                                    <th st-sort="ItemID">SL</th>
+                                    <th st-sort="ItemID">IsActive</th>
+                                    <th st-sort="ItemName">Fees Type</th>
+                                    <th st-sort="ItemBrandID">Fees Head</th>
+                                    <th st-sort="ItemBrandID">Fees</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="FeeDetail in vm.aug">
+                                    <td>{{$index+1}}</td>
+                                    <td ng-repeat="value8 in FeeDetail">
+                                        <div class="checkbox check-primary">
+                                            <input id="{{$parent.$index + value}}h" type="checkbox" ng-model="value8.IsActive" ng-click="openFeesDetailsIndex($parent.$index,value8.IsActive)"
+                                                   ng-checked="value8.IsActive===1">
+                                            <label for="{{$parent.$index + value}}h"></label>
+
+                                        </div>
+                                    </td>
+                                    <td ng-repeat="value1 in FeeDetail">{{value1.FeesType}}</td>
+                                    <td ng-repeat="value1 in FeeDetail">{{value1.FeesHead}}</td>
+                                    <td ng-repeat="value1 in FeeDetail">{{value1.Fee}}</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" style="text-align: right;">Total Fees in August </td>
+                                    <td>{{totalArr[7]}}</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" style="text-align: right;border: none !important"></td>
+                                    <td style="border: none !important">
+                                        <button type="submit" class="btn btn-primary btn-block saveBtn" ng-click="vm.postInsYearlyFee()" ng-disabled="disButton">Save</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="8" class="tab-pane fade">
+                        <div class="col-md-1 marginOff" style="float:right">
+                            <button type="submit" class="btn btn-primary btn-block showBtn" ng-click="openFeesTabIndex(8)" ng-show="IsShowMonthSep=vm.sep.length > 0 ? false : true">Show</button>
+                        </div>
+
+                        <table st-table="rowCollection" class="table table-bordered" ng-show="IsShowMonthSep=vm.sep.length > 0 ? true : false">
+                            <thead>
+                                <tr>
+                                    <th st-sort="ItemID">SL</th>
+                                    <th st-sort="ItemID">IsActive</th>
+                                    <th st-sort="ItemName">Fees Type</th>
+                                    <th st-sort="ItemBrandID">Fees Head</th>
+                                    <th st-sort="ItemBrandID">Fees</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="FeeDetail in vm.sep">
+                                    <td>{{$index+1}}</td>
+                                    <td ng-repeat="value9 in FeeDetail">
+                                        <div class="checkbox check-primary">
+                                            <input id="{{$parent.$index + value}}i" type="checkbox" ng-model="value9.IsActive" ng-click="openFeesDetailsIndex($parent.$index,value9.IsActive)"
+                                                   ng-checked="value9.IsActive===1">
+                                            <label for="{{$parent.$index + value}}i"></label>
+
+                                        </div>
+                                    </td>
+                                    <td ng-repeat="value1 in FeeDetail">{{value1.FeesType}}</td>
+                                    <td ng-repeat="value1 in FeeDetail">{{value1.FeesHead}}</td>
+                                    <td ng-repeat="value1 in FeeDetail">{{value1.Fee}}</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" style="text-align: right;">Total Fees in September </td>
+                                    <td>{{totalArr[8]}}</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" style="text-align: right;border: none !important"></td>
+                                    <td style="border: none !important">
+                                        <button type="submit" class="btn btn-primary btn-block saveBtn" ng-click="vm.postInsYearlyFee()" ng-disabled="disButton">Save</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="9" class="tab-pane fade">
+                        <div class="col-md-1 marginOff" style="float:right">
+                            <button type="submit" class="btn btn-primary btn-block showBtn" ng-click="openFeesTabIndex(9)" ng-show="IsShowMonthOct=vm.oct.length > 0 ? false : true">Show</button>
+                        </div>
+
+                        <table st-table="rowCollection" class="table table-bordered" ng-show="IsShowMonthOct=vm.oct.length > 0 ? true : false">
+                            <thead>
+                                <tr>
+                                    <th st-sort="ItemID">SL</th>
+                                    <th st-sort="ItemID">IsActive</th>
+                                    <th st-sort="ItemName">Fees Type</th>
+                                    <th st-sort="ItemBrandID">Fees Head</th>
+                                    <th st-sort="ItemBrandID">Fees</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="FeeDetail in vm.oct">
+                                    <td>{{$index+1}}</td>
+                                    <td ng-repeat="value10 in FeeDetail">
+                                        <div class="checkbox check-primary">
+                                            <input id="{{$parent.$index + valie}}j" type="checkbox" ng-model="value10.IsActive" ng-click="openFeesDetailsIndex($parent.$index,value10.IsActive)"
+                                                   ng-checked="value10.IsActive===1">
+                                            <label for="{{$parent.$index + valie}}j"></label>
+
+                                        </div>
+                                    </td>
+                                    <td ng-repeat="value1 in FeeDetail">{{value1.FeesType}}</td>
+                                    <td ng-repeat="value1 in FeeDetail">{{value1.FeesHead}}</td>
+                                    <td ng-repeat="value1 in FeeDetail">{{value1.Fee}}</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" style="text-align: right;">Total Fees in October </td>
+                                    <td>{{totalArr[9]}}</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" style="text-align: right;border: none !important"></td>
+                                    <td style="border: none !important">
+                                        <button type="submit" class="btn btn-primary btn-block saveBtn" ng-click="vm.postInsYearlyFee()" ng-disabled="disButton">Save</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="10" class="tab-pane fade">
+                        <div class="col-md-1 marginOff" style="float:right">
+                            <button type="submit" class="btn btn-primary btn-block showBtn" ng-click="openFeesTabIndex(10)" ng-show="IsShowMonthNov=vm.nov.length > 0 ? false : true">Show</button>
+                        </div>
+
+                        <table st-table="rowCollection" class="table table-bordered" ng-show="IsShowMonthNov=vm.nov.length > 0 ? true : false">
+                            <thead>
+                                <tr>
+                                    <th st-sort="ItemID">SL</th>
+                                    <th st-sort="ItemID">IsActive</th>
+                                    <th st-sort="ItemName">Fees Type</th>
+                                    <th st-sort="ItemBrandID">Fees Head</th>
+                                    <th st-sort="ItemBrandID">Fees</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="FeeDetail in vm.nov">
+                                    <td>{{$index+1}}</td>
+                                    <td ng-repeat="value11 in FeeDetail">
+                                        <div class="checkbox check-primary">
+                                            <input id="{{$parent.$index + value}}k" type="checkbox" ng-model="value11.IsActive" ng-click="openFeesDetailsIndex($parent.$index,value11.IsActive)"
+                                                   ng-checked="value11.IsActive===1">
+                                            <label for="{{$parent.$index + value}}k"></label>
+
+                                        </div>
+                                    </td>
+                                    <td ng-repeat="value1 in FeeDetail">{{value1.FeesType}}</td>
+                                    <td ng-repeat="value1 in FeeDetail">{{value1.FeesHead}}</td>
+                                    <td ng-repeat="value1 in FeeDetail">{{value1.Fee}}</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" style="text-align: right;">Total Fees in November </td>
+                                    <td>{{totalArr[10]}}</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" style="text-align: right;border: none !important"></td>
+                                    <td style="border: none !important">
+                                        <button type="submit" class="btn btn-primary btn-block saveBtn" ng-click="vm.postInsYearlyFee()" ng-disabled="disButton">Save</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="11" class="tab-pane fade">
+                        <div class="col-md-1 marginOff" style="float:right">
+                            <button type="submit" class="btn btn-primary btn-block showBtn" ng-click="openFeesTabIndex(11)" ng-show="IsShowMonthDec=vm.dec.length > 0 ? false : true">Show</button>
+                        </div>
+
+                        <table st-table="rowCollection" class="table table-bordered" ng-show="IsShowMonthDec=vm.dec.length > 0 ? true : false">
+                            <thead>
+                                <tr>
+                                    <th st-sort="ItemID">SL</th>
+                                    <th st-sort="ItemID">IsActive</th>
+                                    <th st-sort="ItemName">Fees Type</th>
+                                    <th st-sort="ItemBrandID">Fees Head</th>
+                                    <th st-sort="ItemBrandID">Fees</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="FeeDetail in vm.dec">
+                                    <td>{{$index+1}}</td>
+                                    <td ng-repeat="value12 in FeeDetail">
+                                        <div class="checkbox check-primary">
+                                            <input id="{{$parent.$index + value}}l" type="checkbox" ng-model="value12.IsActive" ng-click="openFeesDetailsIndex($parent.$index,value12.IsActive)"
+                                                   ng-checked="value12.IsActive===1">
+                                            <label for="{{$parent.$index + value}}l"></label>
+
+                                        </div>
+                                    </td>
+                                    <td ng-repeat="value1 in FeeDetail">{{value1.FeesType}}</td>
+                                    <td ng-repeat="value1 in FeeDetail">{{value1.FeesHead}}</td>
+                                    <td ng-repeat="value1 in FeeDetail">{{value1.Fee}}</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" style="text-align: right;">Total Fees in December </td>
+                                    <td>{{totalArr[11]}}</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" style="text-align: right;border: none !important"></td>
+                                    <td style="border: none !important">
+                                        <button type="submit" class="btn btn-primary btn-block saveBtn" ng-click="vm.postInsYearlyFee()" ng-disabled="disButton">Save</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+
+                <!-- End of Tab Content -->
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .thumb {
+        width: 24px;
+        height: 24px;
+        float: none;
+        position: relative;
+        top: 7px;
+    }
+
+    .modal-content {
+        width: 1660px;
+        margin-left: -405px;
+    }
+</style>

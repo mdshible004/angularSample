@@ -1,0 +1,369 @@
+<div class="grid simple col-md-12" ng-show="createItem">
+
+    <div class="grid-title">
+        <div class="row">
+            <div class="col-md-9">
+                <div class="page-title">
+                    <i class="fa fa-keyboard-o" aria-hidden="true"></i>
+                    <h3>
+                        Monthly Class Wise Attendance -
+                        <span class="semi-bold">Report</span>
+                    </h3>
+                </div>
+            </div>
+            <div class="col-md-1 marginOff">
+                <button type="submit" class="btn btn-primary btn-block showBtn" ng-click="vm.getMonthlyClassWiseStudentAttendance()" ng-disabled="vm.attendanceRepo.$invalid">Show</button>
+            </div>
+            <div class="col-md-1 marginOff">
+                <button type="submit" class="btn btn-primary btn-block resetBtn" ng-click="clearField()">Reset</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Input Parameter Start from here -->
+    <div class="grid-body">
+        <div class="row">
+
+            <form class="form-horizontal col-sm-12" name="vm.attendanceRepo">
+                <div class="row">
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Medium</label>
+                            <div class="col-sm-8">
+                                <ui-select ng-model="vm.medium.selected" name="Med" on-select="vm.MediumWiseClassDDL(vm.MediumID)" theme="bootstrap" ng-click="vm.MediumID = $select.selected.MediumID" ng-change="changeGrid()" required>
+                                    <ui-select-match placeholder="-Select-">
+                                        {{$select.selected.MameName}}
+                                        <span style="float:right" ng-click="vm.MediumID = null; DisBtn(); showItem=false; vm.class=undefined; vm.department=undefined;vm.classes=[];vm.departments=[];vm.section=undefined;vm.sections=[]; $select.selected=undefined">
+                                            <i class="fa fa-remove" aria-hidden="true"></i>
+                                        </span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="medium in vm.mediums | filter: $select.search">
+                                        <div ng-bind-html="medium.MameName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            <span class="error" ng-show="(vm.attendanceRepo.$dirty||submitted) && vm.attendanceRepo.Med.$error.required">*</span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Class</label>
+                            <div class="col-sm-8">
+                                <ui-select ng-model="vm.class.selected" name="Cls" on-select="vm.ClassWiseDepartmentDDL(vm.ClassID)" theme="bootstrap" ng-click="vm.ClassID = $select.selected.ClassID" ng-change="changeGrid()" >
+                                    <ui-select-match placeholder="-Select-">
+                                        {{$select.selected.ClassName}}
+                                        <span style="float:right" ng-click="vm.ClassID = null; DisBtn(); vm.department=undefined;vm.departments=[];vm.section=undefined;vm.sections=[]; $select.selected=undefined">
+                                            <i class="fa fa-remove" aria-hidden="true"></i>
+                                        </span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="class in vm.classes | filter: $select.search">
+                                        <div ng-bind-html="class.ClassName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Department</label>
+                            <div class="col-sm-8">
+                                <ui-select ng-model="vm.department.selected" name="Dep" theme="bootstrap" ng-click="vm.DepartmentID = $select.selected.DepartmentID" ng-change="changeGrid()" on-select="vm.ClassSelected(0, '')" >
+                                    <ui-select-match placeholder="-Select-">
+                                        {{$select.selected.DepartmentName}}
+                                        <span style="float:right" ng-click="vm.DepartmentID = null; DisBtn();vm.section=undefined;vm.sections=[]; $select.selected=undefined">
+                                            <i class="fa fa-remove" aria-hidden="true"></i>
+                                        </span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="department in vm.departments | filter: $select.search">
+                                        <div ng-bind-html="department.DepartmentName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            
+                        </div>
+                    </div>
+                    
+                    <!--<div class="col-md-2">
+
+                <button type="submit" class="btn btn-primary btn-block showBtn" ng-click="vm.getTeacherAttendanceByParams()">Show</button>
+
+        </div>-->
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Section</label>
+                            <div class="col-sm-8">
+                                <ui-select ng-model="vm.section.selected" theme="bootstrap" name="sec" ng-click="vm.SectionID = $select.selected.SectionID" ng-keydown="$event.keyCode == 13 ? $event.preventDefault() : null" ng-change="changeGrid()">
+                                    <!--<ui-select ng-model="vm.section.selected" theme="bootstrap" name="sec" ng-click="vm.SectionID = $select.selected.SectionID" ng-keydown="$event.keyCode == 13 ? $event.preventDefault() : null" ng-change="changeGrid()" ng-required="IsRequiredSec">  -->
+                                    <ui-select-match placeholder="-Select-">
+                                        {{$select.selected.SectionName}}
+                                        <span style="float:right" ng-click="vm.SectionID = null; $select.selected=undefined"><i class="fa fa-remove" aria-hidden="true"></i></span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="section in vm.sections | filter: $select.search">
+                                        <div ng-bind-html="section.SectionName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Shift</label>
+                            <div class="col-sm-8">
+                                <ui-select ng-model="vm.shift.selected" theme="bootstrap" ng-click="vm.ShiftID = $select.selected.ShiftID" ng-change="changeGrid()" ng-keydown="$event.keyCode == 13 ? $event.preventDefault() : null">
+                                    <ui-select-match placeholder="-Select-">
+                                        {{$select.selected.ShiftName}}
+                                        <span style="float:right" ng-click="vm.ShiftID = null; $select.selected=undefined"><i class="fa fa-remove" aria-hidden="true"></i></span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="shift in vm.shifts | filter: $select.search">
+                                        <div ng-bind-html="shift.ShiftName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Month</label>
+                            <div class="col-sm-8">
+                                <ui-select ng-model="vm.mon.selected" theme="bootstrap" name="month" ng-click="vm.MonthID = $select.selected.MonthID" ng-change="changeGrid()" >
+                                    <ui-select-match placeholder=" -Select-">
+                                        {{$select.selected.MonthName}}
+                                        <span style="float:right" ng-click="vm.monthID = null;showItem=false; $select.selected=undefined">
+                                            <i class="fa fa-remove" aria-hidden="true"></i>
+                                        </span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="mon in vm.months | filter: $select.search">
+                                        <div ng-bind-html="mon.MonthName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                                <!-- value:{{vm.mon.selected.MonthID}} -->
+                            </div>
+                            <!--<span class="error" ng-show="(vm.attendance.$dirty||submitted) && vm.attendance.month.$error.required">*</span>-->
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- End Input Parameter -->
+</div>
+
+<!-- Daily Teacher Attendance Report table Start from here(1st table) -->
+
+<div class="grid simple col-md-12" ng-show="showItem">
+    <div class="grid-title">
+        <div class="row">
+            <div class="col-md-11">
+            </div>
+            <div class="col-md-1 marginOff">
+                <button type="submit" class="btn btn-primary btn-block saveBtn" ng-click="vm.printDiv('print')">
+                    <span class="glyphicon glyphicon-print"></span> Print
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="grid-body">
+        <div class="row">
+            <div class="col-md-12">
+                <table st-table="rowCollection" class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>SL</th>
+                            <th>Student</th>
+                            <th>RFID</th>
+                            <th>Roll</th>
+                            <th>Total Class</th>
+                            <th>Total Present</th>
+                            <th>Total Absent</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="attendance in vm.attendances">
+                            <td>{{$index+1}}</td>
+                            <td>{{attendance.Name}}</td>
+                            <td>{{attendance.RFID}}</td>
+                            <td>{{attendance.Roll}}</td>
+                            <td>{{attendance.TotalClass}}</td>
+                            <td>{{attendance.TotalPresent}}</td>
+                            <td>{{attendance.TotalAbsent}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- End Item Entry List Grid -->
+
+<div class="grid-body" id="print" ng-show="printthis">
+    <!-- logo title -->
+    <table width=100%>
+        <tr>
+            <td width=6%>
+                <div>
+                    <img alt="" height="70px" width="90px" ng-src="{{imgHost}}{{InstituteLogo}}" />
+                </div>
+            </td>
+            <td>
+                <div>
+                    <b style="color: #131212;">
+                        {{InstituteName}}
+                        <!--<br />{{Address}}-->
+                    </b>
+                </div>
+            </td>
+            <td>
+                <div class="col-md-5 pull-right">
+                    <div style="float:right;">
+                        <p style="color: #131212;">
+                            Phone : {{InsPhoneNo}}
+                            <br style="color: #131212;"> Email : {{InsEmail}}
+                            <br style="color: #131212;"> Web :{{InsWeb}}
+                        </p>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </table>
+    <div id="export">
+        <div class="row">
+            <table class="table1" style="  border-collapse: collapse; border-spacing: 10px; border: 1px solid gray; " width=100%>
+                <tr>
+                    <td align="center">
+                        <div>
+                            <b style="color: #131212;">
+                                Medium:
+                            </b>
+                            {{vm.medium.selected.MameName}}
+
+                        </div>
+                    </td>
+                    <td align="center">
+                        <div>
+                            <b style="color: #131212;">
+                                Class:
+                            </b>
+                            {{vm.class.selected.ClassName}}
+
+                        </div>
+                    </td>
+                    <td align="center">
+                        <div>
+                            <b style="color: #131212;">
+                                Department:
+                            </b>
+                            {{vm.department.selected.DepartmentName}}
+
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="center">
+                        <div>
+                            <b style="color: #131212;">
+                                Section:
+                            </b>
+                            {{vm.section.selected.SectionName}}
+
+                        </div>
+                    </td>
+                    <td align="center">
+                        <div>
+                            <b style="color: #131212;">
+                                Month:
+                            </b>
+                            {{vm.mon.selected.MonthName}}
+
+                        </div>
+                    </td>
+                    <td></td>
+
+                </tr>
+            </table>
+        </div>
+        <br>
+        <div class="row">
+            <div style="margin-top : 50px">
+                <i aria-hidden="true"></i>
+
+                <h3>
+                    <pre>      <font size="6"><b><u>Monthly Class Wise Attendance Report ({{vm.mon.selected.MonthName}})</u></b></font>
+</pre>
+                </h3>
+
+            </div>
+        </div>
+
+
+
+        <table class="table1" style="  border-collapse: collapse; border-spacing: 10px; border: 1px solid gray;  width:100%; height:300px !important;">
+            <thead>
+                <tr>
+                    <th style=" border: 1px solid gray; color: #131212;text-align:center">Sl </th>
+                    <th style=" border: 1px solid gray; color: #131212;text-align:center">Student</th>
+                    <th style=" border: 1px solid gray; color: #131212;text-align:center">RFID</th>
+                    <th style=" border: 1px solid gray; color: #131212;text-align:center">Roll</th>
+                    <th style=" border: 1px solid gray; color: #131212;text-align:center">Total Class</th>
+                    <th style=" border: 1px solid gray; color: #131212;text-align:center">Total Present</th>
+                    <th style=" border: 1px solid gray; color: #131212;text-align:center">Total Absent</th>
+
+
+                </tr>
+            </thead>
+            <tbody>
+                <tr style=" border: 1px solid gray;" ng-repeat="attendance in vm.attendances">
+                    <td style=" border: 1px solid gray;color: #131212" align="center">{{$index+1}}</td>
+                    <td style=" border: 1px solid gray;color: #131212" align="center">{{attendance.Name }}</td>
+                    <td style=" border: 1px solid gray;color: #131212" align="center">{{attendance.RFID}}</td>
+                    <td style=" border: 1px solid gray;color: #131212" align="center">{{attendance.Roll}}</td>
+                    <td style=" border: 1px solid gray;color: #131212" align="center">{{attendance.TotalClass}}</td>
+                    <td style=" border: 1px solid gray;color: #131212" align="center">{{attendance.TotalPresent}}</td>
+                    <td style=" border: 1px solid gray;color: #131212" align="center">{{attendance.TotalAbsent}}</td>
+
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+
+    <br>
+    <br>
+    <br>
+    <footer style="position: fixed;bottom: 70px;">
+        <pre>   ______________________            _______________________               ______________________</pre>
+        <pre>        Signed by                          Approved by                         Final approved</pre>
+        <br />
+        </footer>
+        <!-- <p>
+         Powered by : OnAir Int'l Ltd
+        </p> -->
+
+
+</div>
+<style>
+    .thumb {
+        width: 24px;
+        height: 24px;
+        float: none;
+        position: relative;
+        top: 7px;
+    }
+
+    .modal-content {
+        width: 1660px;
+        margin-left: -405px;
+    }
+</style>
+<script src="https://rawgithub.com/eligrey/FileSaver.js/master/FileSaver.js" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.debug.js"></script>
+<script src="http://mrrio.github.io/jsPDF/dist/jspdf.debug.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/2.3.2/jspdf.plugkkin.autotable.js"></script>
+<script src="http://kendo.cdn.telerik.com/2017.3.1026/js/kendo.all.min.js"></script>
+<script src="bower_components/pdfExport/kendo.all.min.js"></script> 

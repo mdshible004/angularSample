@@ -1,0 +1,302 @@
+<div class="grid simple col-md-12">
+    <div class="grid-title">
+        <div class="row">
+            <div class="col-md-9">
+                <div class="page-title">
+                    <i class="fa fa-keyboard-o" aria-hidden="true"></i>
+                    <h3>Permission - <span class="semi-bold">Entry</span></h3>
+                </div>
+            </div>
+            <div class="col-md-1 col-sm-3 marginOff">
+                <button type="submit" class="btn btn-primary btn-block showBtn" ng-click="itemEvent()">Show List</button>           
+            </div>
+            <div class="col-md-1 col-sm-3 marginOff">
+                <button type="submit" class="btn btn-primary btn-block resetBtn" ng-click="vm.clearField()">Reset</button>
+            </div>
+            <div class="col-md-1  col-sm-3 marginOff">
+                <button type="submit" class="btn btn-primary btn-block saveBtn" ng-click="vm.SavePermission()">Save</button>
+            </div>
+        </div>
+    </div>
+    <div class="grid-body">
+        <div class="row">
+            <form class="form-horizontal col-sm-8" name="vm.addAdress">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="col-md-4 control-label" for="input17">Menu</label>
+                                <div class="col-md-7">
+                                    <ui-select ng-model="vm.Menu.selected" name="drpType" theme="bootstrap" ng-click="vm.MenuID = $select.selected.MenuID" required>
+                                        <ui-select-match placeholder="---Select Menu---">
+                                            {{$select.selected.MenuName}}
+                                            <span style="float:right" ng-click="vm.MenuID = null; $select.selected=undefined">
+                                                <i class="fa fa-remove" aria-hidden="true"></i>
+                                            </span>
+                                        </ui-select-match>
+                                        <ui-select-choices repeat="menu in   vm.MenuList | filter: $select.search">
+                                            <div ng-bind-html="menu.MenuName | highlight: $select.search"></div>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+                                <span class="error" ng-show="(frmApprovalSetup.$dirty||submitted) && frmApprovalSetup.ddlMenu.$error.required">*</span>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 control-label"></label>
+                                <div class="col-md-7">
+                                    <div class="checkbox check-primary">
+                                        <input id="chkIsActive" type="checkbox" value="1" ng-click="check()" ng-model="vm.IsActiveChkBox">
+                                        <label for="chkIsActive">Is Active</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="col-md-4 control-label" for="input17">Institute</label>
+                                <div class="col-md-7">
+                                    <ui-select ng-model="vm.institute.selected" name="InsID" theme="bootstrap" ng-click="vm.instituteID = $select.selected.InstituteID" ng-disabled="IsDis=vm.InstituteID!==1?true:false" on-select="vm.instituteSelected($select.selected.InstituteID)" required>
+                                        <ui-select-match placeholder="---Select---">
+                                            {{$select.selected.InstituteName}}
+                                            <span style="float:right" ng-click="vm.instituteID = null; $select.selected=undefined">
+                                                <i class="fa fa-remove" aria-hidden="true"></i>
+                                            </span>
+                                        </ui-select-match>
+                                        <ui-select-choices repeat="institute in vm.institutes | filter: $select.search">
+                                            <div ng-bind-html="institute.InstituteName  | highlight: $select.search"></div>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+                                <span class="error" ng-show="(frmApprovalSetup.$invalid||submitted) && frmApprovalSetup.ddlCompany.$error.required">*</span>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 control-label"></label>
+                                <div class="col-md-4" ng-hide="vm.IsDepartment">
+                                    <div class="checkbox check-primary">
+                                        <input id="chkIsApprovalDetail" type="checkbox" value="1" ng-click="IsTeamChange(vm.IsApprovalDetailChkBox)"  ng-true-value="1" ng-false-value="0" ng-model="vm.IsApprovalDetailChkBox">
+                                        <label for="chkIsApprovalDetail">Is Team</label>
+                                    </div>
+                                </div>
+                                <label class="col-md-4 control-label"></label>
+                                <div class="col-md-4" ng-hide="vm.IsApprovalDetailChkBox">
+                                    <div class="checkbox check-primary">
+                                        <input id="chkIsDepartment" type="checkbox" value="1" ng-click="sss(vm.IsApprovalDetailChkBox)" ng-model="vm.IsDepartment" >
+                                        <label for="chkIsDepartment" style="position: relative;top: -8px;">Is Dept</label>
+                                    </div>                               
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="row"  ng-show= "vm.IsApprovalDetailChkBox" >
+            <div class="col-md-12">
+                <hr />
+                <h3>Approval Team setup</h3>
+                <br />
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="input17">Branch</label>
+                        <div class="col-md-7">
+                            <input type="text"
+                                   @*style="width:230px;" *@
+                                   id="txtBranch"
+                                   class="form-control"
+                                   placeholder="Branch"
+                                   name="txtbxBranch" ng-model="txtbxBranch" />
+                        </div>
+                        <span class="label label-success label-mini">
+                            <a href="javascript:void(0);" ng-href="#drpModal" data-toggle="modal" class="bs-tooltip" title="Select Branch">
+                                <i class="icon-search"></i>
+                            </a>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="input17">Teams</label>
+                        <div class="col-md-7">
+                            <select id="drpTeams" class="select2-select-00"
+                                    ng-model="drpTeams"
+                                    name="drpTeams"
+                                    data-placeholder="--Select Team--"
+                                    style="width: 100%" ng-options="org.TeamID as org.TeamName for org in teams" ng-change="GetTeamsUserByTemID()">
+                                <option></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row"  ng-hide= "vm.IsApprovalDetailChkBox" >
+            <div class="col-md-12">
+                <hr />
+                <h3>Approval Detail setup</h3>
+                <br />
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="input17">Status</label>
+                        <div class="col-md-7">
+                            <ui-select ng-model="vm.status.selected" name="drpType" theme="bootstrap" ng-click="vm.StatusID = $select.selected.StatusID" required>
+                                <ui-select-match placeholder="---Select Status---">
+                                    {{$select.selected.status}}
+                                    <span style="float:right" ng-click="vm.StatusID = null; $select.selected=undefined">
+                                        <i class="fa fa-remove" aria-hidden="true"></i>
+                                    </span>
+                                </ui-select-match>
+                                <ui-select-choices repeat="st in   vm.StatusList | filter: $select.search">
+                                    <div ng-bind-html="st.status | highlight: $select.search"></div>
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="input17">Status By</label>
+                        <div class="col-md-7">
+                            <ui-select ng-model="vm.loginUser.selected" name="drpType" theme="bootstrap" ng-click="vm.LoginID = $select.selected.LoginID" required>
+                                <ui-select-match placeholder="---Select User---">
+                                    {{$select.selected.UserFullName}}
+                                    <span style="float:right" ng-click="vm.LoginID = null; $select.selected=undefined">
+                                        <i class="fa fa-remove" aria-hidden="true"></i>
+                                    </span>
+                                </ui-select-match>
+                                <ui-select-choices repeat="usr in   vm.loginUserList | filter: $select.search">
+                                    <div ng-bind-html="usr.UserFullName | highlight: $select.search"></div>
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Sequence</label>
+                        <div class="col-md-7">
+                            <input type="number"
+                                   id="txtSequence"
+                                   class="form-control"
+                                   name="txtSequence" ng-model="vm.Sequence" min="0" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr />
+        <div class="row" ng-hide="IsApprovalDetailChkBox == '1'">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label class="col-md-10 control-label"></label>
+                    <div class="col-md-2">
+                        <input type="button" id="add" class="btn btn-success" value="Add" ng-click="vm.addRecord()" ng-disabled="frmApprovalSetup.$invalid" />
+                        <input type="button" id="clearDetail" class="btn btn-danger" value="Clear" ng-click="vm.ClearDetail()" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="grid simple col-md-12">
+    <div class="grid-title">
+        <div class="row">
+            <div class="col-md-11">
+                <div class="page-title">
+                    <i class="fa fa-keyboard-o" aria-hidden="true"></i>
+                    <h3>Permission - <span class="semi-bold">Records</span></h3>
+                </div>
+            </div>
+            <div class="col-md-1 marginOff">
+            </div>
+        </div>
+    </div>
+    <div class="grid-body">
+        <div class="row">
+
+
+
+
+            <form class="newOvDiscount" action="#" method="post">
+                <table class="newDiscounts dynaRows table table-hover table-condensed" style="width: 1629px;">
+                    <thead>
+                        <tr>
+                            <th>SL.</th>
+                            <th>Status</th>
+                            <th>Status By</th>
+                            <th>Sequence</th>
+                            <th>Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="value in EducationData ">
+                            <td>
+                                {{$index + 1}}
+                            </td>
+
+
+                            <td ng-repeat="field in value">
+                                <ui-select ng-model="value[$index].statusSelected" theme="bootstrap" ng-click="field.statusID = $select.selected.statusID">
+                                    <ui-select-match placeholder="-Select Status-">{{$select.selected.status}}</ui-select-match>
+                                    <ui-select-choices repeat="sts in vm.StatusList | filter: $select.search">
+                                        <div ng-bind-html="sts.status | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </td>
+
+
+                            <td ng-repeat="field in value">
+                                <ui-select ng-model="value[$index].userSelected" theme="bootstrap" ng-click="field.LoginID = $select.selected.LoginID">
+                                    <ui-select-match placeholder="-Select Status-">{{$select.selected.UserFullName}}</ui-select-match>
+                                    <ui-select-choices repeat="usr in vm.loginUserList | filter: $select.search">
+                                        <div ng-bind-html="usr.UserFullName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </td>
+
+
+                            <td ng-repeat="field in value">
+                                <input type="number" class="form-control" ng-model="field.sequence">
+                            </td>
+
+                            <td ng-click="EducationRemoveRow($index)">
+                                <i class="fa fa-times" ng-repeat="field in value" ng-hide="field.IsDeleted === true"></i>
+                                <span ng-repeat="field in value" ng-show="field.IsDeleted === true" class="deleteTag">
+                                    Deleted
+                                </span>
+                            </td>
+                        </tr>
+
+
+                    </tbody>
+                </table>
+            </form>
+
+
+
+
+
+
+
+
+
+
+
+
+         
+        </div>
+    </div>
+</div>
+<style>
+    .thumb {
+        width: 24px;
+        height: 24px;
+        float: none;
+        position: relative;
+        top: 7px;
+    }
+
+    .modal-content {
+        width: 1660px;
+        margin-left: -405px;
+    }
+</style>

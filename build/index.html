@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html class="hungry profile" ng-app="app">
+<head>
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+    <meta charset="utf-8" />
+    <title>onEMS - App</title>
+    <base href="/">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta content="" name="description" />
+    <meta content="" name="author" />
+    <link rel="stylesheet" href="styles/lib-66d4ad28.css">
+    <link rel="stylesheet" href="styles/app-9f164a6d.css">
+    <!-- END CSS TEMPLATE -->
+    <!--<script src="/signalr/hubs"></script>-->
+</head>
+<!-- END HEAD -->
+<!-- BEGIN BODY -->
+<body>
+    <div ng-controller="loginController as vm">
+        <div id="loginBox" ng-hide="vm.logg">
+            <div class="row login-container animated fadeInUp">
+                <div class="p-t-30 p-l-40 p-b-20 xs-p-t-10 xs-p-l-10 xs-p-b-10" ng-show="vm.dataPending">
+                    <h2 class="normal">Loading <span style="font-weight: bold;color:#FF7801;">onEMS</span>-Application</h2>
+                </div>
+                <div class="col-md-7 col-md-offset-2 tiles white no-padding hidden" ng-hide="loggSign" ng-class="{'hidden': !(!vm.dataPending && !vm.logg)}">
+
+                    <div class="p-t-30 p-l-40 p-b-20 xs-p-t-10 xs-p-l-10 xs-p-b-10">
+                        <h2 class="normal">Sign in to <span style="font-weight: bold;color:#FF7801;">onEMS </span></h2>
+                        <p style=" font-size: 20px;">Use your Email, Phone Number Or Login Name to sign in.<br></p>
+                        <!--<p class="p-b-20">Sign up Now ! for onEMS App - Admin Panel</p>-->
+
+                    </div>
+                    <div class="tiles grey p-t-20 p-b-20 text-black">
+                        <form id="frm_login" class="animated fadeIn" name="vm.loginForm">
+                            <div class="row form-row m-l-20 m-r-20 xs-m-l-10 xs-m-r-10">
+                                <div class="col-md-6 col-sm-6 ">
+                                    <input ng-model="vm.loginForm.username"
+                                           ng-keyup="$event.keyCode == 13 ? vm.submitLoginForm() : null"
+                                           type="text"
+                                           class="form-control"
+                                           placeholder="Username">
+                                </div>
+                                <div class="col-md-6 col-sm-6">
+                                    <input ng-model="vm.loginForm.password"
+                                           ng-keyup="$event.keyCode == 13 ? vm.submitLoginForm() : null"
+                                           type="password"
+                                           class="form-control"
+                                           placeholder="Password">
+                                </div>
+
+
+                            </div>
+                            <div class=" m-l-20 m-r-20 xs-m-l-10 xs-m-r-10">
+                                <div class="col-md-6 col-sm-6">
+                                </div>
+                                <div class="col-md-6 col-sm-6">
+                                    <button type="button" style="margin-top: 27px;" class="btn btn-primary btn-cons pull-right" id="login_toggle" ng-click="vm.submitLoginForm()">Sign in</button><br />
+                                </div>
+                            </div>
+                            <div class="col-md-12 col-sm-12">
+                                <a href="#" style="margin-top: -7px;margin-right: 36px;float: right;" data-toggle="modal" ng-click="forgetPopOne()">Forget Password</a>
+                            </div>
+
+                        </form>
+
+                    </div>
+                </div>
+
+                <div class="modal fade in" id="forgetModalOne" role="dialog" aria-labelledby="forgetModalOne" style="z-index: 1200;" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content" style="width:500px !important; margin-left: 81px !important">
+                            <!--<div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                <h3 class="modal-title"><strong>change password</strong></h3>
+                            </div>-->
+                            <div class="modal-body">
+                                <div class="grid-body" style="overflow-wrap:break-word">
+                                    <div class="row">
+                                        <div ng-show="IsUserEmailPhone">
+                                            <form class="form-horizontal col-md-12" name="frmUserEmailPhone">
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label class="control-label pull-left" style="margin-bottom:10px !important">Enter Your Email, Phone No or User Name</label>
+                                                        <input type="text" class="form-control" ng-model="UserEmailPhoneModel" />
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-12" style="text-align:center">
+                                                    <div class="form-group">
+                                                        <button type="button" class="btn btn-primary" ng-disabled="UserEmailPhoneModel==='' || UserEmailPhoneModel===undefined" ng-click="getUserEmailPhoneIfExist(UserEmailPhoneModel)">Next</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+
+                                        <div ng-show="IsSendCode">
+                                            <form class="form-horizontal col-md-12" name="frmSendCode">
+                                                <div class="col-md-12">
+                                                    <div class="radio radio-success" style="width:317px">
+                                                        <br /><input id="isEmail" type="radio" ng-checked="IsEmail===true" ng-click="checkedOne('isEmail')" ng-model="IsEmail">
+                                                        <label for="isEmail">{{RadioLabelEmail}}</label><br /><br />
+                                                        <input id="isPhone" type="radio" ng-checked="IsPhone===true" ng-click="checkedOne('isPhone')" ng-model="IsPhone">
+                                                        <label for="isPhone">{{RadioLabelPhone}}</label><br /><br />
+                                                        <input id="isDont" type="radio" ng-checked="IsDont===true" ng-click="checkedOne('isDont')" ng-model="IsDont">
+                                                        <label for="isDont">I don't have this</label><br />
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-12" style="text-align:center">
+                                                    <div class="form-group">
+                                                        <button type="button" class="btn btn-primary" ng-disabled="IsEmail===false && IsPhone===false && IsDont===false" ng-click="sendVarificationCode()">Next</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+
+                                        <div ng-show="IsCodeExecute">
+                                            <form class="form-horizontal col-md-12" name="frmSendCode">
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label class="control-label pull-left" style="margin-bottom:10px !important">Enter Varification code we sent to your (mail/Phone)</label>
+                                                        <input type="text" class="form-control" ng-model="varificationCode" />
+                                                        <a ng-show="IsResendCode" href="#" ng-click="sendVarificationCode()">Resend Code</a>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-12" style="text-align:center">
+                                                    <div class="form-group">
+                                                        <button type="button" class="btn btn-primary" ng-disabled="varificationCode==='' || varificationCode===undefined" ng-click="permitResetPassword(varificationCode)">Next</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+
+                                        <div ng-show="IsDontHave">
+                                            <form class="form-horizontal col-md-12" name="frmSendCode">
+                                                <div class="col-md-12" style="text-align:center">
+                                                    <div class="form-group">
+                                                        <br /><label class="control-label" style="margin-bottom:10px !important; text-align:center">Please contact to your Institute to recover your Account</label>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-12" style="text-align:center">
+                                                    <div class="form-group">
+                                                        <img height="90px" width="90px" style="text-align:center" ng-src="{{InsLogoUrl}}" onerror="this.src='images/onairlogo.png'" alt="images/onairlogo.png" />
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <strong style="font-weight:bolder">{{InsName}}</strong>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-12" style="text-align:center">
+                                                    <div class="form-group">
+                                                        <button type="button" class="btn btn-primary" ng-click="clickOk()">ok</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+
+                                        <div ng-show="IsResetPass">
+                                            <form class="form-horizontal col-md-12" name="frmSendCode">
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label class="control-label pull-left">New Password</label>
+                                                        <input type="text" class="form-control" ng-model="newPassword" ng-change="checkConfirmPassword(confirmPassword)" />
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label class="control-label pull-left">Re Enter Password</label>
+                                                        <input type="text" class="form-control" ng-model="confirmPassword" ng-change="checkConfirmPassword(confirmPassword)" />
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-12" ng-show="IsCorrect">
+                                                    <div class="form-group">
+                                                        <label class="control-label pull-left" style="color:red">* {{PassMismatch}}</label>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-12" style="text-align:center">
+                                                    <div class="form-group">
+                                                        <button type="button" class="btn btn-primary" ng-disabled="newPassword==='' || newPassword===undefined || confirmPassword==='' || confirmPassword===undefined || PassMismatch==='Password mismatch'" ng-click="ChangePasswordDone()">Done</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <!--<div class="modal-footer" style="text-align:center">
+                                <button type="button" class="btn btn-primary" ng-disabled="confirmPassword==='' || confirmPassword===undefined || PassMismatch==='Password mismatch'" ng-click="ChangePasswordDone()"><i class="fa fa-check"></i> Done</button>
+                            </div>-->
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <!-- BEGIN HEADER -->
+    <div class="header navbar navbar-inverse " ng-controller="loginController as vm">
+        <!-- BEGIN TOP NAVIGATION BAR -->
+        <div class="navbar-inner">
+            <div class="header-seperation" style="background:#ffffff; border:1px solid #dddddd; text-align:center">
+                <!--<span class="username semi-bold" style="font-size:16px">Welcome to</span>-->
+                <img height="55px" width="90px" style="text-align:center" ng-src="{{InstituteLogoUrl}}" onerror="this.src='images/onairlogo.png'" alt="images/onairlogo.png" />
+
+                <!--<ul class="nav pull-left notifcation-center" id="main-menu-toggle-wrapper" style="display:none">
+                    <li class="dropdown">
+                        <a id="main-menu-toggle" href="#main-menu" class="">
+                            <div class="iconset top-menu-toggle-white"></div>
+                        </a>
+                    </li>
+                </ul>-->
+                <!-- BEGIN LOGO -->
+                <!-- <a href="index.html"><img src="images/logo.png" class="logo" alt=""  data-src="assets/img/logo.png" data-src-retina="assets/img/logo2x.png" width="210" height="42"/></a> -->
+                <!-- END LOGO -->
+            </div>
+            <!-- END RESPONSIVE MENU TOGGLER -->
+            <div class="header-quick-nav">
+                <!-- BEGIN TOP NAVIGATION MENU -->
+                <div class="pull-left">
+                    <ul class="nav quick-section">
+                        <li class="quicklinks">
+                            <a href="#" class="" id="layout-condensed-toggle">
+                                <div class="iconset top-menu-toggle-dark"></div>
+                            </a>
+                        </li>
+                    </ul>
+                    <ul class="nav quick-section">
+                        <!--<li class="quicklinks">
+                            <a href="#" class="">
+                                <div class="iconset top-reload"></div>
+                            </a>
+                        </li>-->
+                    </ul>
+                </div>
+
+                <!-- END TOP NAVIGATION MENU -->
+                <!-- BEGIN CHAT TOGGLER -->
+                <div class="pull-right" ng-controller="loginController as vm">
+                    <div class="chat-toggler">
+                        <div class="dropdown">
+                            <button class="btn btn-primary dropdown-toggle" id="menu1" type="button" data-toggle="dropdown">
+                                {{SelectedType.UserTypeName}}
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
+                                <li role="presentation" ng-repeat="ut in UserTypeList">
+                                    <a role="menuitem" href="#" ng-click="setSelectType(ut)">{{ut.UserTypeName}}</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="chat-toggler">
+                        <a href="#" class="dropdown-toggle" id="my-task-list" data-placement="bottom" data-content='' data-toggle="dropdown" data-original-title="Notifications">
+                            <div class="user-details">
+                                <div class="username"> <span class="badge badge-important">3</span> {{vm.LoginUsername[0]}} <span class="bold">{{vm.LoginUsername[1]}}</span> </div>
+                            </div>
+                        </a>
+                        <div class="profile-pic">
+                            <img src="{{vm.imgHost}}{{vm.loginUserImage}}" style="height:35px; width:35px" ng-if="vm.loginUserImage !== null" />
+                            <img src="images/profiles/no-user-image.png" style="height:35px; width:35px" ng-if="vm.loginUserImage === null" />
+                        </div>
+                    </div>
+                    <ul class="nav quick-section ">
+                        <li class="quicklinks">
+                            <a data-toggle="dropdown" class="dropdown-toggle  pull-right " href="#" id="user-options">
+                                <div class="iconset top-settings-dark "></div>
+                            </a>
+                            <ul class="dropdown-menu  pull-right" role="menu" aria-labelledby="user-options">
+                                <li ng-controller="logoutController as vm"><a data-toggle="modal" data-target="#modalProfile"><i class="fa fa-user"></i>&nbsp;&nbsp;Profile</a></li>
+                                <li ng-controller="logoutController as vm"><a data-toggle="modal" data-target="#modalChangePass"><i class="fa fa-undo"></i>&nbsp;&nbsp;Change Password</a></li>
+                                <li ng-controller="logoutController as vm"><a ng-click="vm.logout()"><i class="fa fa-power-off"></i>&nbsp;&nbsp;Log Out</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                <!-- END CHAT TOGGLER -->
+            </div>
+            <!-- END TOP NAVIGATION MENU -->
+        </div>
+        <!-- END TOP NAVIGATION BAR -->
+    </div>
+    <!-- END HEADER -->
+    <!-- BEGIN CONTAINER -->
+    <div class="page-container row-fluid" ng-controller="loginController as vm">
+        <!-- BEGIN SIDEBAR -->
+        <div class="page-sidebar" id="main-menu" ng-controller="loginController as vm">
+            <!-- BEGIN MINI-PROFILE -->
+            <div class="page-sidebar-wrapper" id="main-menu-wrapper">
+                <!-- angular-slimscroll removed. jQuery plugin used in: template.js-->
+                <div class="user-info-wrapper">
+                    <div style="text-align:center" ng-show="false">
+                        <!--<img src="images/onairlogo.png" alt="User image" data-src="assets/img/profiles/no-user-image.png" data-src-retina="assets/img/profiles/no-user-image.png" />-->
+                        <img height="70px" width="90px" ng-src="{{InstituteLogoUrl}}" alt="Institute logo not found" />
+                    </div>
+                    <div class="user-info">
+                        <div class="greeting" style="text-wrap:normal">{{InstituteName}}</div>
+                        <!--<div class="username"><span class="semi-bold">onEMS Application</span> {{vm.uInfo.lastName}}</div>-->
+                        <!--<div class="status">
+                            Status
+                            <a href="#">
+                                <div class="status-icon green"></div>
+                                Online
+                            </a>
+                        </div>-->
+                    </div>
+                </div>
+                <!-- END MINI-PROFILE -->
+                <!-- BEGIN SIDEBAR MENU -->
+                <p class="menu-title">BROWSE <span class="pull-right"><a href="javascript:;"><i class="fa fa-refresh"></i></a></span></p>
+                <ul arm-sidebar="uType"></ul>
+                <div class="clearfix"></div>
+                <!-- END SIDEBAR MENU -->
+            </div>
+        </div>
+        <a href="#" class="scrollup">Scroll</a>
+        <!-- END SIDEBAR -->
+        <!-- BEGIN PAGE CONTAINER-->
+        <div class="page-content">
+            <div class="clearfix"></div>
+            <div class="content">
+                <div class="grid simple">
+                    <ui-view></ui-view>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade in" id="modalProfile" role="dialog" aria-labelledby="ModalProfile" style="z-index: 1200;" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content" style="width:500px !important; margin-left: 81px !important">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h3 class="modal-title"><strong>Profile</strong></h3>
+                    </div>
+                    <div class="modal-body">
+                        <div class="grid-body" style="overflow-wrap:break-word">
+                            <div class="row">
+                                <div class="col-md-12" style="text-align:center">
+                                    <img height="95px" width="90px" style="text-align:center" ng-src="{{UserImage}}" onerror="this.src='images/profiles/no-user-image.png'" alt="images/profiles/no-user-image.png" />
+                                    <br /><strong>{{UserType}}</strong>
+                                    <hr style="margin-bottom:37px" />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <form class="form-horizontal col-md-12" name="profile">
+                                    <div class="col-md-12">
+                                        <div class="form-group" ng-if="StudentNo" style="margin-top:-20px">
+                                            <label class="col-sm-3 control-label">Student No :</label>
+                                            <div class="col-sm-9" style="margin-top: 6px;">
+                                                {{StudentNo}}
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group" ng-if="FullName" style="margin-top:-20px">
+                                            <label class="col-sm-3 control-label">Name :</label>
+                                            <div class="col-sm-9" style="margin-top: 6px;">
+                                                {{FullName}}
+                                            </div>
+                                        </div>
+                                        <div class="form-group" ng-if="Medium" style="margin-top:-20px">
+                                            <label class="col-sm-3 control-label">Medium :</label>
+                                            <div class="col-sm-9" style="margin-top: 6px;">
+                                                {{Medium}}
+                                            </div>
+                                        </div>
+                                        <div class="form-group" ng-if="Class" style="margin-top:-20px">
+                                            <label class="col-sm-3 control-label">Class :</label>
+                                            <div class="col-sm-9" style="margin-top: 6px;">
+                                                {{Class}}
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group" ng-if="SDepartment" style="margin-top:-20px">
+                                            <label class="col-sm-3 control-label">Department :</label>
+                                            <div class="col-sm-9" style="margin-top: 6px;">
+                                                {{SDepartment}}
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group" ng-if="TDepartment" style="margin-top:-20px">
+                                            <label class="col-sm-3 control-label">Department :</label>
+                                            <div class="col-sm-9" style="margin-top: 6px;">
+                                                {{TDepartment}}
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group" ng-if="Section" style="margin-top:-20px">
+                                            <label class="col-sm-3 control-label">Section :</label>
+                                            <div class="col-sm-9" style="margin-top: 6px;">
+                                                {{Section}}
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group" ng-if="Shift" style="margin-top:-20px">
+                                            <label class="col-sm-3 control-label">Shift :</label>
+                                            <div class="col-sm-9" style="margin-top: 6px;">
+                                                {{Shift}}
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group" ng-if="Roll" style="margin-top:-20px">
+                                            <label class="col-sm-3 control-label">Roll No :</label>
+                                            <div class="col-sm-9" style="margin-top: 6px;">
+                                                {{Roll}}
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group" ng-if="Branch" style="margin-top:-20px">
+                                            <label class="col-sm-3 control-label">Branch :</label>
+                                            <div class="col-sm-9" style="margin-top: 6px;">
+                                                {{Branch}}
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group" ng-if="TBranch" style="margin-top:-20px">
+                                            <label class="col-sm-3 control-label">Branch :</label>
+                                            <div class="col-sm-9" style="margin-top: 6px;">
+                                                {{TBranch}}
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group" ng-if="Email" style="margin-top:-20px">
+                                            <label class="col-sm-3 control-label">E-mail :</label>
+                                            <div class="col-sm-9" style="margin-top: 6px;">
+                                                {{Email}}
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer" style="text-align:center">
+                        <button type="button" class="btn btn-primary pull-left" data-toggle="modal" ng-click="ChangePasswordView()"><i class="fa fa-undo"></i> Change Password</button>
+                        <button type="button" class="btn btn-default pull-right btn-xs" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade in" id="modalChangePass" role="dialog" aria-labelledby="modalChangePass" style="z-index: 1200;" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content" style="width:500px !important; margin-left: 81px !important">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h3 class="modal-title"><strong>Change Password</strong></h3>
+                    </div>
+                    <div class="modal-body">
+                        <div class="grid-body" style="overflow-wrap:break-word">
+                            <div class="row">
+                                <form class="form-horizontal col-md-12" name="profile">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label class="control-label pull-left">Current Password</label>
+                                            <input type="text" class="form-control" ng-model="currentPassword" ng-change="checkCurrentPassword(currentPassword)" />
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label class="control-label pull-left">New Password</label>
+                                            <input type="text" ng-readonly="currentPassword===''||currentPassword===undefined || PassMismatch==='Current Password is invalid'" class="form-control" ng-model="newPassword" ng-change="checkConfirmPassword(confirmPassword)" />
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label class="control-label pull-left">Confirm Password</label>
+                                            <input type="text" ng-readonly="currentPassword===''||currentPassword===undefined || PassMismatch==='Current Password is invalid'" class="form-control" ng-model="confirmPassword" ng-change="checkConfirmPassword(confirmPassword)" />
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-12" ng-show="IsCorrect">
+                                        <div class="form-group">
+                                            <label class="control-label pull-left" style="color:red">* {{PassMismatch}}</label>
+                                        </div>
+                                    </div>
+
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer" style="text-align:center">
+                        <button type="button" class="btn btn-primary" ng-disabled="currentPassword==='' || currentPassword===undefined || newPassword==='' || newPassword===undefined || confirmPassword==='' || confirmPassword===undefined || PassMismatch==='Password mismatch' || PassMismatch==='Current Password is invalid'" ng-click="ChangePasswordDone()"><i class="fa fa-check"></i> Done</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+    <script src="js/lib-4c59cb5a.js"></script>
+    <script src="js/app-bfaad455.js"></script>
+    <!-- <script src="/src/client/js-files/index.js"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/hmac-sha256.js" type="text/javascript"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/components/enc-base64-min.js" type="text/javascript"></script>
+    <script src="/src/client/js-files/authorization.js" type="text/javascript"></script>
+    <!--<script src="/src/client/js-files/qrcode.js" type="text/javascript"></script>-->
+</body>
+</html>

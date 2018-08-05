@@ -1,0 +1,351 @@
+
+<div class="grid simple col-md-12 vertical green" ng-show="createItem">
+
+    <div class="grid-title">
+        <div class="row">
+            <div class="col-md-9">
+                <div class="page-title">
+                    <i class="fa fa-keyboard-o" aria-hidden="true"></i>
+                    <h3>
+                        Result Processing -
+                        <span class="semi-bold">Setup</span>
+                    </h3>
+                </div>
+            </div>
+            <div class="col-md-1 marginOff">
+                <button type="submit" class="btn btn-primary btn-block showBtn" ng-click="vm.showResultProList()">Show List</button>
+            </div>
+            <div class="col-md-1 marginOff">
+                <button type="submit" class="btn btn-primary btn-block resetBtn" ng-click="clearField()">Reset</button>
+            </div>
+            <div class="col-md-1 marginOff">
+                <button type="submit" class="btn btn-primary btn-block saveBtn" ng-click="vm.setInsResultProcessing()">Save</button>
+                <!-- <button type="submit" class="btn btn-primary btn-block saveBtn" ng-click="vm.postUserSetupStudent()">Update</button> -->
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <div class="grid-body">
+        <div class="row">
+            <form class="form-horizontal col-sm-12" name="vm.passMarkSetup">
+                <div class="row col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Institute</label>
+                        <div class="col-sm-8">
+                            <ui-select ng-model="vm.institute.selected" name="Ins" theme="bootstrap" ng-click="vm.instituteID = $select.selected.InstituteID" on-select="vm.getmediumNameDdl(vm.instituteID); " ng-disabled="vm.InstituteID!==1?true:false" ng-change="change()">
+                                <ui-select-match placeholder=" -Select-">
+                                    {{$select.selected.InstituteName}}
+                                    <span style="float:right" ng-click="vm.instituteID = null; vm.medium = undefined; vm.class = undefined; vm.section=undefined; vm.department = undefined; vm.Exame=undefined; vm.Exames=[]; IsXmSelectedFunc(1); $select.selected=undefined">
+                                        <i class="fa fa-remove" aria-hidden="true"></i>
+                                    </span>
+                                </ui-select-match>
+
+                                <ui-select-choices value="Please select" repeat="Institute in vm.institutes | filter: $select.search">
+                                    <div ng-bind-html="Institute.InstituteName | highlight: $select.search"></div>
+                                </ui-select-choices>
+                            </ui-select>
+
+                        </div>
+                        <span class="error" ng-show="(vm.passMarkSetup.$dirty||submitted) && vm.passMarkSetup.Ins.$error.required">*</span>
+
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Medium</label>
+                        <div class="col-sm-8">
+                            <ui-select ng-model="vm.medium.selected" name="Med" on-select="vm.MediumWiseClassDDL(vm.MediumID)" theme="bootstrap" ng-click="vm.MediumID = $select.selected.MediumID" ng-change="changeMed()" required>
+                                <ui-select-match placeholder="- Select Medium -">
+                                    {{$select.selected.MameName}}
+                                    <span style="float:right" ng-click="vm.MediumID = null; DisBtn(); IsXmSelectedFunc(1); vm.class=undefined; vm.Exame=undefined; vm.Exames=[]; $select.selected=undefined">
+                                        <i class="fa fa-remove" aria-hidden="true"></i>
+                                    </span>
+                                </ui-select-match>
+                                <ui-select-choices repeat="med in   vm.mediums | filter: $select.search">
+                                    <div ng-bind-html="med.MameName | highlight: $select.search"></div>
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                        <span class="error" ng-show="(vm.passMarkSetup.$dirty||submitted) && vm.passMarkSetup.Med.$error.required">*</span>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label"></label>
+                        <div class="col-sm-8">
+                            <div class="checkbox check-primary">
+                                <input id="a" type="checkbox" ng-model="vm.CtCal" ng-checked="{{vm.CtCal}}" ng-click="IsCtCal(vm.CtCal,'',0)">
+                                <label for="a">Is Class Test Calculate</label>
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label"></label>
+                        <div class="col-sm-8">
+                            <div class="checkbox check-primary">
+                                <input id="b" type="checkbox" ng-model="vm.FinalCal" ng-checked="{{vm.FinalCal}}" ng-click="IsFinalCal(vm.FinalCal,'',0)" ng-disabled="IsXmSelected">
+                                <label for="b">Is Final Exam</label>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="row col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">Class</label>
+                        <div class="col-sm-7">
+                            <ui-select ng-model="vm.class.selected" name="Cls" on-select="vm.getExame(vm.ClassID,'');" theme="bootstrap" ng-click="vm.ClassID = $select.selected.ClassID" ng-change="changeCls()" required>
+                                <ui-select-match placeholder="- Select Class -">
+                                    {{$select.selected.ClassName}}
+                                    <span style="float:right" ng-click="vm.ClassID = null; DisBtn(); IsXmSelectedFunc(1); vm.Exame=undefined; vm.Exames=[]; $select.selected=undefined">
+                                        <i class="fa fa-remove" aria-hidden="true"></i>
+                                    </span>
+                                </ui-select-match>
+                                <ui-select-choices repeat="cls in   vm.classes | filter: $select.search">
+                                    <div ng-bind-html="cls.ClassName | highlight: $select.search"></div>
+                                </ui-select-choices>
+                            </ui-select>
+
+                        </div>
+                        <span class="error" ng-show="(vm.passMarkSetup.$dirty||submitted) && vm.passMarkSetup.Cls.$error.required">*</span>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">Exam</label>
+                        <div class="col-sm-7">
+                            <ui-select ng-model="vm.Exame.selected" theme="bootstrap" ng-click="vm.ExamID = $select.selected.ExamID; vm.Sequence=$select.selected.Sequence;" name="Exm" ng-change="changexm()" on-select="IsXmSelectedFunc(0)" required>
+                                <ui-select-match placeholder="- Select Exame Type -">
+                                    {{$select.selected.ExamName}}
+                                    <span style="float:right" ng-click="vm.ExamID = null; DisBtn(); IsXmSelectedFunc(1); $select.selected=undefined">
+                                        <i class="fa fa-remove" aria-hidden="true"></i>
+                                    </span>
+                                </ui-select-match>
+                                <ui-select-choices repeat="Exame in   vm.Exames | filter: $select.search">
+                                    <div ng-bind-html="Exame.ExamName | highlight: $select.search"></div>
+                                </ui-select-choices>
+                            </ui-select>
+
+                        </div>
+                        <span class="error" ng-show="(vm.passMarkSetup.$dirty||submitted) && vm.passMarkSetup.Exm.$error.required">*</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">Processing Type</label>
+                        <div class="col-sm-7">
+                            <ui-select ng-model="vm.ct.selected" name="Cls" theme="bootstrap" ng-click="vm.CtProcessingTypeID = $select.selected.CtProcessingTypeID" required>
+                                <ui-select-match placeholder="- Select Class -">
+                                    {{$select.selected.CtProcessingTypeName}}
+                                    <span style="float:right" ng-click="vm.CtProcessingTypeID = null; $select.selected=undefined">
+                                        <i class="fa fa-remove" aria-hidden="true"></i>
+                                    </span>
+                                </ui-select-match>
+                                <ui-select-choices repeat="ct in   vm.ctTypes | filter: $select.search">
+                                    <div ng-bind-html="ct.CtProcessingTypeName | highlight: $select.search"></div>
+                                </ui-select-choices>
+                            </ui-select>
+
+                        </div>
+                        <span class="error" ng-show="(vm.passMarkSetup.$dirty||submitted) && vm.passMarkSetup.Cls.$error.required">*</span>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">Processing Type</label>
+                        <div class="col-sm-7">
+                            <ui-select ng-model="vm.final.selected" name="Cls" theme="bootstrap" ng-click="vm.FinalResultProcessingTypeID = $select.selected.FinalResultProcessingTypeID" on-select="Show(vm.FinalResultProcessingTypeID)" required>
+                                <ui-select-match placeholder="- Select Class -">
+                                    {{$select.selected.FinalResultProcessingTypeName}}
+                                    <span style="float:right" ng-click="vm.FinalResultProcessingTypeID = null; vm.ExamList=[]; $select.selected=undefined">
+                                        <i class="fa fa-remove" aria-hidden="true"></i>
+                                    </span>
+                                </ui-select-match>
+                                <ui-select-choices repeat="final in   vm.finalProTypes | filter: $select.search">
+                                    <div ng-bind-html="final.FinalResultProcessingTypeName | highlight: $select.search"></div>
+                                </ui-select-choices>
+                            </ui-select>
+
+                        </div>
+                        <span class="error" ng-show="(vm.passMarkSetup.$dirty||submitted) && vm.passMarkSetup.Cls.$error.required">*</span>
+                    </div>
+
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+<!-- Exame routine Show -->
+
+
+
+
+
+
+<div class="grid simple col-md-12 vertical green" ng-show="addRoutin1">
+    <div class="grid-body">
+        <div class="row">
+            <div class="col-md-12">
+
+                <!--<pre>{{vm.ExamList|json}}</pre>-->
+                <form class="newOvDiscount" name="pre" ng-model="vm.from">
+                    <div class="col-md-6" >
+                        <h4 class="clearfix"><b>Marks Entry</b></h4>
+                        <table class="newDiscounts dynaRows table table-hover table-condensed">
+                            <thead>
+                                <tr>
+                                    <th>SL</th>
+                                    <th>Exam</th>
+                                    <th>Percent</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="ex in vm.ExamList" ng-show="addRoutin">
+                                    <!-- <tr ng-repeat="sub in data">	 -->
+                                    <td>{{$index + 1}}</td>
+                                    <td>{{ex.ExamName}}</td>
+
+                                    <td ng-click="openSubjectIndex($index)">
+                                        <div>
+                                            <input id="{{$index}}" type="number" min="0" max="100" ng-model="ex.ParcentMark" ng-change="vm.CalculateColumns($index)">
+                                            <label for="{{$index}}"></label>
+                                        </div>
+                                    </td>
+
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-md-6" ng-show="RpShow">
+                        <h4 class="clearfix"><b>Placement Processing</b></h4>
+                        <div class="form-group">
+                            <label class="col-sm-8 control-label">Is Multiple Placement Allowed</label>
+                            <div class="col-sm-3">
+                                <div class="checkbox check-primary">
+                                    <input id="c" type="checkbox" ng-model="vm.MpaCal" ng-checked="{{vm.MpaCal}}" ng-click="IsMpaCal(vm.MpaCal)">
+                                    <label for="c"></label>
+                                </div>
+
+                            </div>
+
+                        </div>
+                        <br><br>
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label">Roll Processing Type</label>
+                            <div class="col-sm-6">
+                                <ui-select ng-model="vm.roll.selected" name="Cls" theme="bootstrap" ng-click="vm.RollProcessingTypeID = $select.selected.RollProcessingTypeID" required>
+                                    <ui-select-match placeholder="- Select Class -">
+                                        {{$select.selected.RollProcessingTypeName}}
+                                        <span style="float:right" ng-click="vm.RollProcessingTypeID = null; $select.selected=undefined">
+                                            <i class="fa fa-remove" aria-hidden="true"></i>
+                                        </span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="roll in   vm.rollProTypes | filter: $select.search">
+                                        <div ng-bind-html="roll.RollProcessingTypeName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="grid simple col-md-12 vertical green" ng-show="showRpList">
+    <div class="grid-body">
+        <div class="row">
+            <div class="col-md-1 col-md-offset-10 marginOff">
+                <button type="submit" class="btn btn-primary btn-block showBtn" ng-click="clearField()">Create</button>
+            </div>
+            <div class="col-md-12">
+                <h4 class="clearfix">Result Processing List</h4>
+                <!--<br/><pre>{{vm.routines|json}}</pre>-->
+                <form class="newOvDiscount" name="pre" ng-model="vm.from">
+                    <table class="newDiscounts dynaRows table table-hover table-condensed">
+                        <thead>
+                            <tr>
+                                <th>SL</th>
+                                <th>Institute</th>
+                                <th>Medium</th>
+                                <th>Class</th>
+                                <th>Exam</th>
+                                <th>CT Pro Type</th>
+                                <th>Final Pro Type</th>
+                                <th>Roll Processing</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="value in vm.RpList ">
+
+                                <td>{{$index + 1}}</td>
+                                <td>{{value.InstituteName}}</td>
+                                <td>{{value.MameName}}</td>
+                                <td>{{value.ClassName}}</td>
+                                <td>{{value.ExamName}}</td>
+                                <td>{{value.CtProcessingTypeName}}</td>
+                                <td>{{value.FinalResultProcessingTypeName }}</td>
+                                <td>{{value.RollProcessingTypeName }}</td>
+                                <td>
+                                    <button href="#" class="btn btn-info btn-xs btn-mini" data-toggle="modal" data-target="#myModal" ng-click="vm.editInsResultProcessing(value)">Edit</button>
+                                    <button href="#" class="btn btn-danger btn-xs btn-mini" ng-click="vm.deleteInsResultProcessing(value.ProcessingID)">Delete</button>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<!-- Edit Html -->
+
+
+
+
+
+<style>
+    a {
+        cursor: pointer;
+    }
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+    .thumb {
+        width: 24px;
+        height: 24px;
+        float: none;
+        position: relative;
+        top: 7px;
+    }
+
+    .hungry table.dynaRows tr td input {
+        width: 100%;
+        border: 1px solid #0aa69994;
+    }
+</style>

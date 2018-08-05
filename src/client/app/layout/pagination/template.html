@@ -1,0 +1,19 @@
+<!-- <pagination></pagination> -->
+<div class="btn-group pull-right">
+	<button class="btn btn-white" type="button"
+		ng-click="vm.goBackward()"
+	>
+		<i class="fa fa-chevron-left"></i>
+	</button>
+	
+	<p class="btn btn-white">
+		Displaying {{ vm.paginationOffset+1 }} to {{ (vm.paginationOffset)+vm.paginationLimit }}
+	</p>
+	
+	<button class="btn btn-white" type="button"
+		ng-click="vm.goForward()"
+	>
+		<i class="fa fa-chevron-right"></i>
+	</button>
+	<!-- vm.paginationOffset +' - '+ vm.paginationLimit -->
+</div>

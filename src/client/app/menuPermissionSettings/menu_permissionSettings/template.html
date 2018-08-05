@@ -1,0 +1,215 @@
+
+
+<div class="grid simple col-md-12" ng-show="createItem">
+    <div class="grid-title">
+        <div class="row">
+            <div class="col-md-9">
+                <div class="page-title">
+                    <i class="fa fa-keyboard-o" aria-hidden="true"></i>
+                    <h3>Menu Permission - <span class="semi-bold">Entry</span></h3>
+                </div>
+            </div>
+            <div class="col-md-1 col-sm-3 marginOff">
+                <button type="submit" class="btn btn-primary btn-block showBtn" ng-click="itemEvent()">Show List</button>
+                <!-- <button type="submit" class="btn btn-primary btn-block" ng-click="">Update</button> -->
+            </div>
+            <div class="col-md-1 col-sm-3 marginOff">
+                <button type="submit" class="btn btn-primary btn-block resetBtn" ng-click="clearField()">Reset</button>
+            </div>
+            <div class="col-md-1  col-sm-3 marginOff">
+                <button type="submit" class="btn btn-primary btn-block saveBtn" ng-click="vm.AddMenuSetting()">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid-body">
+        <div class="row">
+            <form class="form-horizontal col-sm-8" name="vm.addAdress">
+                <div class="row">
+                    <div class="col-md-12">
+
+                        <div class="col-md-4">
+                            <!--<div class="form-group">
+                                <label class="col-md-5 control-label">Institute</label>
+                                <div class="col-md-7">
+                                    <ui-select ng-model="vm.institute.selected" name="InsID" theme="bootstrap" ng-click="vm.instituteID = $select.selected.InstituteID" on-select="vm.instituteSelected($select.selected.InstituteID)" required>
+                                        <ui-select-match placeholder="---Select---">
+                                            {{$select.selected.InstituteName}}
+                                            <span style="float:right" ng-click="vm.instituteID = undefined; $select.selected=undefined">
+                                                <i class="fa fa-remove" aria-hidden="true" ng-click="vm.instituteSelected(undefined)"></i>
+                                            </span>
+                                        </ui-select-match>
+                                        <ui-select-choices repeat="institute in vm.institutes | filter: $select.search">
+                                            <div ng-bind-html="institute.InstituteName  | highlight: $select.search"></div>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+                            </div>-->
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="col-md-5 control-label">Module</label>
+                                <div class="col-md-7">
+                                    <ui-select ng-model="vm.module.selected" theme="bootstrap" ng-click="vm.moduleID = $select.selected.ModuleID" on-select="vm.ModuleSelected($select.selected.ModuleID)">
+                                        <ui-select-match placeholder="-Select Module-">
+                                            {{$select.selected.ModuleName}}
+                                            <span style="float:right" ng-click="vm.moduleID  = null; $select.selected=undefined">
+                                                <i class="fa fa-remove" aria-hidden="true" ng-click="vm.ModuleSelected(undefined)"></i>
+                                            </span>
+                                        </ui-select-match>
+                                        <ui-select-choices repeat="module in vm.modules | filter: $select.search">
+                                            <div ng-bind-html="module.ModuleName | highlight: $select.search"></div>
+                                        </ui-select-choices>
+                                    </ui-select>  <!--<label class="star1"></label> Filter-->
+                                </div>
+                            </div>
+
+                        </div>
+
+
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="col-md-5 control-label">User Type</label>
+                                <div class="col-md-7">
+                                    <ui-select ng-model="vm.userType.selected" theme="bootstrap" ng-click="vm.UserTypeID = $select.selected.UserTypeID" on-select="vm.UserTypeSelected($select.selected.UserTypeID)">
+                                        <ui-select-match placeholder="-Select Type-">
+                                            {{$select.selected.UserTypeName}}
+                                            <span style="float:right" ng-click="vm.UserTypeID  = null; $select.selected=undefined">
+                                                <i class="fa fa-remove" aria-hidden="true" ng-click="vm.UserTypeSelected(undefined)"></i>
+                                            </span>
+                                        </ui-select-match>
+                                        <ui-select-choices repeat="module in vm.UserType | filter: $select.search">
+                                            <div ng-bind-html="module.UserTypeName | highlight: $select.search"></div>
+                                        </ui-select-choices>
+                                    </ui-select> <!--<label class="star2"></label>Params-->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+<!--<pre>{{value|json}}</pre>-->
+
+<div class="grid simple col-md-12" ng-show="showItem">
+    <div class="grid-title">       
+        <div class="row">
+            <div class="col-md-11">
+                <div class="page-title">
+                    <i class="fa fa-keyboard-o" aria-hidden="true"></i>
+                    <h3>Menu Permission - <span class="semi-bold">Records</span></h3>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="grid-body">
+        <div class="row">
+
+            <input id="custSearch" ng-model="custSearch" type="text" class="form-control search" placeholder="Search Menu...">
+
+
+            <table class="table table-striped table-bordered table-hover table-checkable table-tabletools datatable dataTable ">
+                <thead class="grid-top-panel">
+                    <tr>
+                        <th class="text-center col-md-1">SL.</th>
+                        <th class="text-center col-md-6">Menu</th>
+
+                        <!--<th class="text-center col-md-1" type="checkbox" ng-model="dataModel.EnableView">View</th>
+                        <th class="text-center col-md-6" type="checkbox" ng-model="dataModel.EnableInsert">Insert</th>
+                        <th class="text-center col-md-1" type="checkbox" ng-model="dataModel.EnableUpdate">Update</th>
+                        <th class="text-center col-md-6" type="checkbox" ng-model="dataModel.EnableDelete">Dalete</th>-->
+
+                        <th class="text-center col-md-1">  <input type="checkbox" ng-model="vm.EnableView"  ng-click="checkAllView(vm.EnableView)" />View</th>
+                        <th class="text-center col-md-6"><input type="checkbox" ng-model="vm.EnableInsert"  ng-click="checkAllInsert(vm.EnableInsert)" />Insert</th>
+                        <th class="text-center col-md-1"><input type="checkbox" ng-model="vm.EnableUpdate"  ng-click="checkAllUpdate(vm.EnableUpdate)" />Update</th>
+                        <th class="text-center col-md-6"><input type="checkbox" ng-model="vm.EnableDelete"  ng-click="checkAllDelete(vm.EnableDelete)" />Dalete</th>
+
+
+
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="dataModel in vm.MenuListPermission | filter:custSearch">
+                        <td class="col-md-1">{{$index+1}}</td>
+                        <td class="col-md-6">{{dataModel.MenuName}}</td>
+                        <td class="checkbox-column col-md-1" ng-click="checkEnableView($index)">
+                            <div><span><input type="checkbox" ng-model="dataModel.EnableView"   ng-click="gridViewCheckBoxClicked(dataModel.EnableView)"></span></div>
+                        </td>
+                        <td class="checkbox-column col-md-1 " ng-click="checkEnableInsert($index)">
+                            <div><span><input type="checkbox" ng-model="dataModel.EnableInsert"   ng-click="gridCheckBoxClicked(dataModel.EnableInsert)"></span></div>
+                        </td>
+                        <td class="checkbox-column col-md-1" ng-click="checkEnableUpdate($index)">
+                            <div><span><input type="checkbox" ng-model="dataModel.EnableUpdate"  ng-click="gridUpdateCheckBoxClicked(dataModel.EnableUpdate)"></span></div>
+                        </td>
+                        <td class="checkbox-column col-md-1" ng-click="checkEnableDelete($index)">
+                            <div><span><input type="checkbox" ng-model="dataModel.EnableDelete"  ng-click="gridDeleteCheckBoxClicked(dataModel.EnableDelete)"></span></div>
+                        </td>
+
+                    </tr>
+                </tbody>
+            </table>
+
+
+            <p ng-show="(vm.MenuListPermission | filter:custSearch).length == 0" style="color:red">Nothing found!</p>
+
+            <div class="loadmore">
+                <div ng-show="loaderMore" ng-class="result">
+                    {{lblMessage}}
+                </div>
+                <div ng-show="scrollended" ng-class="result">
+                    {{lblMessage}}
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+<style>
+    .thumb {
+        width: 24px;
+        height: 24px;
+        float: none;
+        position: relative;
+        top: 7px;
+    }
+
+    .modal-content {
+        width: 1660px;
+        margin-left: -405px;
+    }
+
+
+    .star1:before {
+        color: red;
+        content: "*";
+        position: absolute;
+        margin-left: 35px;
+        top: 39px;
+    }
+
+    .star2:before {
+        color: red;
+        content: "*";
+        position: absolute;
+        margin-left: 53px;
+        top: 39px;
+    }
+
+
+</style>

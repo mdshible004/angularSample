@@ -1,0 +1,157 @@
+
+
+<div class="grid simple col-md-12" ng-show = "createItem">
+	
+    <div class="grid-title">
+		<div class="row">
+			<div class="col-md-9">
+				<div class="page-title"> <i class="fa fa-keyboard-o" aria-hidden="true"></i>
+					<h3>Religion - <span class="semi-bold">Settings</span></h3>
+				</div>
+			</div>
+			<div class="col-md-1 marginOff">
+				<button type="submit" class="btn btn-primary btn-block showBtn" ng-click="itemEvent()">Show List</button>
+				<!-- <button type="submit" class="btn btn-primary btn-block" ng-click="">Update</button> -->
+			</div>
+			<div class="col-md-1 marginOff">
+				<button type="submit" class="btn btn-primary btn-block resetBtn" ng-click="clearField()">Reset</button>
+			</div>
+			<div class="col-md-1 marginOff">
+				<button type="submit" class="btn btn-primary btn-block saveBtn" ng-click="vm.AddReligion()">Save</button>
+			</div>	
+		</div>
+    </div>
+    <div class="grid-body">
+		<div class="row">
+
+			<form class="form-horizontal col-sm-8" name="vm.ReligionSetup">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="form-group">
+							<label class="col-sm-5 control-label">Religion Name</label>
+							<div class="col-sm-7">
+								<input type="text" class="form-control" placeholder="Religion Name" ng-model="vm.ReligionSetup.ReligionName">
+							</div>
+						</div>	
+					</div>
+				</div>
+			</form>
+
+		</div>
+    </div>
+</div>
+
+<!-- Item Entry List Grid -->
+
+<div class="grid simple col-md-12" ng-show = "showItem" >
+    <div class="grid-title">
+		<div class="row">
+			<div class="col-md-11">
+				<div class="page-title"> <i class="fa fa-keyboard-o" aria-hidden="true"></i>
+					<h3>Religion - <span class="semi-bold">List</span></h3>
+				</div>
+			</div>
+			
+			<div class="col-md-1 marginOff">
+				<button type="submit" class="btn btn-primary btn-block saveBtn" ng-click="listEvent()">Create</button>
+			</div>
+		</div>
+	</div>
+	<div class="grid-body">
+		<div class="row">
+			<div class="col-md-12">
+				<table st-table="rowCollection" class="table table-bordered">
+					<thead>
+						<tr>
+							<th >SL</th>
+							<th >Religion Name</th>						
+							<th >Action</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="rlg in vm.religions">
+							<td>{{$index+1}}</td>
+							<td>{{rlg.ReligionName}}</td>
+							
+							<td>
+								<button href="#" class="btn btn-info btn-xs btn-mini" data-toggle="modal" data-target="#myModal" ng-click="vm.editReligion(rlg.ReligionID)">Edit</button>
+								<button href="/manage-deliveryman-info/edit/1" class="btn btn-primary btn-xs btn-mini"ng-click="vm.deleteReligion(rlg.ReligionID)">Delete</button>
+							</td>
+						</tr>
+					</tbody>
+				</table> 
+			</div> 
+		</div>
+	</div>	
+</div>	
+
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+	  	<div class="modal-content">
+			<div class="modal-body">	
+				<div class="row">
+					<div class="col-md-12">
+						<div class="page-title"> <i class="fa fa-keyboard-o" aria-hidden="true"></i>
+							<h3>Edit Religion</h3>
+						</div>
+					</div>
+				</div>
+				<div class="grid-body">
+					<div class="row">
+						<form class="form-horizontal col-sm-8" name="vm.ReligionSetup">
+							<div class="row">
+								<div class="col-md-12">
+									<div class="form-group">
+										<label class="col-sm-5 control-label">Religion Name</label>
+										<div class="col-sm-7">
+											<input type="text" class="form-control" placeholder="Religion Name" ng-model="vm.ReligionSetup.ReligionName">
+											<input type="hidden" class="form-control" placeholder="Religion Name" ng-model="vm.ReligionSetup.ReligionID">
+										</div>
+									</div>	
+								</div>
+							</div>
+						</form>
+
+					</div>
+				</div>		
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="vm.UpdateReligion()">Save changes</button>
+			</div>
+	  	</div>
+	  <!-- /.modal-content -->
+	</div>
+<!-- /.modal-dialog -->
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+	.thumb {
+    width: 24px;
+    height: 24px;
+    float: none;
+    position: relative;
+    top: 7px;
+}
+.modal-content{
+	width: 1660px;
+    margin-left: -405px;
+}
+</style>

@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html class="hungry profile" ng-app="app">
+<head>
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+    <meta charset="utf-8" />
+    <title>onEMS - App</title>
+    <base href="/">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta content="" name="description" />
+    <meta content="" name="author" />
+    <!-- build:css styles/lib.css -->
+    <!-- bower:css -->
+    <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="/bower_components/font-awesome/css/font-awesome.css" />
+    <link rel="stylesheet" href="/bower_components/toastr/toastr.css" />
+    <link rel="stylesheet" href="/bower_components/angular-ui-select/dist/select.css" />
+    <link rel="stylesheet" href="/bower_components/angular-busy/dist/angular-busy.css" />
+    <link rel="stylesheet" href="/bower_components/angular-native-picker/build/themes/default.css" />
+    <link rel="stylesheet" href="/bower_components/angular-native-picker/build/themes/default.date.css" />
+    <link rel="stylesheet" href="/bower_components/angular-native-picker/build/themes/default.time.css" />
+    <link rel="stylesheet" href="/bower_components/pickadate/lib/themes/default.css" />
+    <link rel="stylesheet" href="/bower_components/pickadate/lib/themes/default.date.css" />
+    <link rel="stylesheet" href="/bower_components/pickadate/lib/themes/default.time.css" />
+    <link rel="stylesheet" href="/bower_components/angular-ui-grid/ui-grid.css" />
+    <link rel="stylesheet" href="/bower_components/angularjs-datepicker/dist/angular-datepicker.css" />
+    <link rel="stylesheet" href="/bower_components/fullcalendar/dist/fullcalendar.css" />
+    <!-- endbower -->
+    <!-- endbuild -->
+    <!-- build:css styles/app.css-->
+    <!-- inject:css -->
+    <link rel="stylesheet" href="/.tmp/styles.css">
+    <!-- endinject -->
+    <!-- endbuild -->
+    <!-- END CSS TEMPLATE -->
+    <!--<script src="/signalr/hubs"></script>-->
+</head>
+<!-- END HEAD -->
+<!-- BEGIN BODY -->
+<body>
+    <div ng-controller="loginController as vm">
+        <div id="loginBox" ng-hide="vm.logg">
+            <div class="row login-container animated fadeInUp">
+                <div class="p-t-30 p-l-40 p-b-20 xs-p-t-10 xs-p-l-10 xs-p-b-10" ng-show="vm.dataPending">
+                    <h2 class="normal">Loading <span style="font-weight: bold;color:#FF7801;">onEMS</span>-Application</h2>
+                </div>
+                <div class="col-md-7 col-md-offset-2 tiles white no-padding hidden" ng-hide="loggSign" ng-class="{'hidden': !(!vm.dataPending && !vm.logg)}">
+
+                    <div class="p-t-30 p-l-40 p-b-20 xs-p-t-10 xs-p-l-10 xs-p-b-10">
+                        <h2 class="normal">Sign in to <span style="font-weight: bold;color:#FF7801;">onEMS </span></h2>
+                        <p style=" font-size: 20px;">Use your Email, Phone Number Or Login Name to sign in.<br></p>
+                        <!--<p class="p-b-20">Sign up Now ! for onEMS App - Admin Panel</p>-->
+
+                    </div>
+                    <div class="tiles grey p-t-20 p-b-20 text-black">
+                        <form id="frm_login" class="animated fadeIn" name="vm.loginForm">
+                            <div class="row form-row m-l-20 m-r-20 xs-m-l-10 xs-m-r-10">
+                                <div class="col-md-6 col-sm-6 ">
+                                    <input ng-model="vm.loginForm.username"
+                                           ng-keyup="$event.keyCode == 13 ? vm.submitLoginForm() : null"
+                                           type="text"
+                                           class="form-control"
+                                           placeholder="Username">
+                                </div>
+                                <div class="col-md-6 col-sm-6">
+                                    <input ng-model="vm.loginForm.password"
+                                           ng-keyup="$event.keyCode == 13 ? vm.submitLoginForm() : null"
+                                           type="password"
+                                           class="form-control"
+                                           placeholder="Password">
+                                </div>
+
+
+                            </div>
+                            <div class=" m-l-20 m-r-20 xs-m-l-10 xs-m-r-10">
+                                <div class="col-md-6 col-sm-6">
+                                </div>
+                                <div class="col-md-6 col-sm-6">
+                                    <button type="button" style="margin-top: 27px;" class="btn btn-primary btn-cons pull-right" id="login_toggle" ng-click="vm.submitLoginForm()">Sign in</button><br />
+                                </div>
+                            </div>
+                            <div class="col-md-12 col-sm-12">
+                                <a href="#" style="margin-top: -7px;margin-right: 36px;float: right;" data-toggle="modal" ng-click="forgetPopOne()">Forget Password</a>
+                            </div>
+
+                        </form>
+
+                    </div>
+                </div>
+
+                <div class="modal fade in" id="forgetModalOne" role="dialog" aria-labelledby="forgetModalOne" style="z-index: 1200;" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content" style="width:500px !important; margin-left: 81px !important">
+                            <!--<div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                <h3 class="modal-title"><strong>change password</strong></h3>
+                            </div>-->
+                            <div class="modal-body">
+                                <div class="grid-body" style="overflow-wrap:break-word">
+                                    <div class="row">
+                                        <div ng-show="IsUserEmailPhone">
+                                            <form class="form-horizontal col-md-12" name="frmUserEmailPhone">
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label class="control-label pull-left" style="margin-bottom:10px !important">Enter Your Email, Phone No or User Name</label>
+                                                        <input type="text" class="form-control" ng-model="UserEmailPhoneModel" />
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-12" style="text-align:center">
+                                                    <div class="form-group">
+                                                        <button type="button" class="btn btn-primary" ng-disabled="UserEmailPhoneModel==='' || UserEmailPhoneModel===undefined" ng-click="getUserEmailPhoneIfExist(UserEmailPhoneModel)">Next</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+
+                                        <div ng-show="IsSendCode">
+                                            <form class="form-horizontal col-md-12" name="frmSendCode">
+                                                <div class="col-md-12">
+                                                    <div class="radio radio-success" style="width:317px">
+                                                        <br /><input id="isEmail" type="radio" ng-checked="IsEmail===true" ng-click="checkedOne('isEmail')" ng-model="IsEmail">
+                                                        <label for="isEmail">{{RadioLabelEmail}}</label><br /><br />
+                                                        <input id="isPhone" type="radio" ng-checked="IsPhone===true" ng-click="checkedOne('isPhone')" ng-model="IsPhone">
+                                                        <label for="isPhone">{{RadioLabelPhone}}</label><br /><br />
+                                                        <input id="isDont" type="radio" ng-checked="IsDont===true" ng-click="checkedOne('isDont')" ng-model="IsDont">
+                                                        <label for="isDont">I don't have this</label><br />
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-12" style="text-align:center">
+                                                    <div class="form-group">
+                                                        <button type="button" class="btn btn-primary" ng-disabled="IsEmail===false && IsPhone===false && IsDont===false" ng-click="sendVarificationCode()">Next</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+
+                                        <div ng-show="IsCodeExecute">
+                                            <form class="form-horizontal col-md-12" name="frmSendCode">
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label class="control-label pull-left" style="margin-bottom:10px !important">Enter Varification code we sent to your (mail/Phone)</label>
+                                                        <input type="text" class="form-control" ng-model="varificationCode" />
+                                                        <a ng-show="IsResendCode" href="#" ng-click="sendVarificationCode()">Resend Code</a>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-12" style="text-align:center">
+                                                    <div class="form-group">
+                                                        <button type="button" class="btn btn-primary" ng-disabled="varificationCode==='' || varificationCode===undefined" ng-click="permitResetPassword(varificationCode)">Next</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+
+                                        <div ng-show="IsDontHave">
+                                            <form class="form-horizontal col-md-12" name="frmSendCode">
+                                                <div class="col-md-12" style="text-align:center">
+                                                    <div class="form-group">
+                                                        <br /><label class="control-label" style="margin-bottom:10px !important; text-align:center">Please contact to your Institute to recover your Account</label>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-12" style="text-align:center">
+                                                    <div class="form-group">
+                                                        <img height="90px" width="90px" style="text-align:center" ng-src="{{InsLogoUrl}}" onerror="this.src='images/onairlogo.png'" alt="images/onairlogo.png" />
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <strong style="font-weight:bolder">{{InsName}}</strong>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-12" style="text-align:center">
+                                                    <div class="form-group">
+                                                        <button type="button" class="btn btn-primary" ng-click="clickOk()">ok</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+
+                                        <div ng-show="IsResetPass">
+                                            <form class="form-horizontal col-md-12" name="frmSendCode">
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label class="control-label pull-left">New Password</label>
+                                                        <input type="text" class="form-control" ng-model="newPassword" ng-change="checkConfirmPassword(confirmPassword)" />
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label class="control-label pull-left">Re Enter Password</label>
+                                                        <input type="text" class="form-control" ng-model="confirmPassword" ng-change="checkConfirmPassword(confirmPassword)" />
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-12" ng-show="IsCorrect">
+                                                    <div class="form-group">
+                                                        <label class="control-label pull-left" style="color:red">* {{PassMismatch}}</label>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-12" style="text-align:center">
+                                                    <div class="form-group">
+                                                        <button type="button" class="btn btn-primary" ng-disabled="newPassword==='' || newPassword===undefined || confirmPassword==='' || confirmPassword===undefined || PassMismatch==='Password mismatch'" ng-click="ChangePasswordDone()">Done</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <!--<div class="modal-footer" style="text-align:center">
+                                <button type="button" class="btn btn-primary" ng-disabled="confirmPassword==='' || confirmPassword===undefined || PassMismatch==='Password mismatch'" ng-click="ChangePasswordDone()"><i class="fa fa-check"></i> Done</button>
+                            </div>-->
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <!-- BEGIN HEADER -->
+    <div class="header navbar navbar-inverse " ng-controller="loginController as vm">
+        <!-- BEGIN TOP NAVIGATION BAR -->
+        <div class="navbar-inner">
+            <div class="header-seperation" style="background:#ffffff; border:1px solid #dddddd; text-align:center">
+                <!--<span class="username semi-bold" style="font-size:16px">Welcome to</span>-->
+                <img height="55px" width="90px" style="text-align:center" ng-src="{{InstituteLogoUrl}}" onerror="this.src='images/onairlogo.png'" alt="images/onairlogo.png" />
+
+                <!--<ul class="nav pull-left notifcation-center" id="main-menu-toggle-wrapper" style="display:none">
+                    <li class="dropdown">
+                        <a id="main-menu-toggle" href="#main-menu" class="">
+                            <div class="iconset top-menu-toggle-white"></div>
+                        </a>
+                    </li>
+                </ul>-->
+                <!-- BEGIN LOGO -->
+                <!-- <a href="index.html"><img src="images/logo.png" class="logo" alt=""  data-src="assets/img/logo.png" data-src-retina="assets/img/logo2x.png" width="210" height="42"/></a> -->
+                <!-- END LOGO -->
+            </div>
+            <!-- END RESPONSIVE MENU TOGGLER -->
+            <div class="header-quick-nav">
+                <!-- BEGIN TOP NAVIGATION MENU -->
+                <div class="pull-left">
+                    <ul class="nav quick-section">
+                        <li class="quicklinks">
+                            <a href="#" class="" id="layout-condensed-toggle">
+                                <div class="iconset top-menu-toggle-dark"></div>
+                            </a>
+                        </li>
+                    </ul>
+                    <ul class="nav quick-section">
+                        <!--<li class="quicklinks">
+                            <a href="#" class="">
+                                <div class="iconset top-reload"></div>
+                            </a>
+                        </li>-->
+                    </ul>
+                </div>
+
+                <!-- END TOP NAVIGATION MENU -->
+                <!-- BEGIN CHAT TOGGLER -->
+                <div class="pull-right" ng-controller="loginController as vm">
+                    <div class="chat-toggler">
+                        <div class="dropdown">
+                            <button class="btn btn-primary dropdown-toggle" id="menu1" type="button" data-toggle="dropdown">
+                                {{SelectedType.UserTypeName}}
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
+                                <li role="presentation" ng-repeat="ut in UserTypeList">
+                                    <a role="menuitem" href="#" ng-click="setSelectType(ut)">{{ut.UserTypeName}}</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="chat-toggler">
+                        <a href="#" class="dropdown-toggle" id="my-task-list" data-placement="bottom" data-content='' data-toggle="dropdown" data-original-title="Notifications">
+                            <div class="user-details">
+                                <div class="username"> <span class="badge badge-important">3</span> {{vm.LoginUsername[0]}} <span class="bold">{{vm.LoginUsername[1]}}</span> </div>
+                            </div>
+                        </a>
+                        <div class="profile-pic">
+                            <img src="{{vm.imgHost}}{{vm.loginUserImage}}" style="height:35px; width:35px" ng-if="vm.loginUserImage !== null" />
+                            <img src="images/profiles/no-user-image.png" style="height:35px; width:35px" ng-if="vm.loginUserImage === null" />
+                        </div>
+                    </div>
+                    <ul class="nav quick-section ">
+                        <li class="quicklinks">
+                            <a data-toggle="dropdown" class="dropdown-toggle  pull-right " href="#" id="user-options">
+                                <div class="iconset top-settings-dark "></div>
+                            </a>
+                            <ul class="dropdown-menu  pull-right" role="menu" aria-labelledby="user-options">
+                                <li ng-controller="logoutController as vm"><a data-toggle="modal" data-target="#modalProfile"><i class="fa fa-user"></i>&nbsp;&nbsp;Profile</a></li>
+                                <li ng-controller="logoutController as vm"><a data-toggle="modal" data-target="#modalChangePass"><i class="fa fa-undo"></i>&nbsp;&nbsp;Change Password</a></li>
+                                <li ng-controller="logoutController as vm"><a ng-click="vm.logout()"><i class="fa fa-power-off"></i>&nbsp;&nbsp;Log Out</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                <!-- END CHAT TOGGLER -->
+            </div>
+            <!-- END TOP NAVIGATION MENU -->
+        </div>
+        <!-- END TOP NAVIGATION BAR -->
+    </div>
+    <!-- END HEADER -->
+    <!-- BEGIN CONTAINER -->
+    <div class="page-container row-fluid" ng-controller="loginController as vm">
+        <!-- BEGIN SIDEBAR -->
+        <div class="page-sidebar" id="main-menu" ng-controller="loginController as vm">
+            <!-- BEGIN MINI-PROFILE -->
+            <div class="page-sidebar-wrapper" id="main-menu-wrapper">
+                <!-- angular-slimscroll removed. jQuery plugin used in: template.js-->
+                <div class="user-info-wrapper">
+                    <div style="text-align:center" ng-show="false">
+                        <!--<img src="images/onairlogo.png" alt="User image" data-src="assets/img/profiles/no-user-image.png" data-src-retina="assets/img/profiles/no-user-image.png" />-->
+                        <img height="70px" width="90px" ng-src="{{InstituteLogoUrl}}" alt="Institute logo not found" />
+                    </div>
+                    <div class="user-info">
+                        <div class="greeting" style="text-wrap:normal">{{InstituteName}}</div>
+                        <!--<div class="username"><span class="semi-bold">onEMS Application</span> {{vm.uInfo.lastName}}</div>-->
+                        <!--<div class="status">
+                            Status
+                            <a href="#">
+                                <div class="status-icon green"></div>
+                                Online
+                            </a>
+                        </div>-->
+                    </div>
+                </div>
+                <!-- END MINI-PROFILE -->
+                <!-- BEGIN SIDEBAR MENU -->
+                <p class="menu-title">BROWSE <span class="pull-right"><a href="javascript:;"><i class="fa fa-refresh"></i></a></span></p>
+                <ul arm-sidebar="uType"></ul>
+                <div class="clearfix"></div>
+                <!-- END SIDEBAR MENU -->
+            </div>
+        </div>
+        <a href="#" class="scrollup">Scroll</a>
+        <!-- END SIDEBAR -->
+        <!-- BEGIN PAGE CONTAINER-->
+        <div class="page-content">
+            <div class="clearfix"></div>
+            <div class="content">
+                <div class="grid simple">
+                    <ui-view></ui-view>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade in" id="modalProfile" role="dialog" aria-labelledby="ModalProfile" style="z-index: 1200;" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content" style="width:500px !important; margin-left: 81px !important">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h3 class="modal-title"><strong>Profile</strong></h3>
+                    </div>
+                    <div class="modal-body">
+                        <div class="grid-body" style="overflow-wrap:break-word">
+                            <div class="row">
+                                <div class="col-md-12" style="text-align:center">
+                                    <img height="95px" width="90px" style="text-align:center" ng-src="{{UserImage}}" onerror="this.src='images/profiles/no-user-image.png'" alt="images/profiles/no-user-image.png" />
+                                    <br /><strong>{{UserType}}</strong>
+                                    <hr style="margin-bottom:37px" />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <form class="form-horizontal col-md-12" name="profile">
+                                    <div class="col-md-12">
+                                        <div class="form-group" ng-if="StudentNo" style="margin-top:-20px">
+                                            <label class="col-sm-3 control-label">Student No :</label>
+                                            <div class="col-sm-9" style="margin-top: 6px;">
+                                                {{StudentNo}}
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group" ng-if="FullName" style="margin-top:-20px">
+                                            <label class="col-sm-3 control-label">Name :</label>
+                                            <div class="col-sm-9" style="margin-top: 6px;">
+                                                {{FullName}}
+                                            </div>
+                                        </div>
+                                        <div class="form-group" ng-if="Medium" style="margin-top:-20px">
+                                            <label class="col-sm-3 control-label">Medium :</label>
+                                            <div class="col-sm-9" style="margin-top: 6px;">
+                                                {{Medium}}
+                                            </div>
+                                        </div>
+                                        <div class="form-group" ng-if="Class" style="margin-top:-20px">
+                                            <label class="col-sm-3 control-label">Class :</label>
+                                            <div class="col-sm-9" style="margin-top: 6px;">
+                                                {{Class}}
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group" ng-if="SDepartment" style="margin-top:-20px">
+                                            <label class="col-sm-3 control-label">Department :</label>
+                                            <div class="col-sm-9" style="margin-top: 6px;">
+                                                {{SDepartment}}
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group" ng-if="TDepartment" style="margin-top:-20px">
+                                            <label class="col-sm-3 control-label">Department :</label>
+                                            <div class="col-sm-9" style="margin-top: 6px;">
+                                                {{TDepartment}}
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group" ng-if="Section" style="margin-top:-20px">
+                                            <label class="col-sm-3 control-label">Section :</label>
+                                            <div class="col-sm-9" style="margin-top: 6px;">
+                                                {{Section}}
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group" ng-if="Shift" style="margin-top:-20px">
+                                            <label class="col-sm-3 control-label">Shift :</label>
+                                            <div class="col-sm-9" style="margin-top: 6px;">
+                                                {{Shift}}
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group" ng-if="Roll" style="margin-top:-20px">
+                                            <label class="col-sm-3 control-label">Roll No :</label>
+                                            <div class="col-sm-9" style="margin-top: 6px;">
+                                                {{Roll}}
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group" ng-if="Branch" style="margin-top:-20px">
+                                            <label class="col-sm-3 control-label">Branch :</label>
+                                            <div class="col-sm-9" style="margin-top: 6px;">
+                                                {{Branch}}
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group" ng-if="TBranch" style="margin-top:-20px">
+                                            <label class="col-sm-3 control-label">Branch :</label>
+                                            <div class="col-sm-9" style="margin-top: 6px;">
+                                                {{TBranch}}
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group" ng-if="Email" style="margin-top:-20px">
+                                            <label class="col-sm-3 control-label">E-mail :</label>
+                                            <div class="col-sm-9" style="margin-top: 6px;">
+                                                {{Email}}
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer" style="text-align:center">
+                        <button type="button" class="btn btn-primary pull-left" data-toggle="modal" ng-click="ChangePasswordView()"><i class="fa fa-undo"></i> Change Password</button>
+                        <button type="button" class="btn btn-default pull-right btn-xs" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade in" id="modalChangePass" role="dialog" aria-labelledby="modalChangePass" style="z-index: 1200;" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content" style="width:500px !important; margin-left: 81px !important">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h3 class="modal-title"><strong>Change Password</strong></h3>
+                    </div>
+                    <div class="modal-body">
+                        <div class="grid-body" style="overflow-wrap:break-word">
+                            <div class="row">
+                                <form class="form-horizontal col-md-12" name="profile">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label class="control-label pull-left">Current Password</label>
+                                            <input type="text" class="form-control" ng-model="currentPassword" ng-change="checkCurrentPassword(currentPassword)" />
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label class="control-label pull-left">New Password</label>
+                                            <input type="text" ng-readonly="currentPassword===''||currentPassword===undefined || PassMismatch==='Current Password is invalid'" class="form-control" ng-model="newPassword" ng-change="checkConfirmPassword(confirmPassword)" />
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label class="control-label pull-left">Confirm Password</label>
+                                            <input type="text" ng-readonly="currentPassword===''||currentPassword===undefined || PassMismatch==='Current Password is invalid'" class="form-control" ng-model="confirmPassword" ng-change="checkConfirmPassword(confirmPassword)" />
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-12" ng-show="IsCorrect">
+                                        <div class="form-group">
+                                            <label class="control-label pull-left" style="color:red">* {{PassMismatch}}</label>
+                                        </div>
+                                    </div>
+
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer" style="text-align:center">
+                        <button type="button" class="btn btn-primary" ng-disabled="currentPassword==='' || currentPassword===undefined || newPassword==='' || newPassword===undefined || confirmPassword==='' || confirmPassword===undefined || PassMismatch==='Password mismatch' || PassMismatch==='Current Password is invalid'" ng-click="ChangePasswordDone()"><i class="fa fa-check"></i> Done</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- build:js js/lib.js -->
+    <!-- bower:js -->
+    <script src="/bower_components/jquery/dist/jquery.js"></script>
+    <script src="/bower_components/angular/angular.js"></script>
+    <script src="/bower_components/angular-sanitize/angular-sanitize.js"></script>
+    <script src="/bower_components/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="/bower_components/extras.angular.plus/ngplus-overlay.js"></script>
+    <script src="/bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+    <script src="/bower_components/toastr/toastr.js"></script>
+    <script src="/bower_components/angular-animate/angular-animate.js"></script>
+    <script src="/bower_components/angular-ui-select/dist/select.js"></script>
+    <script src="/bower_components/angular-busy/dist/angular-busy.js"></script>
+    <script src="/bower_components/angular-native-picker/build/angular-datepicker.js"></script>
+    <script src="/bower_components/ngstorage/ngStorage.js"></script>
+    <script src="/bower_components/slimScroll/jquery.slimscroll.js"></script>
+    <script src="/bower_components/pickadate/lib/picker.js"></script>
+    <script src="/bower_components/pickadate/lib/picker.date.js"></script>
+    <script src="/bower_components/pickadate/lib/picker.time.js"></script>
+    <script src="/bower_components/ng-pickadate/ng-pickadate.js"></script>
+    <script src="/bower_components/angular-simple-logger/dist/angular-simple-logger.js"></script>
+    <script src="/bower_components/lodash/lodash.js"></script>
+    <script src="/bower_components/angular-google-maps/dist/angular-google-maps.js"></script>
+    <script src="/bower_components/ng-file-upload/ng-file-upload.js"></script>
+    <script src="/bower_components/angular-smart-table/dist/smart-table.js"></script>
+    <script src="/bower_components/angular-ui-grid/ui-grid.js"></script>
+    <script src="/bower_components/angularjs-datepicker/dist/angular-datepicker.js"></script>
+    <script src="/bower_components/highcharts/highcharts.js"></script>
+    <script src="/bower_components/bootstrap-timepicker/js/bootstrap-timepicker.js"></script>
+    <script src="/bower_components/moment/moment.js"></script>
+    <script src="/bower_components/fullcalendar/dist/fullcalendar.js"></script>
+    <script src="/bower_components/angular-ui-calendar/src/calendar.js"></script>
+    <script src="/bower_components/axios/dist/axios.js"></script>
+    <script src="/bower_components/qrcode.js/qrcode.js"></script>
+    <!-- endbower -->
+    <!-- endbuild -->
+    <!-- build:js js/app.js-->
+    <!-- inject:js -->
+    <script src="/src/client/app/app.module.js"></script>
+    <script src="/src/client/app/AcademicCalendar/academicCalendar.module.js"></script>
+    <script src="/src/client/app/addressSettings/addressSettings.module.js"></script>
+    <script src="/src/client/app/admitCard/admitCard.module.js"></script>
+    <script src="/src/client/app/api/api.module.js"></script>
+    <script src="/src/client/app/approvalSettings/approvalSettings.module.js"></script>
+    <script src="/src/client/app/balanceSheetHeadCOAMap/balanceSheetHeadCOAMap.module.js"></script>
+    <script src="/src/client/app/balanceSheetReport/balanceSheetReport.module.js"></script>
+    <script src="/src/client/app/bankAccountSeetting/bankAccount.module.js"></script>
+    <script src="/src/client/app/BankPayment/bankPay.module.js"></script>
+    <script src="/src/client/app/BankReceive/bankRec.module.js"></script>
+    <script src="/src/client/app/blocks/auth/auth.module.js"></script>
+    <script src="/src/client/app/blocks/exception/exception.module.js"></script>
+    <script src="/src/client/app/blocks/logger/logger.module.js"></script>
+    <script src="/src/client/app/blocks/router/router.module.js"></script>
+    <script src="/src/client/app/branchSettings/addBranch.module.js"></script>
+    <script src="/src/client/app/CashBankReceive/cashBankRecv.module.js"></script>
+    <script src="/src/client/app/cashFlowMethod/cashFlowMethod.module.js"></script>
+    <script src="/src/client/app/cashFlowMethodMap/cashFlowMethodMap.module.js"></script>
+    <script src="/src/client/app/cashFlowSettings/cashFlowSettings.module.js"></script>
+    <script src="/src/client/app/cashFlowStatementReport/cashFlowStatementReport.module.js"></script>
+    <script src="/src/client/app/CashPayment/cashPay.module.js"></script>
+    <script src="/src/client/app/CashReceive/cashRecv.module.js"></script>
+    <script src="/src/client/app/chartOfAccounts/chartOfAccounts.module.js"></script>
+    <script src="/src/client/app/ChequeIssue/chequeIssue.module.js"></script>
+    <script src="/src/client/app/chequeReceive/chequeRecv.module.js"></script>
+    <script src="/src/client/app/chequeStatus/chequeStatus.module.js"></script>
+    <script src="/src/client/app/chequeType/chequeType.module.js"></script>
+    <script src="/src/client/app/classRoutine/classRoutine.module.js"></script>
+    <script src="/src/client/app/classSettings/classSettings.module.js"></script>
+    <script src="/src/client/app/ClassSetup/classSetup.module.js"></script>
+    <script src="/src/client/app/classTestSettings/classTestSettings.module.js"></script>
+    <script src="/src/client/app/ClassWiseDepartment/ClassWiseDepartment.module.js"></script>
+    <script src="/src/client/app/conveyanceBill/conveyance.module.js"></script>
+    <script src="/src/client/app/core/core.module.js"></script>
+    <script src="/src/client/app/ctMarksEntry/ctMarksEntry.module.js"></script>
+    <script src="/src/client/app/CustomCode/CustomCode.module.js"></script>
+    <script src="/src/client/app/dailyFeesReport/dailyFeesReport.module.js"></script>
+    <script src="/src/client/app/dailySubWiseAtd/dailySubWiseAtd.module.js"></script>
+    <script src="/src/client/app/dashboard/dashboard.module.js"></script>
+    <script src="/src/client/app/dataProcessToAcc/DataProcess.module.js"></script>
+    <script src="/src/client/app/dataservice/dataservice.module.js"></script>
+    <script src="/src/client/app/dateWiseLessonPlan/dateWiseLessonPlan.module.js"></script>
+    <script src="/src/client/app/DaySetting/daySettings.module.js"></script>
+    <script src="/src/client/app/designationSettings/addDesignation.module.js"></script>
+    <script src="/src/client/app/employeeSettings/employeeSettings.module.js"></script>
+    <script src="/src/client/app/exameRoutineEntry/exameRoutineEntry.module.js"></script>
+    <script src="/src/client/app/ExperienceListSettings/ExperienceListSettings.module.js"></script>
+    <script src="/src/client/app/Fee_Setup/FeeSetup.module.js"></script>
+    <script src="/src/client/app/FeeHead/FeeHead.module.js"></script>
+    <script src="/src/client/app/feesCollection/feesCollection.module.js"></script>
+    <script src="/src/client/app/FineHead/FineHead.module.js"></script>
+    <script src="/src/client/app/genaralLedgerReport/genaralLedgerReport.module.js"></script>
+    <script src="/src/client/app/generateCheckBook/generateCheckBook.module.js"></script>
+    <script src="/src/client/app/gradeSettings/gradeSettings.module.js"></script>
+    <script src="/src/client/app/headCategorySetup/headCategorySetup.module.js"></script>
+    <script src="/src/client/app/holidaySettings/holidaySettings.module.js"></script>
+    <script src="/src/client/app/homeWorkEntry/homeWorkEntry.module.js"></script>
+    <script src="/src/client/app/incomeStatementHeadChategory/incomeStatementHeadChategory.module.js"></script>
+    <script src="/src/client/app/incomeStatementHeadCOA/incomeStatementHeadCOA.module.js"></script>
+    <script src="/src/client/app/incomeStatementReport/incomeStatementReport.module.js"></script>
+    <script src="/src/client/app/insEventSetup/insEventSetup.module.js"></script>
+    <script src="/src/client/app/insExameSetting/addInsMedium.module.js"></script>
+    <script src="/src/client/app/insExamMark/insExamMark.module.js"></script>
+    <script src="/src/client/app/insGradeSetup/insGradeSetup.module.js"></script>
+    <script src="/src/client/app/insShiftSettings/insShiftSettings.module.js"></script>
+    <script src="/src/client/app/instDepartmentSettings/instDepartmentSettings.module.js"></script>
+    <script src="/src/client/app/instituteMediumSettings/addInsMedium.module.js"></script>
+    <script src="/src/client/app/instituteSettings/instituteSettings.module.js"></script>
+    <script src="/src/client/app/Journal/journal.module.js"></script>
+    <script src="/src/client/app/layout/layout.module.js"></script>
+    <script src="/src/client/app/layout/pagination/pagination.module.js"></script>
+    <script src="/src/client/app/layout/sidebar/sidebar.module.js"></script>
+    <script src="/src/client/app/leaveApplicationSettings/leaveApplicationSettings.module.js"></script>
+    <script src="/src/client/app/login/login.module.js"></script>
+    <script src="/src/client/app/mailSettings/mailSettings.module.js"></script>
+    <script src="/src/client/app/manualStudentAttendanceSettings/manualStudentAttendance.module.js"></script>
+    <script src="/src/client/app/manualTeacherAttendance/manualTeacherAttendance.module.js"></script>
+    <script src="/src/client/app/mediumSettings/mediumSettings.module.js"></script>
+    <script src="/src/client/app/mediumWiseClass/midWiseclassSetup.module.js"></script>
+    <script src="/src/client/app/menuPermissionSettings/menuPermissionSettings.module.js"></script>
+    <script src="/src/client/app/menuSettings/menuSettings.module.js"></script>
+    <script src="/src/client/app/modulePermissionSettings/modulePermissionSettings.module.js"></script>
+    <script src="/src/client/app/moduleSettings/moduleSettings.module.js"></script>
+    <script src="/src/client/app/monthlyClassWiseAttendance/monthlyClassWiseAttendance.module.js"></script>
+    <script src="/src/client/app/MonthlyDueList/MonthlyDue.module.js"></script>
+    <script src="/src/client/app/monthlyFeeGenerators/monthlyFeeGenerators.module.js"></script>
+    <script src="/src/client/app/monthReport/monthReport.module.js"></script>
+    <script src="/src/client/app/MyAttendance/myAttendance.module.js"></script>
+    <script src="/src/client/app/myHomework/myHomework.module.js"></script>
+    <script src="/src/client/app/MyRoutine/MyRoutine.module.js"></script>
+    <script src="/src/client/app/mySyllabus/mySyllabus.module.js"></script>
+    <script src="/src/client/app/netReceiveReport/netReceiveReport.module.js"></script>
+    <script src="/src/client/app/noticeSettings/noticeSettings.module.js"></script>
+    <script src="/src/client/app/notificationSettings/notificationSettings.module.js"></script>
+    <script src="/src/client/app/OpeningJournal/openingJournal.module.js"></script>
+    <script src="/src/client/app/OpeningTrialBalanceReport/openingTrialBalanceReport.module.js"></script>
+    <script src="/src/client/app/partyLedgerReport/partyLedgerReport.module.js"></script>
+    <script src="/src/client/app/passMarksSetUp/passMarksSetUp.module.js"></script>
+    <script src="/src/client/app/paymentInfo/paymentInfo.module.js"></script>
+    <script src="/src/client/app/paymentVoucher/paymentVoucher.module.js"></script>
+    <script src="/src/client/app/periodSetup/periodSetup.module.js"></script>
+    <script src="/src/client/app/progressReport/viewProgressReport.module.js"></script>
+    <script src="/src/client/app/receiveVoucher/receiveVoucher.module.js"></script>
+    <script src="/src/client/app/relationSettings/addRelation.module.js"></script>
+    <script src="/src/client/app/religionSettings/addReligion.module.js"></script>
+    <script src="/src/client/app/resultProcessingSetup/resultProcessingSetup.module.js"></script>
+    <script src="/src/client/app/Routine/Routine.module.js"></script>
+    <script src="/src/client/app/scholarshipSetup/FeeSetup.module.js"></script>
+    <script src="/src/client/app/sectionSettings/sectionSettings.module.js"></script>
+    <script src="/src/client/app/sendSMS/sms.module.js"></script>
+    <script src="/src/client/app/shiftSettings/shiftSettings.module.js"></script>
+    <script src="/src/client/app/studentAtdReport/studentAtdReport.module.js"></script>
+    <script src="/src/client/app/studentAttendanceSettings/studentAttendance.module.js"></script>
+    <script src="/src/client/app/studentInput/studentSettings.module.js"></script>
+    <script src="/src/client/app/studentSettings/studentSettings.module.js"></script>
+    <script src="/src/client/app/StudentWiseMarksEntry/studentWiseMarksEntry.module.js"></script>
+    <script src="/src/client/app/studentYearlyAttendance/studentYearlyAttendance.module.js"></script>
+    <script src="/src/client/app/subjectSettings/subjectSettings.module.js"></script>
+    <script src="/src/client/app/subjectWiseMarksEntry/subjectWiseMarksEntry.module.js"></script>
+    <script src="/src/client/app/syllabusEntry/syllabus.module.js"></script>
+    <script src="/src/client/app/teacherAttendanceSettings/teacherAttendance.module.js"></script>
+    <script src="/src/client/app/trailBalanceReport/trailBalanceReport.module.js"></script>
+    <script src="/src/client/app/UpdateStudent/updateStudent.module.js"></script>
+    <script src="/src/client/app/userAuthentication/userAuthentication.module.js"></script>
+    <script src="/src/client/app/userRegistrationSettings/userRegistration.module.js"></script>
+    <script src="/src/client/app/vacationSettings/vacationSettings.module.js"></script>
+    <script src="/src/client/app/voucharReport/voucharReport.module.js"></script>
+    <script src="/src/client/app/widgets/widgets.module.js"></script>
+    <script src="/src/client/app/YearlyClosingProcess/closingProcess.module.js"></script>
+    <script src="/src/client/app/yearlyFeeGenaration/yearlyFeeGenaration.module.js"></script>
+    <script src="/src/client/app/AcademicCalendar/academicCalendar/academicCalendar.controller..js"></script>
+    <script src="/src/client/app/AcademicCalendar/academicCalendar/academicCalendar.route.js"></script>
+    <script src="/src/client/app/addressSettings/addaddress/addadress.controller.js"></script>
+    <script src="/src/client/app/addressSettings/addaddress/addadress.router.js"></script>
+    <script src="/src/client/app/admitCard/admitCard/admitCard.controller.js"></script>
+    <script src="/src/client/app/admitCard/admitCard/admitCard.route.js"></script>
+    <script src="/src/client/app/api/api.config.js"></script>
+    <script src="/src/client/app/api/api.interceptor.js"></script>
+    <script src="/src/client/app/approvalSettings/approval/approval.controller.js"></script>
+    <script src="/src/client/app/approvalSettings/approval/approval.router.js"></script>
+    <script src="/src/client/app/balanceSheetHeadCOAMap/balanceSheetHeadCOAMap/balanceSheetHeadCOAMap.controller..js"></script>
+    <script src="/src/client/app/balanceSheetHeadCOAMap/balanceSheetHeadCOAMap/balanceSheetHeadCOAMap.route.js"></script>
+    <script src="/src/client/app/balanceSheetReport/balanceSheetReport/balanceSheetReport.controller.js"></script>
+    <script src="/src/client/app/balanceSheetReport/balanceSheetReport/balanceSheetReport.route.js"></script>
+    <script src="/src/client/app/bankAccountSeetting/addBankAccount/bankAccount.controller.js"></script>
+    <script src="/src/client/app/bankAccountSeetting/addBankAccount/bankAccount.route.js"></script>
+    <script src="/src/client/app/BankPayment/bankPay/bankPay.controller.js"></script>
+    <script src="/src/client/app/BankPayment/bankPay/bankPay.route.js"></script>
+    <script src="/src/client/app/BankReceive/bankRec/bankRec.controller.js"></script>
+    <script src="/src/client/app/BankReceive/bankRec/bankRec.route.js"></script>
+    <script src="/src/client/app/blocks/auth/auth.controller.js"></script>
+    <script src="/src/client/app/blocks/auth/auth.interceptor.js"></script>
+    <script src="/src/client/app/blocks/auth/auth.provider.js"></script>
+    <script src="/src/client/app/blocks/auth/auth.service.js"></script>
+    <script src="/src/client/app/blocks/exception/exception-handler.provider.js"></script>
+    <script src="/src/client/app/blocks/exception/exception.js"></script>
+    <script src="/src/client/app/blocks/helpers/datahelper.service.js"></script>
+    <script src="/src/client/app/blocks/helpers/errorstatushandeler.provide.js"></script>
+    <script src="/src/client/app/blocks/helpers/filterurl.service.js"></script>
+    <script src="/src/client/app/blocks/helpers/fixedfloat.filter.js"></script>
+    <script src="/src/client/app/blocks/helpers/phpjs.service.js"></script>
+    <script src="/src/client/app/blocks/helpers/terminator.service.js"></script>
+    <script src="/src/client/app/blocks/logger/logger.js"></script>
+    <script src="/src/client/app/blocks/router/router-helper.provider.js"></script>
+    <script src="/src/client/app/branchSettings/addBranch/addBranch.controller.js"></script>
+    <script src="/src/client/app/branchSettings/addBranch/addBranch.route.js"></script>
+    <script src="/src/client/app/CashBankReceive/cashBankRecv/cashBankRecv.controller.js"></script>
+    <script src="/src/client/app/CashBankReceive/cashBankRecv/cashBankRecv.route.js"></script>
+    <script src="/src/client/app/cashFlowMethod/addCashFlowMethod/cashFlowMethod.controller.js"></script>
+    <script src="/src/client/app/cashFlowMethod/addCashFlowMethod/cashFlowMethod.route.js"></script>
+    <script src="/src/client/app/cashFlowMethodMap/addCashFlowMethodMap/cashFlowMethodMap.controller.js"></script>
+    <script src="/src/client/app/cashFlowMethodMap/addCashFlowMethodMap/cashFlowMethodMap.route.js"></script>
+    <script src="/src/client/app/cashFlowSettings/addcashFlowSettings/cashFlowSettings.controller.js"></script>
+    <script src="/src/client/app/cashFlowSettings/addcashFlowSettings/cashFlowSettings.route.js"></script>
+    <script src="/src/client/app/cashFlowStatementReport/cashFlowStatementReport/cashFlowStatementReport.controller.js"></script>
+    <script src="/src/client/app/cashFlowStatementReport/cashFlowStatementReport/cashFlowStatementReport.route.js"></script>
+    <script src="/src/client/app/CashPayment/cashPay/cashPay.controller.js"></script>
+    <script src="/src/client/app/CashPayment/cashPay/cashPay.route.js"></script>
+    <script src="/src/client/app/CashReceive/cashRecv/cashRecv.controller.js"></script>
+    <script src="/src/client/app/CashReceive/cashRecv/cashRecv.route.js"></script>
+    <script src="/src/client/app/chartOfAccounts/chartOfAccounts/chartOfAccounts.controller..js"></script>
+    <script src="/src/client/app/chartOfAccounts/chartOfAccounts/chartOfAccounts.route.js"></script>
+    <script src="/src/client/app/ChequeIssue/chequeIssue/chequeIssue.controller.js"></script>
+    <script src="/src/client/app/ChequeIssue/chequeIssue/chequeIssue.route.js"></script>
+    <script src="/src/client/app/chequeReceive/chequeRecv/chequeRecv.controller.js"></script>
+    <script src="/src/client/app/chequeReceive/chequeRecv/chequeRecv.route.js"></script>
+    <script src="/src/client/app/chequeStatus/addchequeStatus/chequeStatus.controller.js"></script>
+    <script src="/src/client/app/chequeStatus/addchequeStatus/chequeStatus.route.js"></script>
+    <script src="/src/client/app/chequeType/addChequetype/chequeType.controller.js"></script>
+    <script src="/src/client/app/chequeType/addChequetype/chequeType.route.js"></script>
+    <script src="/src/client/app/classRoutine/addClassRoutine/classRoutine.controller..js"></script>
+    <script src="/src/client/app/classRoutine/addClassRoutine/classRoutine.route.js"></script>
+    <script src="/src/client/app/classSettings/addClass/classSettings.controller.js"></script>
+    <script src="/src/client/app/classSettings/addClass/classSettings.route.js"></script>
+    <script src="/src/client/app/ClassSetup/classSetup/classSetup.controller.js"></script>
+    <script src="/src/client/app/ClassSetup/classSetup/classSetup.route.js"></script>
+    <script src="/src/client/app/classTestSettings/addClassTestSettings/classTestSettings.controller.js"></script>
+    <script src="/src/client/app/classTestSettings/addClassTestSettings/classTestSettings.route.js"></script>
+    <script src="/src/client/app/ClassWiseDepartment/adddepartmentClassWise/adddepartmentClassWise.controller.js"></script>
+    <script src="/src/client/app/ClassWiseDepartment/adddepartmentClassWise/adddepartmentClassWise.router.js"></script>
+    <script src="/src/client/app/conveyanceBill/conveyance/conveyance.controller.js"></script>
+    <script src="/src/client/app/conveyanceBill/conveyance/conveyance.route.js"></script>
+    <script src="/src/client/app/core/config.js"></script>
+    <script src="/src/client/app/core/constants.js"></script>
+    <script src="/src/client/app/core/core.route.js"></script>
+    <script src="/src/client/app/ctMarksEntry/addctMarksEntry/ctMarksEntry.controller.js"></script>
+    <script src="/src/client/app/ctMarksEntry/addctMarksEntry/ctMarksEntry.route.js"></script>
+    <script src="/src/client/app/CustomCode/customCode/customCode.controller.js"></script>
+    <script src="/src/client/app/CustomCode/customCode/customCode.route.js"></script>
+    <script src="/src/client/app/dailyFeesReport/dailyFeesReport/dailyFeesReport.controller.js"></script>
+    <script src="/src/client/app/dailyFeesReport/dailyFeesReport/dailyFeesReport.route.js"></script>
+    <script src="/src/client/app/dailySubWiseAtd/dailySubWiseAtd/dailySubWiseAtd.controller.js"></script>
+    <script src="/src/client/app/dailySubWiseAtd/dailySubWiseAtd/dailySubWiseAtd.route.js"></script>
+    <script src="/src/client/app/dashboard/dashboard.controller.js"></script>
+    <script src="/src/client/app/dashboard/dashboard.route.js"></script>
+    <script src="/src/client/app/dataProcessToAcc/DataProcess/DataProcess.controller.js"></script>
+    <script src="/src/client/app/dataProcessToAcc/DataProcess/DataProcess.route.js"></script>
+    <script src="/src/client/app/dataservice/addressSettings/address.service.js"></script>
+    <script src="/src/client/app/dataservice/admitCardService/admitCardService.service.js"></script>
+    <script src="/src/client/app/dataservice/approvalSettings/approval.service.js"></script>
+    <script src="/src/client/app/dataservice/bankAccount/bankAccount.service.js"></script>
+    <script src="/src/client/app/dataservice/bankAccountService/bankAccount.service.js"></script>
+    <script src="/src/client/app/dataservice/branchService/branchSettings.service.js"></script>
+    <script src="/src/client/app/dataservice/branchSettings/branchService.js"></script>
+    <script src="/src/client/app/dataservice/chartOfAccountsService/chartOfAccounts.service.js"></script>
+    <script src="/src/client/app/dataservice/classService/class.service.js"></script>
+    <script src="/src/client/app/dataservice/classSettings/classSettings.service.js"></script>
+    <script src="/src/client/app/dataservice/ClassTestService/ClassTest.service.js"></script>
+    <script src="/src/client/app/dataservice/classWiseDepartmentService/classWiseDepartmentService.service.js"></script>
+    <script src="/src/client/app/dataservice/commonService/common.service.js"></script>
+    <script src="/src/client/app/dataservice/conversionService/conversion.service.js"></script>
+    <script src="/src/client/app/dataservice/customCodeService/customCode.service.js"></script>
+    <script src="/src/client/app/dataservice/dailyFeesReport/dailyFeesReport.service.js"></script>
+    <script src="/src/client/app/dataservice/dailySubjectWiseAtd/dailySubjectWiseAtd.service.js"></script>
+    <script src="/src/client/app/dataservice/daySettings/daySettings.service.js"></script>
+    <script src="/src/client/app/dataservice/designationSettings/designationService.js"></script>
+    <script src="/src/client/app/dataservice/exameRoutineService/exameRoutineEntry.service.js"></script>
+    <script src="/src/client/app/dataservice/experienceListSettings/experienceListService.js"></script>
+    <script src="/src/client/app/dataservice/feesCollectionService/feesCollection.service.js"></script>
+    <script src="/src/client/app/dataservice/FeeService/Fee.service.js"></script>
+    <script src="/src/client/app/dataservice/FeeSetupService/FeeSetup.service.js"></script>
+    <script src="/src/client/app/dataservice/FineService/Fine.service.js"></script>
+    <script src="/src/client/app/dataservice/gradeService/gradeSettings.service.js"></script>
+    <script src="/src/client/app/dataservice/homeWorkService/homeWorkService.service.js"></script>
+    <script src="/src/client/app/dataservice/insEventSetupService/insEvent.service.js"></script>
+    <script src="/src/client/app/dataservice/insExameSetting/insexame.service.js"></script>
+    <script src="/src/client/app/dataservice/insExamPassMark/insExamPassmark.service.js"></script>
+    <script src="/src/client/app/dataservice/insGradeSettingService/insGradeSetup.service.js"></script>
+    <script src="/src/client/app/dataservice/insMediumSettings/insmedium.service.js"></script>
+    <script src="/src/client/app/dataservice/insShiftSettings/insShift.service.js"></script>
+    <script src="/src/client/app/dataservice/instDepartmentSettings/instDepartment.service.js"></script>
+    <script src="/src/client/app/dataservice/instituteService/institute.service.js"></script>
+    <script src="/src/client/app/dataservice/itemEntry/itemEntry.service.js"></script>
+    <script src="/src/client/app/dataservice/journalService/journal.service.js"></script>
+    <script src="/src/client/app/dataservice/leaveService/leave.service.js"></script>
+    <script src="/src/client/app/dataservice/loginService/login.service.js"></script>
+    <script src="/src/client/app/dataservice/mailSettings/mail.service.js"></script>
+    <script src="/src/client/app/dataservice/mediumService/mediumSettings.service.js"></script>
+    <script src="/src/client/app/dataservice/mediumSetting/medium.service.js"></script>
+    <script src="/src/client/app/dataservice/mediumWiseClassService/mediumWiseClassService.service.js"></script>
+    <script src="/src/client/app/dataservice/menuSettings/menuSettings.service.js"></script>
+    <script src="/src/client/app/dataservice/monthlyFeeReportService/monthlyfeereport.service.js"></script>
+    <script src="/src/client/app/dataservice/monthlyFeeService/monthlyFee.service.js"></script>
+    <script src="/src/client/app/dataservice/myAttendance/myAttendance.service.js"></script>
+    <script src="/src/client/app/dataservice/NoticeService/notice.service.js"></script>
+    <script src="/src/client/app/dataservice/notificationSettings/notification.service.js"></script>
+    <script src="/src/client/app/dataservice/OpeningJournalService/openingJournal.service.js"></script>
+    <script src="/src/client/app/dataservice/openingTrailBalanceReportService/openingTrailBalanceReport.service.js"></script>
+    <script src="/src/client/app/dataservice/pagerService/pager.service.js"></script>
+    <script src="/src/client/app/dataservice/paymentInfoService/paymentInfo.service.js"></script>
+    <script src="/src/client/app/dataservice/paymentVoucherService/paymentVoucher.Service.js"></script>
+    <script src="/src/client/app/dataservice/periodSetupService/periodSetup.service.js"></script>
+    <script src="/src/client/app/dataservice/progressReport/progressReportService.service.js"></script>
+    <script src="/src/client/app/dataservice/receiveVoucherService/receiveVoucher.Service.js"></script>
+    <script src="/src/client/app/dataservice/relationSettings/relationService.js"></script>
+    <script src="/src/client/app/dataservice/religionService/religion.service.js"></script>
+    <script src="/src/client/app/dataservice/resultProcessingService/resultProcessing.Service.js"></script>
+    <script src="/src/client/app/dataservice/scholarService/scholar.service.js"></script>
+    <script src="/src/client/app/dataservice/sectionService/sectionSettings.service.js"></script>
+    <script src="/src/client/app/dataservice/shiftService/shiftSettings.service.js"></script>
+    <script src="/src/client/app/dataservice/shiftSettings/shift.service.js"></script>
+    <script src="/src/client/app/dataservice/staticData/staticData.service.js"></script>
+    <script src="/src/client/app/dataservice/studentAtdReportService/studentAtdReport.service.js"></script>
+    <script src="/src/client/app/dataservice/studentAttendanceService/studentAttendance.service.js"></script>
+    <script src="/src/client/app/dataservice/studentWiseMarksEntryService/studentWiseMarksEntryService.service.js"></script>
+    <script src="/src/client/app/dataservice/studentYearlyAttendance/studentYearlyAttendance.service.js"></script>
+    <script src="/src/client/app/dataservice/subjectService/subjectSettings.service.js"></script>
+    <script src="/src/client/app/dataservice/subjectWiseMarksEntryService/subjectWiseMarksEntryService.service.js"></script>
+    <script src="/src/client/app/dataservice/syllabusService/syllabus.service.js"></script>
+    <script src="/src/client/app/dataservice/teacherAttendanceService/teacherAttendance.service.js"></script>
+    <script src="/src/client/app/dataservice/testInstitute/testInstitute.service.js"></script>
+    <script src="/src/client/app/dataservice/trailBalanceReportService/trailBalanceReport.service.js"></script>
+    <script src="/src/client/app/dataservice/updateStudentService/updateStudent.service.js"></script>
+    <script src="/src/client/app/dataservice/uploadService/upload.service.js"></script>
+    <script src="/src/client/app/dataservice/userAuthenticationService/userAuthentication.Service.js"></script>
+    <script src="/src/client/app/dataservice/userMenuService/menu.Service.js"></script>
+    <script src="/src/client/app/dataservice/userMenuService/menu.Service.Permission.js"></script>
+    <script src="/src/client/app/dataservice/userModuleService/module.Service.js"></script>
+    <script src="/src/client/app/dataservice/userModuleService/module.Service.Permission.js"></script>
+    <script src="/src/client/app/dataservice/userRegistrationService/userRegistration.service.js"></script>
+    <script src="/src/client/app/dataservice/userService/user.service.js"></script>
+    <script src="/src/client/app/dataservice/vacationSettingsService/vacation.service.js"></script>
+    <script src="/src/client/app/dataservice/yearlyFeeService/yearlyFeeGeneration.service.js"></script>
+    <script src="/src/client/app/dateWiseLessonPlan/addDateWiseLessonPlan/dateWiseLessonPlan.controller.js"></script>
+    <script src="/src/client/app/dateWiseLessonPlan/addDateWiseLessonPlan/dateWiseLessonPlan.route.js"></script>
+    <script src="/src/client/app/DaySetting/addday/daySettings.controller.js"></script>
+    <script src="/src/client/app/DaySetting/addday/daySettings.route.js"></script>
+    <script src="/src/client/app/designationSettings/addDesignation/addDesignation.controller.js"></script>
+    <script src="/src/client/app/designationSettings/addDesignation/addDesignation.route.js"></script>
+    <script src="/src/client/app/employeeSettings/add_new_employee/addaddEmployee.controller.js"></script>
+    <script src="/src/client/app/employeeSettings/add_new_employee/addEmployee.route.js"></script>
+    <script src="/src/client/app/exameRoutineEntry/addExameRoutine/exameRoutineEntry.controller.js"></script>
+    <script src="/src/client/app/exameRoutineEntry/addExameRoutine/exameRoutineEntry.route.js"></script>
+    <script src="/src/client/app/ExperienceListSettings/addExperienceList/ExperienceList.controller.js"></script>
+    <script src="/src/client/app/ExperienceListSettings/addExperienceList/ExperienceList.route.js"></script>
+    <script src="/src/client/app/Fee_Setup/FeeSetup/FeeSetup.controller.js"></script>
+    <script src="/src/client/app/Fee_Setup/FeeSetup/FeeSetup.route.js"></script>
+    <script src="/src/client/app/FeeHead/FeeHead/FeeHead.controller.js"></script>
+    <script src="/src/client/app/FeeHead/FeeHead/FeeHead.route.js"></script>
+    <script src="/src/client/app/feesCollection/feesCollection/feesCollection.controller..js"></script>
+    <script src="/src/client/app/feesCollection/feesCollection/feesCollection.route.js"></script>
+    <script src="/src/client/app/FinancialReport/FinancialReport.js"></script>
+    <script src="/src/client/app/FinancialReport/financialReport/financialReport.controller.js"></script>
+    <script src="/src/client/app/FinancialReport/financialReport/financialReport.route.js"></script>
+    <script src="/src/client/app/FineHead/FineHead/FineHead.controller.js"></script>
+    <script src="/src/client/app/FineHead/FineHead/FineHead.route.js"></script>
+    <script src="/src/client/app/genaralLedgerReport/genaralLedgerReport/genaralLedgerReport.controller.js"></script>
+    <script src="/src/client/app/genaralLedgerReport/genaralLedgerReport/genaralLedgerReport.route.js"></script>
+    <script src="/src/client/app/generateCheckBook/generateCheckBook/generateCheckBook.controller..js"></script>
+    <script src="/src/client/app/generateCheckBook/generateCheckBook/generateCheckBook.route.js"></script>
+    <script src="/src/client/app/gradeSettings/addGrade/gradeSettings.controller.js"></script>
+    <script src="/src/client/app/gradeSettings/addGrade/gradeSettings.route.js"></script>
+    <script src="/src/client/app/headCategorySetup/headCategorySetup/headCategorySetup.controller..js"></script>
+    <script src="/src/client/app/headCategorySetup/headCategorySetup/headCategorySetup.route.js"></script>
+    <script src="/src/client/app/holidaySettings/addHoliday/addHoliday.controller.js"></script>
+    <script src="/src/client/app/holidaySettings/addHoliday/addHoliday.route.js"></script>
+    <script src="/src/client/app/homeWorkEntry/homeWorkEntry/homeWorkEntry.controller.js"></script>
+    <script src="/src/client/app/homeWorkEntry/homeWorkEntry/homeWorkEntry.route.js"></script>
+    <script src="/src/client/app/incomeStatementHeadChategory/addIncomeStatementHeadChategory/incomeStatementHeadChategory.controller.js"></script>
+    <script src="/src/client/app/incomeStatementHeadChategory/addIncomeStatementHeadChategory/incomeStatementHeadChategory.route.js"></script>
+    <script src="/src/client/app/incomeStatementHeadCOA/addIncomeStatementHeadCOA/incomeStatementHeadCOA.controller.js"></script>
+    <script src="/src/client/app/incomeStatementHeadCOA/addIncomeStatementHeadCOA/incomeStatementHeadCOA.route.js"></script>
+    <script src="/src/client/app/incomeStatementReport/incomeStatementReport/incomeStatementReport.controller.js"></script>
+    <script src="/src/client/app/incomeStatementReport/incomeStatementReport/incomeStatementReport.route.js"></script>
+    <script src="/src/client/app/insEventSetup/addInsEventSetup/insEventSetup.controller.js"></script>
+    <script src="/src/client/app/insEventSetup/addInsEventSetup/insEventSetup.route.js"></script>
+    <script src="/src/client/app/insExameSetting/addInsExame/addInsExame.controller.js"></script>
+    <script src="/src/client/app/insExameSetting/addInsExame/addInsExame.route.js"></script>
+    <script src="/src/client/app/insExamMark/addExamMark/insExamMark.controller.js"></script>
+    <script src="/src/client/app/insExamMark/addExamMark/insExamMark.route.js"></script>
+    <script src="/src/client/app/insGradeSetup/addInsGradeSetUp/insGradeSetUp.controller.js"></script>
+    <script src="/src/client/app/insGradeSetup/addInsGradeSetUp/InsGradeSetUp.route.js"></script>
+    <script src="/src/client/app/insShiftSettings/addinsshift/addinsshift.controller.js"></script>
+    <script src="/src/client/app/insShiftSettings/addinsshift/addinsshift.router.js"></script>
+    <script src="/src/client/app/instDepartmentSettings/adddepartment/adddepartment.controller.js"></script>
+    <script src="/src/client/app/instDepartmentSettings/adddepartment/adddepartment.router.js"></script>
+    <script src="/src/client/app/instituteMediumSettings/addInsMedium/addInsMedium.controller.js"></script>
+    <script src="/src/client/app/instituteMediumSettings/addInsMedium/addInsMedium.route.js"></script>
+    <script src="/src/client/app/instituteSettings/addInstitute/instituteSettings.controller.js"></script>
+    <script src="/src/client/app/instituteSettings/addInstitute/instituteSettings.route.js"></script>
+    <script src="/src/client/app/Journal/journal/journal.controller.js"></script>
+    <script src="/src/client/app/Journal/journal/journal.route.js"></script>
+    <script src="/src/client/template-js/jquery-slider/jquery.sidr.min.js"></script>
+    <script src="/src/client/app/layout/pagination/pagination.directive.js"></script>
+    <script src="/src/client/app/layout/sidebar/sidebar.controller.js"></script>
+    <script src="/src/client/app/layout/sidebar/sidebar.directive.js"></script>
+    <script src="/src/client/app/leaveApplicationSettings/addLeaveApplication/addLeaveApplication.controller.js"></script>
+    <script src="/src/client/app/leaveApplicationSettings/addLeaveApplication/addLeaveApplication.route.js"></script>
+    <script src="/src/client/app/login/login.controller.js"></script>
+    <script src="/src/client/app/login/login.route.js"></script>
+    <script src="/src/client/app/login/logout.controller.js"></script>
+    <script src="/src/client/app/mailSettings/addmail/addmail.controller.js"></script>
+    <script src="/src/client/app/mailSettings/addmail/addmail.router.js"></script>
+    <script src="/src/client/app/manualStudentAttendanceSettings/addManualStudentAttendance/manualStudentAttendance.controller.js"></script>
+    <script src="/src/client/app/manualStudentAttendanceSettings/addManualStudentAttendance/manualStudentAttendance.route.js"></script>
+    <script src="/src/client/app/manualTeacherAttendance/addManualTeacherAttendance/manualTeacherAttendance.controller.js"></script>
+    <script src="/src/client/app/manualTeacherAttendance/addManualTeacherAttendance/manualTeacherAttendance.route.js"></script>
+    <script src="/src/client/app/mediumSettings/addmedium/mediumSettings.controller.js"></script>
+    <script src="/src/client/app/mediumSettings/addmedium/mediumSettings.route.js"></script>
+    <script src="/src/client/app/mediumWiseClass/midWiseclassSetup/midWiseclassSetup.controller.js"></script>
+    <script src="/src/client/app/mediumWiseClass/midWiseclassSetup/midWiseclassSetup.route.js"></script>
+    <script src="/src/client/app/menuPermissionSettings/menu_permissionSettings/menuPermissionSettings.controller.js"></script>
+    <script src="/src/client/app/menuPermissionSettings/menu_permissionSettings/menuPermissionSettings.route.js"></script>
+    <script src="/src/client/app/menuSettings/menu_settings/menuSettings.controller.js"></script>
+    <script src="/src/client/app/menuSettings/menu_settings/menuSettings.route.js"></script>
+    <script src="/src/client/app/modulePermissionSettings/module_permissionSettings/modulePermissionSettings.controller.js"></script>
+    <script src="/src/client/app/modulePermissionSettings/module_permissionSettings/modulePermissionSettings.route.js"></script>
+    <script src="/src/client/app/moduleSettings/module_settings/moduleSettings.controller.js"></script>
+    <script src="/src/client/app/moduleSettings/module_settings/moduleSettings.route.js"></script>
+    <script src="/src/client/app/monthlyClassWiseAttendance/addMonthlyClassWiseAttendance/monthlyClassWiseAttendance.controller.js"></script>
+    <script src="/src/client/app/monthlyClassWiseAttendance/addMonthlyClassWiseAttendance/monthlyClassWiseAttendance.route.js"></script>
+    <script src="/src/client/app/MonthlyDueList/MonthlyDue/MonthlyDue.controller.js"></script>
+    <script src="/src/client/app/MonthlyDueList/MonthlyDue/MonthlyDue.route.js"></script>
+    <script src="/src/client/app/monthlyFeeGenerators/monthlyFeeGenerate/monthlyFeeGenerate.controller..js"></script>
+    <script src="/src/client/app/monthlyFeeGenerators/monthlyFeeGenerate/monthlyFeeGenerate.route.js"></script>
+    <script src="/src/client/app/monthReport/addmonthReport/monthReport.controller.js"></script>
+    <script src="/src/client/app/monthReport/addmonthReport/monthReport.route.js"></script>
+    <script src="/src/client/app/MyAttendance/myAttendance/myAttendance.controller..js"></script>
+    <script src="/src/client/app/MyAttendance/myAttendance/myAttendance.route.js"></script>
+    <script src="/src/client/app/myHomework/addMyHomework/myHomework.controller.js"></script>
+    <script src="/src/client/app/myHomework/addMyHomework/myHomework.route.js"></script>
+    <script src="/src/client/app/MyRoutine/addMyRoutine/MyRoutine.controller..js"></script>
+    <script src="/src/client/app/MyRoutine/addMyRoutine/MyRoutine.route.js"></script>
+    <script src="/src/client/app/mySyllabus/addMySyllabus/mySyllabus.controller.js"></script>
+    <script src="/src/client/app/mySyllabus/addMySyllabus/mySyllabus.route.js"></script>
+    <script src="/src/client/app/netReceiveReport/netReceiveReport/netReceiveReport.controller.js"></script>
+    <script src="/src/client/app/netReceiveReport/netReceiveReport/netReceiveReport.route.js"></script>
+    <script src="/src/client/app/noticeSettings/addnotice/addnotice.controller.js"></script>
+    <script src="/src/client/app/noticeSettings/addnotice/addnotice.router.js"></script>
+    <script src="/src/client/app/notificationSettings/addnotification/addnotification.controller.js"></script>
+    <script src="/src/client/app/notificationSettings/addnotification/addnotification.router.js"></script>
+    <script src="/src/client/app/OpeningJournal/openingJournal/openingJournal.controller.js"></script>
+    <script src="/src/client/app/OpeningJournal/openingJournal/openingJournal.route.js"></script>
+    <script src="/src/client/app/OpeningTrialBalanceReport/openingTrialBalanceReport/openingTrialBalanceReport.controller.js"></script>
+    <script src="/src/client/app/OpeningTrialBalanceReport/openingTrialBalanceReport/openingTrialBalanceReport.route.js"></script>
+    <script src="/src/client/app/partyLedgerReport/partyLedgerReport/partyLedgerReport.controller.js"></script>
+    <script src="/src/client/app/partyLedgerReport/partyLedgerReport/partyLedgerReport.route.js"></script>
+    <script src="/src/client/app/passMarksSetUp/addPassmarksSetup/passMarksSetup.controller.js"></script>
+    <script src="/src/client/app/passMarksSetUp/addPassmarksSetup/passMarksSetup.route.js"></script>
+    <script src="/src/client/app/paymentInfo/addPaymentInfo/paymentInfo.controller..js"></script>
+    <script src="/src/client/app/paymentInfo/addPaymentInfo/paymentInfo.route.js"></script>
+    <script src="/src/client/app/paymentVoucher/paymentVoucher/paymentVoucher.controller.js"></script>
+    <script src="/src/client/app/paymentVoucher/paymentVoucher/paymentVoucher.route.js"></script>
+    <script src="/src/client/app/periodSetup/addPeriod/periodSetup.route.js"></script>
+    <script src="/src/client/app/periodSetup/addPeriod/periodSetupt.controller.js"></script>
+    <script src="/src/client/app/progressReport/viewProgressReport/getrogressReport..route.js"></script>
+    <script src="/src/client/app/progressReport/viewProgressReport/getrogressReport.controller.js"></script>
+    <script src="/src/client/app/receiveVoucher/receiveVoucher/receiveVoucher.controller.js"></script>
+    <script src="/src/client/app/receiveVoucher/receiveVoucher/receiveVoucher.route.js"></script>
+    <script src="/src/client/app/relationSettings/addRelation/addRelation.controller.js"></script>
+    <script src="/src/client/app/relationSettings/addRelation/addRelation.route.js"></script>
+    <script src="/src/client/app/religionSettings/addReligion/addReligion.controller.js"></script>
+    <script src="/src/client/app/religionSettings/addReligion/addReligion.route.js"></script>
+    <script src="/src/client/app/resultProcessingSetup/addResultProcessingSetup/resultProcessingSetup.controller.js"></script>
+    <script src="/src/client/app/resultProcessingSetup/addResultProcessingSetup/resultProcessingSetup.route.js"></script>
+    <script src="/src/client/app/Routine/addRoutine/Routine.controller..js"></script>
+    <script src="/src/client/app/Routine/addRoutine/Routine.route.js"></script>
+    <script src="/src/client/app/scholarshipSetup/scholarship/scholarship.controller.js"></script>
+    <script src="/src/client/app/scholarshipSetup/scholarship/scholarship.route.js"></script>
+    <script src="/src/client/app/sectionSettings/addSection/sectionSettings.controller.js"></script>
+    <script src="/src/client/app/sectionSettings/addSection/sectionSettings.route.js"></script>
+    <script src="/src/client/app/sendSMS/sms/sms.controller.js"></script>
+    <script src="/src/client/app/sendSMS/sms/sms.route.js"></script>
+    <script src="/src/client/app/shiftSettings/addshift/addshift.controller.js"></script>
+    <script src="/src/client/app/shiftSettings/addshift/addshift.router.js"></script>
+    <script src="/src/client/app/studentAtdReport/studentAtdReport/studentAtdReport.controller..js"></script>
+    <script src="/src/client/app/studentAtdReport/studentAtdReport/studentAtdReport.route.js"></script>
+    <script src="/src/client/app/studentAttendanceSettings/addStudentAttendance/studentAttendance.controller.js"></script>
+    <script src="/src/client/app/studentAttendanceSettings/addStudentAttendance/studentAttendance.route.js"></script>
+    <script src="/src/client/app/studentInput/studentData/addStudent.controller.js"></script>
+    <script src="/src/client/app/studentInput/studentData/addStudent.route.js"></script>
+    <script src="/src/client/app/studentSettings/add_new_student/addStudent.controller.js"></script>
+    <script src="/src/client/app/studentSettings/add_new_student/addStudent.route.js"></script>
+    <script src="/src/client/app/StudentWiseMarksEntry/studentWiseMarksEntry/studentWiseMarks.controller.js"></script>
+    <script src="/src/client/app/StudentWiseMarksEntry/studentWiseMarksEntry/studentWiseMarks.route.js"></script>
+    <script src="/src/client/app/studentYearlyAttendance/addStudentYearlyAttendance/studentYearlyAttendance.controller.js"></script>
+    <script src="/src/client/app/studentYearlyAttendance/addStudentYearlyAttendance/studentYearlyAttendance.route.js"></script>
+    <script src="/src/client/app/subjectSettings/addSubject/addSubject.controller.js"></script>
+    <script src="/src/client/app/subjectSettings/addSubject/addSubject.route.js"></script>
+    <script src="/src/client/app/subjectWiseMarksEntry/addSubjectWiseMarks/subjectWiseMarks.controller.js"></script>
+    <script src="/src/client/app/subjectWiseMarksEntry/addSubjectWiseMarks/subjectWiseMarks.route.js"></script>
+    <script src="/src/client/app/syllabusEntry/addSyllabus/syllabus.controller.js"></script>
+    <script src="/src/client/app/syllabusEntry/addSyllabus/syllabus.route.js"></script>
+    <script src="/src/client/app/teacherAttendanceSettings/addTeacherAttendance/teacherAttendance.controller.js"></script>
+    <script src="/src/client/app/teacherAttendanceSettings/addTeacherAttendance/teacherAttendance.route.js"></script>
+    <script src="/src/client/template-js/template.js"></script>
+    <script src="/src/client/app/trailBalanceReport/trailBalanceReport/trailBalanceReport.controller.js"></script>
+    <script src="/src/client/app/trailBalanceReport/trailBalanceReport/trailBalanceReport.route.js"></script>
+    <script src="/src/client/app/UpdateStudent/updateStudent/updateStudent.controller..js"></script>
+    <script src="/src/client/app/UpdateStudent/updateStudent/updateStudent.route.js"></script>
+    <script src="/src/client/app/userAuthentication/userAuthentication/userAuthentication.controller..js"></script>
+    <script src="/src/client/app/userAuthentication/userAuthentication/userAuthentication.route.js"></script>
+    <script src="/src/client/app/userRegistrationSettings/addUserRegistration/userRegistration.controller.js"></script>
+    <script src="/src/client/app/userRegistrationSettings/addUserRegistration/userRegistration.route.js"></script>
+    <script src="/src/client/app/vacationSettings/addvacation/addvacation.controller.js"></script>
+    <script src="/src/client/app/vacationSettings/addvacation/addvacation.router.js"></script>
+    <script src="/src/client/app/voucharReport/voucharReport/voucharReport.controller.js"></script>
+    <script src="/src/client/app/voucharReport/voucharReport/voucharReport.route.js"></script>
+    <script src="/src/client/app/widgets/config.js"></script>
+    <script src="/src/client/app/widgets/ht-img-person.directive.js"></script>
+    <script src="/src/client/app/widgets/ht-widget-header.directive.js"></script>
+    <script src="/src/client/app/YearlyClosingProcess/closingProcess/closingProcess.controller.js"></script>
+    <script src="/src/client/app/YearlyClosingProcess/closingProcess/closingProcess.route.js"></script>
+    <script src="/src/client/app/yearlyFeeGenaration/addYearlyFee/yearlyFeeGenaration.controller.js"></script>
+    <script src="/src/client/app/yearlyFeeGenaration/addYearlyFee/yearlyFeeGenaration.route.js"></script>
+    <!-- endinject -->
+    <!-- inject:templates:js -->
+    <!-- endinject -->
+    <!-- endbuild -->
+    <!-- <script src="/src/client/js-files/index.js"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/hmac-sha256.js" type="text/javascript"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/components/enc-base64-min.js" type="text/javascript"></script>
+    <script src="/src/client/js-files/authorization.js" type="text/javascript"></script>
+    <!--<script src="/src/client/js-files/qrcode.js" type="text/javascript"></script>-->
+</body>
+</html>

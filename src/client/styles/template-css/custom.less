@@ -1,0 +1,580 @@
+/* Account Module CSS Start */
+.flex-con {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+
+  -ms-box-orient: horizontal;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: -moz-flex;
+  display: -webkit-flex;
+  display: flex;
+}
+
+.page-sidebar .page-sidebar-wrapper > ul{
+padding-bottom: 300px !important;
+}
+.hasFatTable{
+overflow:scroll;
+}
+
+.right-devider.row{
+ border-right: 1px solid #DDD;
+}
+.reconcile-infoGrid.row{
+
+}
+.reconcile-infoGrid.row .col-md-5 p{
+text-align: right;
+}
+.reconcile-infoGrid.row .col-md-7 p{
+text-align: left;
+color: #494949;
+}
+
+.reconcile-odrNote.row .col-md-7{
+
+}
+
+.topBtmGreyBorder.row{
+border-width: 1px 0px;
+border-style: solid;
+border-color: #DDD;
+padding-top: 10px;
+padding-bottom: 10px;
+margin: 30px 0px;
+}
+
+
+
+button.tblRowAddingBtn{
+margin: 0 10px 5px 0;
+}
+
+
+.table.hasRemovableCol .fa.fa-minus-circle{
+color:#FF4C4C;
+font-size: 24px;
+}
+
+.vmiddle {
+vertical-align: middle !important;
+}
+
+.select.inputNeighbour{
+min-height: 29px !important;
+height: 29px !important;
+}
+.select.btnNeighbour {
+  min-height: 25px !important;
+  height: 25px !important;
+}
+
+.vSpacer{
+display: inline-block;
+}
+.tab-content [ui-view="tabcontent"]{
+min-height: 430px;
+}
+
+
+
+/* ui-select override */
+.ui-select-container
+.btn.btn-default.form-control.ui-select-toggle{
+background-color: #FFF;
+}
+/* ui-select override */
+
+
+
+/* ~~ Show/Hide animation ~~ */
+.animate-show-hide {
+}
+.animate-show-hide.ng-hide-add, .animate-show-hide.ng-hide-remove {
+  -webkit-transition:all linear 0.5s;
+  -moz-transition:all linear 0.5s;
+  -o-transition:all linear 0.5s;
+  transition:all linear 0.5s;
+}
+.animate-show-hide.ng-hide-add.ng-hide-add-active,
+.animate-show-hide.ng-hide-remove {
+-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+filter: alpha(opacity=0);
+-moz-opacity: 0;
+-khtml-opacity: 0;
+opacity: 0;
+}
+
+.animate-show-hide.ng-hide-add,
+.animate-show-hide.ng-hide-remove.ng-hide-remove-active {
+-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=1)";
+filter: alpha(opacity=1);
+-moz-opacity: 1;
+-khtml-opacity: 1;
+opacity: 1;
+}
+
+/* ~~ Colored Show/Hide animation ~~ */
+.animate-show-hide-successFlash {
+}
+
+.animate-show-hide-successFlash.ng-hide-add, .animate-show-hide-successFlash.ng-hide-remove {
+  -webkit-transition:all linear 0.5s;
+  -moz-transition:all linear 0.5s;
+  -o-transition:all linear 0.5s;
+  transition:all linear 0.5s;
+}
+
+.animate-show-hide-successFlash.ng-hide-add.ng-hide-add-active,
+.animate-show-hide-successFlash.ng-hide-remove {
+-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+filter: alpha(opacity=0);
+-moz-opacity: 0;
+-khtml-opacity: 0;
+opacity: 0;
+background-color: rgba(10, 166, 153, 0.37);
+}
+
+.animate-show-hide-successFlash.ng-hide-add,
+.animate-show-hide-successFlash.ng-hide-remove.ng-hide-remove-active {
+-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=1)";
+filter: alpha(opacity=1);
+-moz-opacity: 1;
+-khtml-opacity: 1;
+opacity: 1;
+background-color: rgba(255, 255, 255, 1);
+}
+
+
+.animate-show-hide-warnFlash {
+}
+
+.animate-show-hide-warnFlash.ng-hide-add, .animate-show-hide-warnFlash.ng-hide-remove {
+  -webkit-transition:all linear 0.5s;
+  -moz-transition:all linear 0.5s;
+  -o-transition:all linear 0.5s;
+  transition:all linear 0.5s;
+}
+
+.animate-show-hide-warnFlash.ng-hide-add.ng-hide-add-active,
+.animate-show-hide-warnFlash.ng-hide-remove {
+-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+filter: alpha(opacity=0);
+-moz-opacity: 0;
+-khtml-opacity: 0;
+opacity: 0;
+background-color: rgba(251, 176, 94, 0.5);
+}
+
+.animate-show-hide-warnFlash.ng-hide-add,
+.animate-show-hide-warnFlash.ng-hide-remove.ng-hide-remove-active {
+-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=1)";
+filter: alpha(opacity=1);
+-moz-opacity: 1;
+-khtml-opacity: 1;
+opacity: 1;
+background-color: rgba(255, 255, 255, 1);
+}
+
+
+
+/* Account Module CSS End */
+
+
+
+
+
+
+
+/* index.html(dashboard) */
+.hungry.dashboard
+.graphHolder.dayVsAmnt{
+background-color: #FFF;
+color: #C2C2C2;
+position: relative;
+font-size: 10px;
+padding: 5px 1px 0 0;
+margin-bottom: -2px;
+}
+
+.hungry.dashboard
+.graphHolder.dayVsAmnt
+span.axis-labels{
+position: absolute;
+top: 1px;
+left: 1px;
+font-family: 'Open Sans';
+padding: 3px 10px 3px 7px;
+font-size: 12px;
+color: #FFFFFF;
+background-color: #bdc3c7;
+}
+.hungry.dashboard
+.graphHolder.dayVsAmnt
+span.title{
+border-left: 3px solid #D8D8D8;
+padding-left: 5px;
+}
+
+
+
+
+.hungry table.dynaRows
+thead tr th{
+background-color: #f8f8f8 !important;
+color: rgb(85, 85, 85);
+border: 1px solid rgb(221, 221, 221) !important;
+}
+.hungry table.dynaRows tr td{
+background-color: #FCFCFC !important;
+border: 1px solid #DDD !important;
+text-align: center;
+vertical-align: middle;
+}
+
+.hungry table.dynaRows
+tr  td input{
+width: 100%;
+border: 1px solid #CCC;
+}
+
+.hungry table.dynaRows
+.fa-times{
+color: #FA0202;
+font-size: 21px;
+cursor: pointer;
+}
+.addMoreBtn-holder{
+margin: 23px 0 6px 0;
+
+}
+
+
+
+.hungry-spacer{
+padding: 2px 0px;
+}
+.hungry.row .user-description-box {
+margin: 0px -15px 0px -15px;
+padding: 20px;
+}
+
+.hungry.row .user-profile-pic img{
+height: 90px;
+width: 90px;
+}
+
+/* Account Balance Css */
+
+.acc_search_box{
+  overflow:scroll;
+  padding-left:0px;
+}
+
+.rCommission_range{
+  overflow:scroll;
+  padding-left:0px;
+}
+
+select.roundCorner{
+  border-radius:3px;
+}
+.contentName p{
+  margin-top:9px;font-weight:bold;
+}
+
+
+.hn-searchWidget {
+	r:0;
+}
+.hn-searchWidget
+.ui-select-container{
+	float: left;
+    width: 35%;
+}
+.hn-searchWidget > input[type="text"].form-control:first-child{
+	width: 70%;
+	border: 1px solid #e5e9ec;
+	border-radius: 3px 0 0 3px;
+}
+.hn-searchWidget > input[type="text"].form-control{
+	display: inline-block;
+	float: left;
+	width: 45%;
+	border-radius: 0 3px 3px 0;
+	border-left: 0;
+}
+.hn-searchWidget
+input[type="text"]:focus.ui-select-search{
+	r:0;
+}
+.hn-searchWidget
+.ui-select-container .btn.btn-default.ui-select-toggle {
+    height: 37px;
+    padding: 8px 12px;
+	border-radius: 3px 0 0 3px;
+}
+.hn-searchWidget
+button{
+	width: 20%;
+    padding-bottom: 10px;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    margin-left: -2px;
+}
+.hn-searchWidget
+button:nth-child(2){
+    width: 30%;
+}
+
+.grid-actionTitle{
+	background-color: #FFF;
+	padding: 6px 26px;
+	border: 1px solid #dddddd;
+	color: #6f7b8a;
+	border-bottom: 0;
+}
+.grid-actionTitle
+.page-titleBar{
+	font-size: 16px;
+	margin-top: 7px;
+	display: inline-block;
+}
+.grid-actionTitle
+.elmSeparator{
+	display: inline-block;
+    margin: 10px;
+}
+.grid-actionTitle
+.picker__input{
+	display: inline-block;
+    margin-top: 1px;
+	width: 105px;
+	text-align: center;
+}
+
+
+.hn-cloloredStrip{
+	color: #FFF;
+    border-radius: 4px;
+    padding: 8px 10px;
+}
+.hn-cloloredStrip.red{
+	background-color: #db2929;
+}
+.hn-cloloredStrip.brown{
+	background-color: #de6811;
+}
+.hn-cloloredStrip.purple{
+	background-color: #733bd4;
+}
+.hn-cloloredStrip.blue{
+	background-color: #20a0d1;
+}
+.hn-cloloredStrip
+.iconWrap{
+	display: inline-block;
+	text-align: center;
+	border-radius: 50%;
+	padding: 7px;
+	background-color: rgba(255, 255, 255, 0.18);
+	float: left;
+    margin-right: 10px;
+}
+.hn-cloloredStrip
+.iconWrap i{
+	display: inline-block;
+    text-align: center;
+    height: 25px;
+    width: 25px;
+    line-height: 25px;
+    letter-spacing: 0px;
+    font-size: 24px;
+}
+.hn-cloloredStrip
+.dataSide{
+	r:0;
+}
+.hn-cloloredStrip
+.dataSide .total{
+	text-align: right;
+    font-weight: 600;
+    font-size: 24px;
+    line-height: 19px;
+    margin-bottom: 6px;
+}
+.hn-cloloredStrip
+.dataSide .stLabel{
+	text-align: right;
+	font-size: 14px;
+	line-height: 15px;
+}
+
+.listFilterLine{
+	margin: 20px 0;
+	border-top: 1px solid #DDD;
+}
+.hn-labeledDrop{
+	display: inline-block;
+	// width: 145px;
+    flex: 1 1 0;
+}
+.hn-labeledDrop > label{
+	width: 45%;
+    display: block;
+    float: left;
+    border: 1px solid #e5e9ec;
+    padding: 6px 10px;
+    border-radius: 3px 0 0 3px;
+    border-right: 0;
+    margin: 0;
+}
+.hn-labeledDrop
+.ui-select-container .btn.btn-default.ui-select-toggle,
+.hn-labeledDrop
+.ui-select-container .ui-select-search{
+	min-height: 34px;
+	border-radius: 0 3px 3px 0;
+}
+.hn-labeledDrop
+.ui-select-container{
+	width: 55%;
+	display: inline-block;
+}
+.hn-labeledDrop+.hn-labeledDrop{
+	margin-left: 10px;
+}
+.totalRunningCounter{
+	margin: 6px 0 0 0;
+    text-align: center;
+}
+
+
+.row.orderListWrap{
+	r:0;
+}
+
+.redTxt{
+	color: #ae382e;
+}
+.greenTxt{
+	color: #0ca529;
+}
+.noMargin.noMargin.noMargin{
+	margin: 0;
+}
+
+table.hn-orderTbl th{
+	text-align: center;
+}
+table.hn-orderTbl td{
+	color: #656565;
+    padding: 8px 10px !important;
+}
+table.hn-orderTbl
+p {
+	font-size: 13px;
+	margin-bottom: 8px;
+}
+table.hn-orderTbl
+.items {
+	margin-bottom: 0;
+}
+table.hn-orderTbl
+.items p {
+	margin-bottom: 3px;
+}
+table.hn-orderTbl
+.items p.topping {
+	margin-left: 10px;
+}
+table.hn-orderTbl
+td > div {
+	margin-bottom: 8px;
+}
+table.hn-orderTbl
+p {
+	r:0;
+}
+table.hn-orderTbl
+.lbl{
+    color: #c1c1c1;
+}
+table.hn-orderTbl
+.orderId {
+	padding: 10px;
+	text-align: center;
+	color: #FFF;
+	font-weight: 600;
+	font-size: 16px;
+	margin: -8px -10px 8px;
+}
+table.hn-orderTbl
+.orderId.red {
+	background-color: #db2929;
+}
+table.hn-orderTbl
+.orderId.brown {
+	background-color: #de6811;
+}
+table.hn-orderTbl
+.orderId.purple {
+	background-color: #733bd4;
+}
+table.hn-orderTbl
+.orderId.blue {
+	background-color: #20a0d1;
+}
+
+table.hn-orderTbl
+.odrStatusChangers{
+	text-align: center;
+    margin-top: 15px;
+}
+table.hn-orderTbl
+.odrStatusChangers > button{
+	background-color: #DDD;
+	border: 1px solid #DDD;
+	border-radius: 3px;
+	margin: 0 2px;
+}
+table.hn-orderTbl
+.odrStatusChangers > button i{
+	height: 14px;
+    width: 14px;
+}
+table.hn-orderTbl
+.odrStatusChangers > button.active{
+	background-color: #FFF;
+	cursor: not-allowed;
+}
+table.hn-orderTbl
+.odrStatusChangers > button.active i{
+	color: #DDD;
+}
+table.hn-orderTbl
+.odrTimer{
+	text-align: center;
+	font-size: 36px;
+	margin-top: 8px;
+}
+table.hn-orderTbl
+.odrTimer.red{
+	color: #d94231;
+}
+.hn-drop{
+	width: 87px;
+	text-align: center;
+}
+.hn-drop
+.dropdown-menu{
+	right: 0;
+	left: auto;
+}
+
+
+.angular-google-map-container {
+    height: 320px;
+}

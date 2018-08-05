@@ -1,0 +1,264 @@
+<div class="grid simple col-lg-12 col-sm-12 col-xs-12" ng-show="createItem">
+
+    <div class="grid-title">
+        <div class="row">
+            <div class="col-lg-9 col-sm-7 col-xs-7">
+                <div class="page-title">
+                    <i class="fa fa-keyboard-o" aria-hidden="true"></i>
+                    <h3>
+                        Fees -
+                        <span class="semi-bold">Setup</span>
+                    </h3>
+                </div>
+            </div>
+            <div class="col-lg-1 col-sm-2 col-xs-2 marginOff">
+                <button type="submit" class="btn btn-primary btn-block resetBtn" ng-click="clearField()">Reset</button>
+            </div>
+            <div class="col-lg-1 col-sm-1 col-xs-1 marginOff">
+                <button type="submit" class="btn btn-primary btn-block saveBtn" ng-click="vm.AddFees()" ng-disabled="vm.FeesSetup.$invalid">Save</button>
+            </div>
+        </div>
+    </div>
+    <div class="grid-body">
+        <form class="form-horizontal col-md-11" name="vm.FeesSetup">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="col-md-4 control-label">Institute</label>
+                    <div class="col-md-7">
+                        <ui-select ng-model="vm.institute.selected" required name="InsID" theme="bootstrap" ng-click="vm.instituteID = $select.selected.InstituteID" ng-disabled="vm.InstituteID!==1?true:false" ng-change="hideList()" on-select="vm.getmediumNameDdl($select.selected.InstituteID, ''); vm.getShift(''); vm.getMedium('')">
+                            <ui-select-match placeholder="-Select Institute-">
+                                {{$select.selected.InstituteName}}
+                                <span style="float:right" ng-click="vm.instituteID = null; $select.selected=undefined; ReloadDll()">
+                                    <i class="fa fa-remove" aria-hidden="true"></i>
+                                </span>
+                            </ui-select-match>
+                            <ui-select-choices repeat="institute in vm.institutes | filter: $select.search">
+                                <div ng-bind-html="institute.InstituteName | highlight: $select.search"></div>
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                    <span class="error" ng-show="(vm.FeesSetup.$dirty||submitted) && vm.FeesSetup.InsID.$error.required">*</span>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">Medium Name</label>
+                    <div class="col-sm-7">
+                        <ui-select ng-model="vm.med.selected" theme="bootstrap" name="Mediumm" required ng-click="vm.MediumID = $select.selected.MediumID" ng-change="HideDiv()" on-select="vm.getClass('')">
+                            <ui-select-match placeholder="- Select Medium -">
+                                {{$select.selected.MameName}}
+                                <span style="float:right" ng-click="vm.MediumID = undefined; $select.selected=undefined; ReloadMedium(0)">
+                                    <i class="fa fa-remove" aria-hidden="true"></i>
+                                </span>
+                            </ui-select-match>
+                            <ui-select-choices repeat="med in   vm.medium | filter: $select.search">
+                                <div ng-bind-html="med.MameName | highlight: $select.search"></div>
+                            </ui-select-choices>
+                        </ui-select>
+
+                    </div>
+                    <span class="error" ng-show="(vm.FeesSetup.$dirty||submitted) && vm.FeesSetup.Mediumm.$error.required">*</span>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">Class</label>
+                    <div class="col-sm-7">
+                        <ui-select ng-model="vm.cls.selected" theme="bootstrap" name="clsname" required ng-click="vm.ClassID = $select.selected.ClassID" on-select="vm.getDept('')">
+                            <ui-select-match placeholder="- Select Class -">
+                                {{$select.selected.ClassName}}
+                                <span style="float:right" ng-click="vm.ClassID = undefined; $select.selected=undefined; ReloadClass(0)">
+                                    <i class="fa fa-remove" aria-hidden="true"></i>
+                                </span>
+                            </ui-select-match>
+                            <ui-select-choices repeat="cls in   vm.class | filter: $select.search">
+                                <div ng-bind-html="cls.ClassName | highlight: $select.search"></div>
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                    <span class="error" ng-show="(vm.FeesSetup.$dirty||submitted) && vm.FeesSetup.clsname.$error.required">*</span>
+                </div>
+
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">Department</label>
+                    <div class="col-sm-7">
+                        <ui-select ng-model="vm.dept.selected" theme="bootstrap" ng-click="vm.DepartmentID = $select.selected.DepartmentID" ng-change="HideDiv()" on-select="vm.getSection('')">
+                            <ui-select-match placeholder="- Select Department -">
+                                {{$select.selected.DepartmentName}}
+                                <span style="float:right" ng-click="vm.DepartmentID = undefined; $select.selected=undefined; ReloadDept(0)">
+                                    <i class="fa fa-remove" aria-hidden="true"></i>
+                                </span>
+                            </ui-select-match>
+                            <ui-select-choices repeat="dept in    vm.department | filter: $select.search">
+                                <div ng-bind-html="dept.DepartmentName | highlight: $select.search"></div>
+                            </ui-select-choices>
+                        </ui-select>
+
+                    </div>
+                </div>
+
+                <div class="form-group" ng-if="false">
+                    <label class="col-sm-4 control-label">Section</label>
+                    <div class="col-sm-7">
+                        <ui-select ng-model="vm.sec.selected" theme="bootstrap" ng-click="vm.SectionID = $select.selected.SectionID" ng-change="HideDiv()">
+                            <ui-select-match placeholder="- Select Section -">
+                                {{$select.selected.SectionName}}
+                                <span style="float:right" ng-click="vm.SectionID = undefined; $select.selected=undefined">
+                                    <i class="fa fa-remove" aria-hidden="true"></i>
+                                </span>
+                            </ui-select-match>
+                            <ui-select-choices repeat="sec in   vm.section | filter: $select.search">
+                                <div ng-bind-html="sec.SectionName | highlight: $select.search"></div>
+                            </ui-select-choices>
+                        </ui-select>
+
+                    </div>
+                </div>
+
+                <div class="form-group" ng-if="false">
+                    <label class="col-sm-4 control-label">Shift</label>
+                    <div class="col-sm-7">
+                        <ui-select ng-model="vm.shift.selected" theme="bootstrap" ng-click="vm.ShiftID = $select.selected.ShiftID" ng-change="HideDiv()">
+                            <ui-select-match placeholder="- Select Shift -">
+                                {{$select.selected.ShiftName}}
+                                <span style="float:right" ng-click="vm.ShiftID = undefined; $select.selected=undefined">
+                                    <i class="fa fa-remove" aria-hidden="true"></i>
+                                </span>
+                            </ui-select-match>
+                            <ui-select-choices repeat="shift in   vm.Shift | filter: $select.search">
+                                <div ng-bind-html="shift.ShiftName | highlight: $select.search"></div>
+                            </ui-select-choices>
+                        </ui-select>
+
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">Fees Type</label>
+                    <div class="col-sm-7">
+                        <ui-select ng-model="vm.Fee.selected" theme="bootstrap" ng-click="vm.FeesTypeID = $select.selected.FeesTypeID" ng-change="HideDiv()">
+                            <ui-select-match placeholder="- Select Fees Type -">
+                                {{$select.selected.FeesType}}
+                                <span style="float:right" ng-click="vm.FeesTypeID = undefined; $select.selected=undefined">
+                                    <i class="fa fa-remove" aria-hidden="true"></i>
+                                </span>
+                            </ui-select-match>
+                            <ui-select-choices repeat="Fee in   vm.FeeTypes | filter: $select.search">
+                                <div ng-bind-html="Fee.FeesType | highlight: $select.search"></div>
+                            </ui-select-choices>
+                        </ui-select>
+
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-4 control-label"></label>
+                    <div class="col-sm-7">
+                        <button type="button" class="btn btn-primary btn-block showBtn addBtn" ng-click="itemEvent()" ng-disabled="vm.FeesSetup.$invalid" style="margin-left:-212px">
+                            Add
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- for test purpose -->
+<!--<pre>{{value|json}}</pre>-->
+<!-- Item Entry List Grid -->
+
+<div class="grid simple col-md-12" ng-show="showItem">
+    <!--<div class="grid-title">
+        <div class="row">
+            <div class="col-md-11">
+                <div class="page-title">
+                    <i class="fa fa-keyboard-o" aria-hidden="true"></i>
+                    <h3>
+                        All Fees -
+                        <span class="semi-bold">Setup</span>
+                    </h3>
+                </div>
+            </div>
+        </div>
+    </div>-->
+    <div class="grid-body">
+        <div class="row">
+            <div class="col-md-12">
+                <table st-table="rowCollection" class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>SL</th>
+                            <th>Is Active</th>
+                            <th>Fees Head</th>
+                            <th>Fees Type</th>
+                            <th>Fees</th>
+                            <!-- <th>Edit</th> -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="fee in vm.Fees track by $index">
+                            <td>{{$index+1}}</td>
+
+                            <td ng-click="checkBoxIndex($index)">
+                                <input id="checkBox" class="form-check-input" type="checkbox" ng-checked="fee.IsActive===1" ng-model="fee.IsActive" ng-click="clickEvent(fee.IsActive,fee.FeesHead,fee.FeesTypeID,$index)" />
+                            </td>
+
+                            <td>{{fee.FeesHead}}</td>
+                            <td>{{fee.FeesType}}</td>
+                            <td style="width:20%">
+                                <input id="{{fee.FeesHead}}" type="number" text-aling="center" class="form-control text-center" placeholder="{{fee.Fee}}"
+                                       ng-model="fee.inputFee" ng-readonly="isReadOnly(fee.Fee)" min=0 oninput="validity.valid||(value=null);">
+                            </td>
+                        </tr>
+                    </tbody>
+                    <!--<tfoot>
+                        <tr>
+                            <td colspan="5" class="text-center">
+                                <div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="7"></div>
+                            </td>
+                        </tr>
+                    </tfoot>-->
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<style>
+    .thumb {
+        width: 24px;
+        height: 24px;
+        float: none;
+        position: relative;
+        top: 7px;
+    }
+
+    input[type="checkbox"] {
+        display: inline-block;
+        width: 19px;
+        height: 19px;
+        margin: -2px 10px 0 0;
+        vertical-align: middle;
+        background: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/210284/check_radio_sheet.png) left top no-repeat;
+        cursor: pointer;
+    }
+
+    @media (min-width: 768px) {
+        .addBtn {
+            position: relative;
+            left: 211px;
+        }
+    }
+
+    @media (min-width: 1400px) {
+        .addBtn {
+            position: relative;
+            left: 211px;
+        }
+    }
+</style>

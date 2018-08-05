@@ -1,0 +1,363 @@
+<div class="grid simple col-md-12" ng-show="createItem">
+
+    <div class="grid-title">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="page-title">
+                    <i class="fa fa-keyboard-o" aria-hidden="true"></i>
+                    <h3>
+                        Daily Subject Wise -
+                        <span class="semi-bold">Attendance</span>
+                    </h3>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary btn-block showBtn" ng-click="vm.getInsSubjectShow()"  ng-disabled="vm.classSetup.$invalid">Show</button>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary btn-block resetBtn" ng-click="clearField()">Reset</button>
+            </div>
+
+        </div>
+    </div>
+    <div class="grid-body">
+        <div class="row">
+
+            <form class="form-horizontal col-md-12" name="vm.classSetup">
+                <div class="row">
+                    <div class="col-md-4">
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Medium</label>
+                            <div class="col-sm-8">
+                                <ui-select ng-model="vm.medium.selected" theme="bootstrap" name="Med" ng-click="vm.MediumID = $select.selected.MediumID" ng-keydown="$event.keyCode == 13 ? $event.preventDefault() : null" ng-change="changeGrid()" on-select="vm.MediumWiseClassDDL($select.selected.MediumID, '')">
+                                   <!-- <ui-select ng-model="vm.medium.selected" name="Med" on-select="vm.MediumWiseClassDDL(vm.MediumID)" theme="bootstrap" ng-click="vm.MediumID = $select.selected.MediumID" ng-change="changeGrid()" required>-->
+                                        <ui-select-match placeholder="-Select-">
+                                            {{$select.selected.MameName}}
+                                            <span style="float:right" ng-click="vm.MediumID = null; DisBtn();vm.ClassID=null; vm.class=undefined; vm.classes=[]; vm.DepartmentID = null; vm.department=undefined; vm.departments=[]; vm.SectionID = null; vm.section=undefined; vm.sections=[]; $select.selected=undefined">
+                                                <i class="fa fa-remove" aria-hidden="true"></i>
+                                            </span>
+                                        </ui-select-match>
+                                        <ui-select-choices repeat="medium in vm.mediums | filter: $select.search">
+                                            <div ng-bind-html="medium.MameName | highlight: $select.search"></div>
+                                        </ui-select-choices>
+                                    </ui-select>
+                            </div>
+                            <span class="error" ng-show="(vm.classSetup.$dirty||submitted) && vm.classSetup.Med.$error.required">*</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Section</label>
+                            <div class="col-sm-8">
+                                <ui-select ng-model="vm.section.selected" theme="bootstrap" name="sec" ng-click="vm.SectionID = $select.selected.SectionID" ng-keydown="$event.keyCode == 13 ? $event.preventDefault() : null" ng-change="changeGrid()" ng-required="IsRequiredSec">
+                                    <!--<ui-select ng-model="vm.section.selected" theme="bootstrap" name="sec" ng-click="vm.SectionID = $select.selected.SectionID" ng-keydown="$event.keyCode == 13 ? $event.preventDefault() : null" ng-change="changeGrid()" ng-required="IsRequiredSec">  -->
+                                    <ui-select-match placeholder="-Select-">
+                                        {{$select.selected.SectionName}}
+                                        <span style="float:right" ng-click="vm.SectionID = null; $select.selected=undefined"><i class="fa fa-remove" aria-hidden="true"></i></span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="section in vm.sections | filter: $select.search">
+                                        <div ng-bind-html="section.SectionName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            <span class="error" ng-show="(vm.classSetup.$dirty||submitted) && vm.classSetup.sec.$error.required">*</span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Class</label>
+                            <div class="col-sm-8">
+                                <ui-select ng-model="vm.class.selected" theme="bootstrap" name="Cls" ng-click="vm.ClassID = $select.selected.ClassID" ng-change="changeGrid()" on-select="vm.ClassWiseDepartmentDDL(vm.ClassID, '')" ng-keydown="$event.keyCode == 13 ? $event.preventDefault() : null" required>
+                                    <!--<ui-select ng-model="vm.class.selected" name="Cls" on-select="vm.ClassWiseDepartmentDDL(vm.ClassID)" theme="bootstrap" ng-click="vm.ClassID = $select.selected.ClassID" ng-change="changeGrid()" required>-->
+                                    <ui-select-match placeholder="-Select-">
+                                        {{$select.selected.ClassName}}
+                                        <span style="float:right" ng-click="vm.ClassID = null; DisBtn(); vm.DepartmentID = null; vm.department=undefined; vm.departments=[]; vm.SectionID = null; vm.section=undefined; vm.sections=[]; $select.selected=undefined">
+                                            <i class="fa fa-remove" aria-hidden="true"></i>
+                                        </span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="class in vm.classes | filter: $select.search">
+                                        <div ng-bind-html="class.ClassName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            <span class="error" ng-show="(vm.classSetup.$dirty||submitted) && vm.classSetup.Cls.$error.required">*</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Shift</label>
+                            <div class="col-sm-8">
+                                <ui-select ng-model="vm.shift.selected" theme="bootstrap" ng-click="vm.ShiftID = $select.selected.ShiftID" ng-change="changeGrid()" ng-keydown="$event.keyCode == 13 ? $event.preventDefault() : null">
+                                    <ui-select-match placeholder="-Select-">
+                                        {{$select.selected.ShiftName}}
+                                        <span style="float:right" ng-click="vm.ShiftID = null; $select.selected=undefined"><i class="fa fa-remove" aria-hidden="true"></i></span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="shift in vm.shifts | filter: $select.search">
+                                        <div ng-bind-html="shift.ShiftName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Department</label>
+                            <div class="col-sm-8">
+                                <ui-select ng-model="vm.department.selected" theme="bootstrap" name="Dep" ng-click="vm.DepartmentID = $select.selected.DepartmentID" ng-keydown="$event.keyCode == 13 ? $event.preventDefault() : null" ng-change="changeGrid()" on-select="vm.ClassSelected(0, '')" ng-required="IsRequired">
+                                    <!--<ui-select ng-model="vm.department.selected" name="Dep" theme="bootstrap" ng-click="vm.DepartmentID = $select.selected.DepartmentID" ng-change="changeGrid()" on-select="vm.ClassSelected(0, '')" ng-required="IsRequired">-->
+                                    <ui-select-match placeholder="-Select-">
+                                        {{$select.selected.DepartmentName}}
+                                        <span style="float:right" ng-click="vm.DepartmentID = null; DisBtn();  vm.SectionID = null; vm.section=undefined; vm.sections=[]; $select.selected=undefined">
+                                            <i class="fa fa-remove" aria-hidden="true"></i>
+                                        </span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="department in vm.departments | filter: $select.search">
+                                        <div ng-bind-html="department.DepartmentName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            <span class="error" ng-show="(vm.classSetup.$dirty||submitted) && vm.classSetup.Dep.$error.required">*</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Date</label>
+                            <div class="col-sm-8">
+                                <datepicker date-format="dd-MM-yyyy" selector="form-control">
+                                    <div class="input-group">
+                                        <input class="form-control" placeholder="Choose a date" ng-model="vm.dateName" ng-change="DateValidation(vm)" >
+                                        <span class="input-group-addon" style="cursor: pointer">
+                                            <i class="fa fa-lg fa-calendar"></i>
+                                        </span>
+                                    </div>
+                                </datepicker>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </form>
+
+        </div>
+
+        <div class="grid-body" ng-show="showGrid">
+            <div class="row">
+                <div class="col-md-12">
+
+                    <!-- <label for="items">items by page</label>
+                    <input class="input-sm form-control" name="items" id="items" type="number" ng-model="itemsByPage" /> -->
+                    <!-- <p>data: <br/><pre>{{vm.subwiseData|json}}</pre>      -->
+                    <table st-table="rowCollection" class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>sl</th>
+                                <th>Subject Name</th>
+                                <th>Subject Code</th>
+                                <th>Status</th>
+                                <!--<th></th>-->
+
+                            </tr>
+                            <tr>
+                                <!-- <th>
+                                    <input st-search="'ItemName'" placeholder="search for ItemName" class="input-sm form-control" type="search"/>
+                                </th>
+                                 <th colspan="4">
+                                    <input st-search placeholder="global search" class="input-sm form-control" type="search"/>
+                                </th>  -->
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="sub in vm.subwiseData">
+                                <td> {{$index+1}}</td>
+                                <td>{{sub.SubjectName}}</td>
+                                <td>{{sub.SubjectNo}}</td>
+                                <td>
+                                    <button href="#" class="btn btn-info btn-xs btn-mini" data-toggle="modal" data-target="#myModal" ng-click="vm.getHrmSubWiseAtdDetails($index)">Attendence</button>
+
+                                </td>
+                                <!--<td>
+                                    <input type="hidden" class="form-control" placeholder="Class Name" ng-model="vm.shift.selected.ShiftID">
+                                    <input type="hidden" class="form-control" placeholder="Class Name" ng-model="vm.medium.selected.MediumID">
+                                    <input type="hidden" class="form-control" placeholder="Class Name" ng-model="vm.class.selected.ClassID">
+                                    <input type="hidden" class="form-control" placeholder="Class Name" ng-model="vm.section.selected.SectionID">
+                                    <input type="hidden" class="form-control" placeholder="Class Name" ng-model="sub.SubjectID">
+                                </td>-->
+
+                            </tr>
+                        </tbody>
+                        <!--<tfoot>
+                            <tr>
+                                <td colspan="5" class="text-center">
+                                    <div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="7"></div>
+                                </td>
+                            </tr>
+                        </tfoot>-->
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="page-title">
+                            <div class="col-md-6">
+                                <h3>
+                                    Attendence For Subject -
+                                    <span class="semi-bold">{{subject}}</span>
+                                </h3>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="pull-right">
+                                    <button type="button" style="width:84px" class="btn btn-default" data-dismiss="modal">Close</button>&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <button type="button" style="width:135px" class="btn btn-primary" data-dismiss="modal" ng-click="vm.saveAttendence()">Save </button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="grid-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div>
+                                <p>
+                                    <b>Attendence By:{{UserFullName}}. Attendence Date: {{date | date:'dd-MM-yyyy'}} Attendence Time: {{time}}</b>
+                                </p>
+                                <!-- <input type="text" class="form-control" ng-model="CurrentDate" id="CurrentDate"> -->
+                            </div>
+                            <div>
+                                <p>
+                                    <b>
+                                        Daily Class Wise Attendance Sheet for (
+                                        <b>Class:</b> {{vm.class.selected.ClassName}} ,
+                                        <b>Medium:</b> {{vm.medium.selected.MameName}} ,
+                                        <b>Shift:</b> {{vm.shift.selected.ShiftName}} ,
+                                        <b>Section:</b> {{vm.section.selected.SectionName}} ).
+                                    </b>
+                                </p>
+                            </div>
+
+                            <!-- <p>data: <br/><pre>{{subwiseAtd|json}}</pre>    -->
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th style="width:1px">Sl.</th>
+                                        <th style="width:197px">Student Name</th>
+                                        <th style="width:120px">Student Id</th>
+                                        <th style="width:78px">Roll No</th>
+                                        <th style="width:345px">Attendence</th>
+                                        <th style="width:60px">Late in Minutes</th>
+                                        <th>Remarks</th>
+                                        <!--<th></th>-->
+                                    </tr>
+
+                                </thead>
+                                </table>
+                                <div id="table-wrapper">
+                                    <div id="table-scroll" style="margin-top: -21px;">
+                                        <table class="table table-bordered">                                            
+                                            <tbody>
+
+                                                <tr ng-repeat="list in subwiseAtd">
+                                                    <td>{{$index+1}}</td>
+                                                    <td style="width:200px">{{list.UserFullName}}</td>
+                                                    <td style="width:120px">{{list.RFID}}</td>
+                                                    <td style="width:78px">{{list.RollNo}}</td>
+
+
+                                                    <!-- <td><input type="checkbox"  ng-model="vm.classSetup.classID"></td> -->
+                                                    <td ng-click="pickAddress($index)">
+                                                        <div class="radio radio-success" style="width:317px">
+                                                            <input id="{{list.UserID + $index}}" type="radio" name="{{list.UserID}}" ng-click="IsPresent()" ng-model="list.IsPresent"
+                                                                   ng-init="list.IsPresent=1" ng-checked="list.IsPresent===1">
+                                                            <label for="{{list.UserID + $index}}">Present</label>
+                                                            <input id="{{list.UserID + $index + 1}}" type="radio" name="{{list.UserID}}" ng-click="IsAbsent()" ng-checked="list.IsAbsent===1">
+                                                            <label for="{{list.UserID + $index + 1}}">Absent</label>
+                                                            <input id="{{list.UserID + $index + 2}}" type="radio" name="{{list.UserID}}" ng-click="IsLeave()" ng-checked="list.IsLeave===1">
+                                                            <label for="{{list.UserID + $index + 2}}">Leave</label>
+                                                            <input id="{{list.UserID + $index + 3}}" type="radio" name="{{list.UserID}}" ng-click="Islate()" ng-checked="list.Islate===1">
+                                                            <label for="{{list.UserID + $index + 3}}">Late</label>
+                                                        </div>
+                                                    </td>
+
+                                                    <td ng-click="pickAddress($index)">
+                                                            <input id="{{list.UserID}}" style="width:50px" type="number" ng-model="list.LateTime" ng-disabled="list.isReadOnly" min=0 oninput="validity.valid||(value=null);" >
+                                                            <label for="{{list.UserID}}"></label>
+                                                    </td>
+                                                    <td ng-click="pickAddress($index)">
+                                                            <input id="{{list.UserID}}" type="text" style="width:110px" ng-model="list.Remarks">
+                                                            <label for="{{list.UserID}}"></label>
+                                                    </td>
+
+                                                    <!--<td>
+                                <input type="hidden" class="form-control" placeholder="Class Name" ng-model="vm.shift.selected.ShiftID">
+                                <input type="hidden" class="form-control" placeholder="Class Name" ng-model="vm.medium.selected.MediumID">
+                                <input type="hidden" class="form-control" placeholder="Class Name" ng-model="vm.class.selected.ClassID">
+                                <input type="hidden" class="form-control" placeholder="Class Name" ng-model="vm.section.selected.SectionID">
+                                <input type="hidden" class="form-control" placeholder="Class Name" ng-model="list.SubjectID">
+
+                            </td>-->
+                                                </tr>
+                                            </tbody>
+                                            <tfoot>
+                                                <!-- <tr>
+                            <td colspan="5" class="text-center">
+                                <div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="7"></div>
+                            </td>
+                        </tr> -->
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <!-- <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" ng-click="vm.patchClass()">Save changes</button>
+                </div> -->
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+<style>    
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        margin: 0;
+    }
+
+    .thumb {
+        width: 24px;
+        height: 24px;
+        float: none;
+        position: relative;
+        top: 7px;
+    }
+
+    .modal-content {
+        width: 1660px;
+        margin-left: -405px;
+    }
+</style>

@@ -1,0 +1,393 @@
+<div class="grid simple col-md-12" ng-show="createItem">
+
+    <div class="grid-title">
+        <div class="row">
+            <div class="col-md-9">
+                <div class="page-title">
+                    <!-- <i class="fa fa-sign-in" aria-hidden="true"></i> -->
+                    <h3>
+                        User-
+                        <span class="semi-bold">Authentication</span>
+                    </h3><i class="fa fa-lock" aria-hidden="true"></i>
+                </div>
+
+            </div>
+            <div class="col-md-1 marginOff">
+                <button type="submit" class="btn btn-primary btn-block showBtn" ng-click="RefreshList()">Show List</button>
+                <!-- <button type="submit" class="btn btn-primary btn-block" ng-click="">Update</button> -->
+            </div>
+            <div class="col-md-1 marginOff">
+                <button type="submit" class="btn btn-primary btn-block resetBtn" ng-click="clearField()">Reset</button>
+            </div>
+            <div class="col-md-1 marginOff">
+                <button type="submit" class="btn btn-primary btn-block saveBtn" ng-click="vm.AddUserAuthentication()" ng-disabled="vm.userAuth.$invalid">Save</button>
+            </div>
+
+        </div>
+    </div>
+
+
+    <div class="grid-body">
+        <div class="row">
+            <form class="form-horizontal col-md-12" name="vm.userAuth">
+                <div class="row">
+                    <div class="col-md-2">
+
+                    </div>
+                    <div class="col-md-7">
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label">Institute Name</label>
+                            <div class="col-sm-5">
+                                <ui-select ng-model="vm.institute.selected" on-select="vm.mediumReset()" name="InsID" theme="bootstrap" ng-click="vm.instituteID = $select.selected.InstituteID" ng-disabled="vm.InstituteID!==1?true:false" ng-change="changeGrid()" ng-keydown="$event.keyCode == 13 ? $event.preventDefault() : null" required>
+                                    <ui-select-match placeholder="-Select Institute-">
+                                        {{$select.selected.InstituteName}}
+                                        <span style="float:right" ng-click="vm.instituteID = null; DisBtn(); $select.selected=undefined">
+                                            <i class="fa fa-remove" aria-hidden="true"></i>
+                                        </span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="institute in vm.institutes | filter: $select.search">
+                                        <div ng-bind-html="institute.InstituteName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label"> User</label>
+                            <div class="col-sm-5">
+                                <input type="hidden" class="form-control" placeholder="Phone Number" ng-model="vm.userAuth.AuthenticationID">
+                                <input type="hidden" class="form-control" placeholder="Phone Number" ng-model="vm.userAuth.UserID">
+                                <input type="text" class="form-control" ng-model="vm.userAuth.User" disabled>
+                            </div>
+                            <div class="col-sm-2">
+                                <button href="#" class="btn btn-primary btn-block " style="background-color:#205a39cf" data-toggle="modal" data-target="#myModal"
+                                        ng-click="UserList()">
+                                    <i class="fa fa-search" aria-hidden="true"></i>
+                                </button>
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label">Phone</label>
+                            <div class="col-sm-5">
+
+                                <input type="text" class="form-control" placeholder="Phone Number" ng-model="vm.userAuth.Phone" ng-blur="checkIfExist(vm.userAuth.Phone, 'Phone')" ng-keydown="$event.keyCode == 13 ? $event.preventDefault() : null">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label">Email</label>
+                            <div class="col-sm-5">
+                                <input type="email" class="form-control" placeholder=" example@gmail.com" ng-model="vm.userAuth.Email" ng-blur="checkIfExist(vm.userAuth.Email, 'Mail')" ng-keydown="$event.keyCode == 13 ? $event.preventDefault() : null">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label">Login Name</label>
+                            <div class="col-sm-5">
+                                <input type="text" required name="loginID" class="form-control" placeholder="Login Name" ng-model="vm.userAuth.LoginName" ng-blur="checkIfExist(vm.userAuth.LoginName, 'LoginName')" ng-keydown="$event.keyCode == 13 ? $event.preventDefault() : null">
+                            </div>
+                            <span class="error" ng-show="(vm.userAuth.$dirty||submitted) && vm.userAuth.loginID.$error.required">*</span>
+                        </div>
+
+                        <div class="form-group">
+
+                            <label class="col-sm-5 control-label">Password </label>
+                            <div class="col-sm-5">
+                                <input required type="text" name="pass" class="form-control" placeholder="Password" ng-model="vm.userAuth.Password" ng-blur="validationInputPwdText(vm.userAuth.Password)" ng-keydown="$event.keyCode == 13 ? $event.preventDefault() : null">
+                            </div>
+                            <span class="error" ng-show="(vm.userAuth.$dirty||submitted) && vm.userAuth.pass.$error.required">*</span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label">Confirm Password </label>
+                            <div class="col-sm-5">
+                                <input required name="conPass" type="text" class="form-control" placeholder="Confirm Password " ng-model="vm.userAuth.ConfirmPassword" ng-keydown="$event.keyCode == 13 ? $event.preventDefault() : null">
+
+                            </div>
+                            <span class="error" ng-show="(vm.userAuth.$dirty||submitted) && vm.userAuth.conPass.$error.required">*</span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label">Active Date</label>
+                            <div class="col-sm-4 input-groups margin-bottom-sm">
+                                <datepicker date-format="dd-MM-yyyy" selector="form-control">
+                                    <div class="input-group">
+                                        <input required name="acDate" class="form-control" placeholder="Choose a date" ng-model="vm.userAuth.ActiveDate" ng-keydown="$event.keyCode == 13 ? $event.preventDefault() : null" />
+                                        <span class="input-group-addon" style="cursor: pointer">
+                                            <i class="fa fa-lg fa-calendar"></i>
+                                        </span>
+                                    </div>
+                                    <span class="error" ng-show="(vm.userAuth.$dirty||submitted) && vm.userAuth.acDate.$error.required">*</span>
+                                </datepicker>
+
+                            </div>
+
+                            <input type="time" class="col-sm-2" ng-model="vm.userAuth.Activetime" ng-keydown="$event.keyCode == 13 ? $event.preventDefault() : null" />
+
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label">Expire Date</label>
+                            <div class="col-sm-4 input-groups margin-bottom-sm">
+                                <datepicker date-format="dd-MM-yyyy" selector="form-control">
+                                    <div class="input-group">
+                                        <input required name="expDate" class="form-control" placeholder="Choose a date" ng-model="vm.userAuth.ExpireDate" ng-keydown="$event.keyCode == 13 ? $event.preventDefault() : null" />
+                                        <span class="input-group-addon" style="cursor: pointer">
+                                            <i class="fa fa-lg fa-calendar"></i>
+                                        </span>
+                                    </div>
+                                    <span class="error" ng-show="(vm.userAuth.$dirty||submitted) && vm.userAuth.expDate.$error.required">*</span>
+
+                                </datepicker>
+                            </div>
+
+                            <input type="time" class="col-sm-2" ng-model="vm.userAuth.Expiretime" ng-keydown="$event.keyCode == 13 ? $event.preventDefault() : null" />
+
+                        </div>
+
+                    </div>
+                    <div class="col-md-2">
+
+                        <div class="form-group" style="float:left">
+
+
+                            <div style="margin-top: 233px;width: 119px ;float: left!important;height: 25px;" ng-style="checkpwdStrength"></div>
+
+                        </div>
+                        <br>
+
+                        <div class="form-group">
+
+                            <div ng-show="vm.userAuth.Password !== vm.userAuth.ConfirmPassword" style="color:red;float:left;width: 151px;">* Password mismatch </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+</div>
+
+
+
+<!-- ---------------------------------------------------- Start UI-Grid ------------------------------------------------ -->
+<div class="grid simple col-md-12" ng-show="showItem">
+    <div class="grid-title">
+        <div class="row">
+            <div class="col-md-11">
+                <div class="page-title">
+                    <i class="fa fa-keyboard-o" aria-hidden="true"></i>
+                    <h3>
+                        Authenticate User -
+                        <span class="semi-bold">List</span>
+                    </h3>
+                </div>
+            </div>
+
+            <div class="col-md-1 marginOff">
+                <button type="submit" class="btn btn-primary btn-block saveBtn" ng-click="listEvent()">Create</button>
+            </div>
+        </div>
+    </div>
+    <div class="grid-body">
+        <div class="row">
+            <div class="col-md-12" style="text-align:right">
+                <input type="text" ng-model="SearchProperty" placeholder="Login Name" ng-keyup="$event.keyCode == 13 ? SearchNow(SearchProperty) : null" />
+                <button type="button" class="close" aria-label="Close" ng-click="SearchCancel('')">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div ui-grid="gridOptions" ui-grid-resize-columns ui-grid-auto-resize ui-grid-move-columns ui-grid-exporter ui-grid-pinning
+                     class="grid" style="height:550px"></div>
+
+                <div class="loadmore">
+                    <div ng-show="loaderMore" ng-class="result">
+                        <!-- <img src="~/Content/img/ng-loader.gif" /> -->
+                        {{lblMessage}}
+                    </div>
+                </div>
+                <div class="row"></div>
+                <div role="contentinfo" style="margin-bottom: -20px;" class="ui-grid-pager-panel ng-scope">
+                    <div role="navigation" class="ui-grid-pager-container">
+                        <div role="menubar" class="ui-grid-pager-control">
+                            <!-- Start Page -->
+                            <button type="button" role="menuitem" class="ui-grid-pager-first" ui-grid-one-bind-title="aria.pageToFirst" ui-grid-one-bind-aria-label="aria.pageToFirst"
+                                    ng-click="pagination.firstPage()" ng-disabled="cantPageBackward()" title="Page to first" aria-label="Page to first"
+                                    disabled="disabled">
+                                <div class="first-triangle">
+                                    <div class="first-bar"></div>
+                                </div>
+                            </button>
+
+                            <!-- Prev Page -->
+                            <button type="button" role="menuitem" class="ui-grid-pager-previous" ui-grid-one-bind-title="aria.pageBack" ui-grid-one-bind-aria-label="aria.pageBack"
+                                    ng-click="pagination.previousPage()" ng-disabled="cantPageBackward()" title="Page back" aria-label="Page back"
+                                    disabled="disabled">
+                                <div class="first-triangle prev-triangle"></div>
+                            </button>
+
+                            <input type="number" ui-grid-one-bind-title="aria.pageSelected" ui-grid-one-bind-aria-label="aria.pageSelected" class="ui-grid-pager-control-input ng-pristine ng-untouched ng-valid ng-not-empty ng-valid-min ng-valid-max ng-valid-required"
+                                   ng-model="pagination.pageNumber" min="1" max="{{pagination.getTotalPages()}}" required="" title="Selected page"
+                                   aria-label="Selected page" />
+
+                            <span class="ui-grid-pager-max-pages-number ng-binding" ng-show="pagination.getTotalPages() > 0">
+                                <abbr ui-grid-one-bind-title="paginationOf" title="of">/</abbr>{{pagination.getTotalPages()}}
+                            </span>
+
+                            <!-- Next Page -->
+                            <button type="button" role="menuitem" class="ui-grid-pager-next" ui-grid-one-bind-title="aria.pageForward" ui-grid-one-bind-aria-label="aria.pageForward"
+                                    ng-click="pagination.nextPage()" ng-disabled="cantPageForward()" title="Page forward" aria-label="Page forward">
+                                <div class="last-triangle next-triangle"></div>
+                            </button>
+
+                            <!-- Last Page -->
+                            <button type="button" role="menuitem" class="ui-grid-pager-last" ui-grid-one-bind-title="aria.pageToLast" ui-grid-one-bind-aria-label="aria.pageToLast"
+                                    ng-click="pagination.lastPage()" ng-disabled="cantPageToLast()" title="Page to last" aria-label="Page to last">
+                                <div class="last-triangle">
+                                    <div class="last-bar"></div>
+                                </div>
+                            </button>
+                        </div>
+                        <!-- ngIf: grid.options.paginationPageSizes.length > 1 -->
+
+                        <div class="ui-grid-pager-row-count-picker ng-scope">
+                            <select ng-model="pagination.ddlpageSize" ng-options="o as o for o in pagination.paginationPageSizes" ng-change="pagination.pageSizeChange()"
+                                    class="ng-pristine ng-untouched ng-valid ng-not-empty"></select>
+                            <span class="ui-grid-pager-row-count-label ng-binding">&nbsp;items per page</span>
+                        </div>
+                        <!-- end ngIf: grid.options.paginationPageSizes.length > 1 -->
+                        <!-- ngIf: grid.options.paginationPageSizes.length <= 1 -->
+                    </div>
+                    <div class="ui-grid-pager-count-container">
+                        <div class="ui-grid-pager-count">
+                            <span ng-show="pagination.totalItems > 0" class="ng-binding">
+                                {{pagination.pageNumber}}
+                                <abbr ui-grid-one-bind-title="paginationThrough" title="through">-</abbr>
+                                {{pagination.ddlpageSize}} of {{pagination.totalItems}} items
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ----------------------------------------------------- End UI-Grid ------------------------------------------------- -->
+<!-- ---------------------------------------------------- Start UI-Grid ------------------------------------------------ -->
+<div class="modal fade " id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" style="float:left">User List</h4>
+            </div>
+            <div class="modal-body">
+                <div class="grid-body">                    
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div ui-grid="gridOptionsUsr" ui-grid-resize-columns ui-grid-auto-resize ui-grid-move-columns ui-grid-exporter ui-grid-pinning
+                                 class="grid" style="height:550px"></div>
+
+                            <div class="loadmore">
+                                <div ng-show="loaderMore" ng-class="result">
+                                    <!-- <img src="~/Content/img/ng-loader.gif" /> -->
+                                    {{lblMessage}}
+                                </div>
+                            </div>
+                            <div class="row"></div>
+                            <div role="contentinfo" style="margin-bottom: -20px;" class="ui-grid-pager-panel ng-scope">
+                                <div role="navigation" class="ui-grid-pager-container">
+                                    <div role="menubar" class="ui-grid-pager-control">
+                                        <!-- Start Page -->
+                                        <button type="button" role="menuitem" class="ui-grid-pager-first" ui-grid-one-bind-title="aria.pageToFirst" ui-grid-one-bind-aria-label="aria.pageToFirst"
+                                                ng-click="gridOptionsUsr.firstPage()" ng-disabled="cantPageBackward()" title="Page to first" aria-label="Page to first"
+                                                disabled="disabled">
+                                            <div class="first-triangle">
+                                                <div class="first-bar"></div>
+                                            </div>
+                                        </button>
+
+                                        <!-- Prev Page -->
+                                        <button type="button" role="menuitem" class="ui-grid-pager-previous" ui-grid-one-bind-title="aria.pageBack" ui-grid-one-bind-aria-label="aria.pageBack"
+                                                ng-click="paginationUsr.previousPage()" ng-disabled="cantPageBackward()" title="Page back" aria-label="Page back"
+                                                disabled="disabled">
+                                            <div class="first-triangle prev-triangle"></div>
+                                        </button>
+
+                                        <input type="number" ui-grid-one-bind-title="aria.pageSelected" ui-grid-one-bind-aria-label="aria.pageSelected" class="ui-grid-pager-control-input ng-pristine ng-untouched ng-valid ng-not-empty ng-valid-min ng-valid-max ng-valid-required"
+                                               ng-model="paginationUsr.pageNumber" min="1" max="{{paginationUsr.getTotalPages()}}" required="" title="Selected page"
+                                               aria-label="Selected page" />
+
+                                        <span class="ui-grid-pager-max-pages-number ng-binding" ng-show="paginationUsr.getTotalPages() > 0">
+                                            <abbr ui-grid-one-bind-title="paginationOf" title="of">/</abbr>{{paginationUsr.getTotalPages()}}
+                                        </span>
+
+                                        <!-- Next Page -->
+                                        <button type="button" role="menuitem" class="ui-grid-pager-next" ui-grid-one-bind-title="aria.pageForward" ui-grid-one-bind-aria-label="aria.pageForward"
+                                                ng-click="paginationUsr.nextPage()" ng-disabled="cantPageForward()" title="Page forward" aria-label="Page forward">
+                                            <div class="last-triangle next-triangle"></div>
+                                        </button>
+
+                                        <!-- Last Page -->
+                                        <button type="button" role="menuitem" class="ui-grid-pager-last" ui-grid-one-bind-title="aria.pageToLast" ui-grid-one-bind-aria-label="aria.pageToLast"
+                                                ng-click="paginationUsr.lastPage()" ng-disabled="cantPageToLast()" title="Page to last" aria-label="Page to last">
+                                            <div class="last-triangle">
+                                                <div class="last-bar"></div>
+                                            </div>
+                                        </button>
+                                    </div>
+                                    <!-- ngIf: grid.options.paginationPageSizes.length > 1 -->
+
+                                    <div class="ui-grid-pager-row-count-picker ng-scope">
+                                        <select ng-model="paginationUsr.ddlpageSize" ng-options="o as o for o in paginationUsr.paginationPageSizes" ng-change="paginationUsr.pageSizeChange()"
+                                                class="ng-pristine ng-untouched ng-valid ng-not-empty"></select>
+                                        <span class="ui-grid-pager-row-count-label ng-binding">&nbsp;items per page</span>
+                                    </div>
+                                    <!-- end ngIf: grid.options.paginationPageSizes.length > 1 -->
+                                    <!-- ngIf: grid.options.paginationPageSizes.length <= 1 -->
+                                </div>
+                                <div class="ui-grid-pager-count-container">
+                                    <div class="ui-grid-pager-count">
+                                        <span ng-show="paginationUsr.totalItems > 0" class="ng-binding">
+                                            {{paginationUsr.pageNumber}}
+                                            <abbr ui-grid-one-bind-title="paginationThrough" title="through">-</abbr>
+                                            {{paginationUsr.ddlpageSize}} of {{paginationUsr.totalItems}} items
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ----------------------------------------------------- End UI-Grid ------------------------------------------------- -->
+
+
+
+
+<style>
+    .thumb {
+        width: 24px;
+        height: 24px;
+        float: none;
+        position: relative;
+        top: 7px;
+    }
+
+    /*.modal-content {
+                width: 960px !important;
+                margin-left: -162px !important;
+            }
+            #myModal {
+                width: 1300px;
+                margin-left: 200px;
+            }*/
+    .class1 {
+        height: 25px;
+    }
+</style>

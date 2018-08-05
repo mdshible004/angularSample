@@ -1,0 +1,362 @@
+
+<div class="grid simple col-md-12 vertical green" ng-show = "createItem">
+	
+    <div class="grid-title">
+		<div class="row">
+			<div class="col-md-9">
+				<div class="page-title"> <i class="fa fa-keyboard-o" aria-hidden="true"></i>
+					<h3>Exame Routine - <span class="semi-bold">Entry</span></h3>
+				</div>
+			</div>
+			<div class="col-md-1 marginOff">
+				<button type="submit" class="btn btn-primary btn-block showBtn" ng-click="vm.showInsExameRoutine()">Show List</button>
+			</div>
+			<div class="col-md-1 marginOff">
+				<button type="submit" class="btn btn-primary btn-block resetBtn" ng-click="clearField()">Reset</button>
+			</div>
+			<div class="col-md-1 marginOff">
+				<button type="submit" class="btn btn-primary btn-block saveBtn" ng-click="vm.postExameRoutine()" ng-disabled="saveBtn || !addRoutin ">Save</button>
+				<!-- <button type="submit" class="btn btn-primary btn-block saveBtn" ng-click="vm.postUserSetupStudent()">Update</button> -->
+			</div>	
+		</div>
+		
+    </div>
+
+
+
+    <div class="grid-body">
+        <div class="row">
+            <form class="form-horizontal col-sm-11" name="vm.masterRoutineSteup">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Medium</label>
+                            <div class="col-sm-8">
+                                <ui-select ng-model="vm.medium.selected" name="Med" on-select="vm.MediumWiseClassDDL(vm.MediumID)" theme="bootstrap" ng-click="vm.MediumID = $select.selected.MediumID" ng-change="changeMed()" required>
+                                    <ui-select-match placeholder="- Select Medium -">
+                                        {{$select.selected.MameName}}
+                                        <span style="float:right" ng-click="vm.MediumID = null; DisBtn(); vm.class=undefined; vm.department=undefined; $select.selected=undefined">
+                                            <i class="fa fa-remove" aria-hidden="true"></i>
+                                        </span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="med in   vm.mediums | filter: $select.search">
+                                        <div ng-bind-html="med.MameName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            <span class="error" ng-show="(vm.masterRoutineSteup.$dirty||submitted) && vm.masterRoutineSteup.Med.$error.required">*</span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Class</label>
+                            <div class="col-sm-8">
+                                <ui-select ng-model="vm.class.selected" name="Cls" on-select="vm.ClassWiseDepartmentDDL(vm.ClassID, ''); vm.getExame(vm.ClassID,'');" theme="bootstrap" ng-click="vm.ClassID = $select.selected.ClassID" ng-change="changeCls()" required>
+                                    <ui-select-match placeholder="- Select Class -">
+                                        {{$select.selected.ClassName}}
+                                        <span style="float:right" ng-click="vm.ClassID = null; DisBtn(); vm.department=undefined; $select.selected=undefined">
+                                            <i class="fa fa-remove" aria-hidden="true"></i>
+                                        </span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="cls in   vm.classes | filter: $select.search">
+                                        <div ng-bind-html="cls.ClassName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+
+                            </div>
+                            <span class="error" ng-show="(vm.masterRoutineSteup.$dirty||submitted) && vm.masterRoutineSteup.Cls.$error.required">*</span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Department</label>
+                            <div class="col-sm-8">
+                                <ui-select ng-model="vm.department.selected" name="Dep" theme="bootstrap" ng-click="vm.DepartmentID = $select.selected.DepartmentID" ng-required="IsRequired" ng-change="changeDep()" on-select="vm.ClassSelected(0, '')">
+                                    <ui-select-match placeholder="- Select Department -">
+                                        {{$select.selected.DepartmentName}}
+                                        <span style="float:right" ng-click="vm.DepartmentID = null; DisBtn(); $select.selected=undefined">
+                                            <i class="fa fa-remove" aria-hidden="true"></i>
+                                        </span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="dept in    vm.departments | filter: $select.search">
+                                        <div ng-bind-html="dept.DepartmentName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+
+                            </div>
+                            <span class="error" ng-show="(vm.masterRoutineSteup.$dirty||submitted) && vm.masterRoutineSteup.Dep.$error.required">*</span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Section</label>
+                            <div class="col-sm-8">
+                                <ui-select ng-model="vm.section.selected" name="sec" theme="bootstrap" ng-click="vm.SectionID = $select.selected.SectionID" ng-required="secRequired" ng-change="changeSec()">
+                                    <ui-select-match placeholder="- Select Section -">
+                                        {{$select.selected.SectionName}}
+                                        <span style="float:right" ng-click="vm.SectionID = null; DisBtn(); $select.selected=undefined">
+                                            <i class="fa fa-remove" aria-hidden="true"></i>
+                                        </span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="sec in   vm.sections | filter: $select.search">
+                                        <div ng-bind-html="sec.SectionName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+
+                            </div>
+                            <span class="error" ng-show="(vm.masterRoutineSteup.$dirty||submitted) && vm.masterRoutineSteup.sec.$error.required">*</span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Shift</label>
+                            <div class="col-sm-8">
+                                <ui-select ng-model="vm.shift.selected" name="Shi" theme="bootstrap" ng-click="vm.ShiftID = $select.selected.ShiftID" ng-change="changeShi()" ng-required="IsRequiredShift">
+                                    <ui-select-match placeholder="- Select Shift -">
+                                        {{$select.selected.ShiftName}}
+                                        <span style="float:right" ng-click="vm.ShiftID = null; DisBtn(); $select.selected=undefined">
+                                            <i class="fa fa-remove" aria-hidden="true"></i>
+                                        </span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="shift in   vm.Shifts | filter: $select.search">
+                                        <div ng-bind-html="shift.ShiftName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            <span class="error" ng-show="(vm.masterRoutineSteup.$dirty||submitted) && vm.masterRoutineSteup.Shi.$error.required">*</span>
+                        </div>
+
+                    </div>
+                    <div class="col-md-6">
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Session</label>
+                            <div class="col-sm-8">
+                                <ui-select ng-model="vm.session.selected" name="Sessi" theme="bootstrap" ng-click="vm.SessionID = $select.selected.SessionID" ng-change="changeSes()" required>
+                                    <ui-select-match placeholder="- Select Session -">
+                                        {{$select.selected.SessionName}}
+                                        <span style="float:right" ng-click="vm.SessionID = null; DisBtn(); $select.selected=undefined">
+                                            <i class="fa fa-remove" aria-hidden="true"></i>
+                                        </span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="session in   vm.sessions | filter: $select.search">
+                                        <div ng-bind-html="session.SessionName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            <span class="error" ng-show="(vm.masterRoutineSteup.$dirty||submitted) && vm.masterRoutineSteup.Sessi.$error.required">*</span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Exam</label>
+                            <div class="col-sm-8">
+                                <ui-select ng-model="vm.Exame.selected" theme="bootstrap" ng-click="vm.ExamID = $select.selected.ExamID" name="Exm"  ng-change="changeExm()" required>
+                                    <ui-select-match placeholder="- Select Exame Type -">
+                                        {{$select.selected.ExamName}}
+                                        <span style="float:right" ng-click="vm.ExamID = null; DisBtn(); $select.selected=undefined">
+                                            <i class="fa fa-remove" aria-hidden="true"></i>
+                                        </span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="Exame in   vm.Exames | filter: $select.search">
+                                        <div ng-bind-html="Exame.ExamName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+
+                            </div>
+                            <span class="error" ng-show="(vm.masterRoutineSteup.$dirty||submitted) && vm.masterRoutineSteup.Exm.$error.required">*</span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Start Date</label>
+                            <div class="col-sm-8 input-groups margin-bottom-sm">
+                                <datepicker date-format="dd-MM-yyyy" selector="form-control">
+                                    <div class="input-group">
+                                        <input class="form-control" placeholder="Choose a date" ng-model="vm.startdate" />
+                                        <span class="input-group-addon" style="cursor: pointer">
+                                            <i class="fa fa-lg fa-calendar"></i>
+                                        </span>
+                                    </div>
+                                </datepicker>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">End Date</label>
+                            <div class="col-sm-8 input-groups margin-bottom-sm">
+                                <datepicker date-format="dd-MM-yyyy" selector="form-control">
+                                    <div class="input-group">
+                                        <input class="form-control" placeholder="Choose a date" ng-model="vm.enddate" />
+                                        <span class="input-group-addon" style="cursor: pointer">
+                                            <i class="fa fa-lg fa-calendar"></i>
+                                        </span>
+                                    </div>
+                                </datepicker>
+                            </div>
+                        </div>
+                        <div class="col-sm-3 col-sm-offset-8">
+                            <button type="submit" class="btn btn-primary btn-block showBtn"  ng-click="vm.showsubject()" ng-disabled="vm.masterRoutineSteup.$invalid || btnDis">Add</button>
+                        </div>
+                    </div>
+                      
+                    </div>
+       
+            </form>
+            
+        </div>
+    </div>
+</div>
+
+<!-- Exame routine Show -->
+<div class="grid simple col-md-12 vertical green" ng-show = "addExameRoutin">
+	<div class="grid-body">
+		<div class="row">
+            <div class="col-md-1 col-md-offset-10 marginOff">
+                <button type="submit" class="btn btn-primary btn-block showBtn" ng-click="clearField()">Create</button>
+            </div>
+			<div class="col-md-12">		
+				<h4 class="clearfix">Exame Routine</h4>
+				  <!--<br/><pre>{{vm.routines|json}}</pre>-->    
+				<form class="newOvDiscount" name="pre" ng-model="vm.from">
+					<table class="newDiscounts dynaRows table table-hover table-condensed">
+						<thead>
+                            <tr>
+                                <th>SL</th>
+                                <!-- <th>ID</th> -->
+                                <th>Medium</th>
+                                <th>Class</th>
+                                <th>Department</th>
+                                <th>Section</th>
+
+
+                                <th>Shift</th>
+                                <th>Exam</th>
+                                <th>Session</th>
+                                <th>Start Date</th>
+                                <th>End Date</th>
+                                <th>Action</th>
+                            </tr>
+						</thead>
+						<tbody>
+                            <tr ng-repeat="value in vm.routines ">
+
+                                <td>{{$index + 1}}</td>
+                                <!-- <td>{{value.ExamRoutineID}}</td> -->
+                                <td>{{value.MameName}}</td>
+                                <td>{{value.ClassName}}</td>
+                                <td>{{value.DepartmentName}}</td>
+                                <td>{{value.SectionName}}</td>
+
+
+                                <td>{{value.ShiftName}}</td>
+                                <td>{{value.ExamName }}</td>
+                                <td>{{value.SessionName }}</td>
+                                <td>{{value.StartDate | date:'dd-mm-yyyy'}}</td>
+                                <td>{{value.EndDate | date:'dd-mm-yyyy'}}</td>
+                                <td>
+                                    <button href="#" class="btn btn-info btn-xs btn-mini" data-toggle="modal" data-target="#myModal" ng-click="vm.editInsExameRoutine(value.ExamRoutineID)">Edit</button>
+                                    <button href="#" class="btn btn-danger btn-xs btn-mini" ng-click="vm.deleteUserRoutine(value.ExamRoutineID)">Delete</button>
+                                </td>
+                            </tr>
+							
+						</tbody>
+					</table>
+				</form>	
+			
+			</div>
+		</div>
+	</div>	
+</div>	
+
+
+
+
+
+<div class="grid simple col-md-12 vertical green" ng-show = "addRoutin">
+	<div class="grid-body">
+		<div class="row">
+			<div class="col-md-12">		
+				<h4 class="clearfix">Routine Entry</h4>
+                <!--<pre>{{RoutineDetailArr|json}}</pre>-->  
+				<form class="newOvDiscount" name="pre" ng-model="vm.from">
+					<table class="newDiscounts dynaRows table table-hover table-condensed">
+						<thead>
+							<tr>
+								<th>SL</th>
+								<th>Subject</th>
+								<th>Exam Date</th>
+								<th>Start Time</th>
+								<th >End Time</th>
+								<th>Is Active</th>
+							</tr>
+						</thead>
+						<tbody>
+                            <tr ng-repeat="value in RoutineDetailArr">
+
+                                <td>{{$index + 1}}</td>
+                                <td ng-repeat="field in value">{{field.SubjectName}}</td>
+                                <td ng-repeat="field in value">
+                                    <div class="form-group">
+                                        <div class="col-sm-12 input-groups margin-bottom-sm">
+                                            <datepicker date-format="dd-MM-yyyy" selector="form-control">
+                                                <div class="input-group">
+                                                    <input class="form-control" placeholder="Choose a date" ng-model="field.ExamDate" />
+                                                    <span class="input-group-addon" style="cursor: pointer">
+                                                        <i class="fa fa-lg fa-calendar"></i>
+                                                    </span>
+                                                </div>
+                                            </datepicker>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td ng-click="openRoutineIndex($index)" ng-repeat="field in value">
+                                    <input ng-model="field.StartTime" type="time" placeholder="{{field.StartTime}}" ng-change="TimeValidate(field.StartTime,field.EndTime)">
+                                </td>
+                                <td ng-click="openRoutineIndex($index)" ng-repeat="field in value">
+                                    <input ng-model="field.EndTime" type="time" placeholder="{{field.EndTime}}" ng-change="TimeValidate(field.StartTime,field.EndTime)">
+                                </td>
+
+                                <td ng-click="openRoutineIndex($index)" ng-repeat="field in value">
+                                    <div class="checkbox check-primary">
+                                        <input id="{{$parent.$index+a}}" type="checkbox" ng-model="field.IsActive" ng-checked="field.IsActive == true" ng-click="permanetToggleSelection($parent.$index)">
+                                        <label for="{{$parent.$index+a}}"></label>
+                                    </div>
+                                </td>
+                            </tr>
+							
+						</tbody>
+					</table>
+				</form>	
+			</div>
+		</div>
+	</div>	
+</div>	 
+
+
+
+<!-- Edit Html -->
+
+
+
+  
+
+<style>
+	a {
+		cursor: pointer;
+	}
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+	.thumb {
+    width: 24px;
+    height: 24px;
+    float: none;
+    position: relative;
+    top: 7px;
+}
+.hungry table.dynaRows tr td input {
+    width: 100%;
+	border: 1px solid #0aa69994;
+	
+}
+
+</style>

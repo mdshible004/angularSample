@@ -1,0 +1,599 @@
+<div class="grid simple col-md-12" ng-show="createItem">
+
+    <div class="grid-title">
+        <div class="row">
+            <div class="col-md-9">
+                <div class="page-title">
+                    <i class="fa fa-keyboard-o" aria-hidden="true"></i>
+                    <h3>
+                        Institute -
+                        <span class="semi-bold">Settings</span>
+                    </h3>
+                </div>
+            </div>
+            <div class="col-md-1 marginOff">
+                <button type="submit" class="btn btn-primary btn-block showBtn" ng-click="RefreshList()">Show List</button>
+            </div>
+            <div class="col-md-1 marginOff">
+                <button type="submit" class="btn btn-primary btn-block resetBtn" ng-click="clearField()">Reset</button>
+            </div>
+            <div class="col-md-1 marginOff">
+                <button type="submit" class="btn btn-primary btn-block saveBtn" ng-click="vm.AddInstituteSetting()" ng-disabled="vm.instituteSetupSave.$invalid">Save</button>
+            </div>
+        </div>
+    </div>
+    <div class="grid-body">
+        <div class="row">
+
+            <form class="form-horizontal col-md-12" name="vm.instituteSetupSave">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label">Institute Code</label>
+                            <div class="col-sm-6">
+                                <input type="text" name="InstituteCode" class="form-control" placeholder="Institute Code" ng-model="vm.instituteSetup.InstituteCode"
+                                       required>
+                                <input type="hidden" class="form-control" placeholder="Articel No" ng-model="vm.instituteSetup.InstituteID">
+                            </div>
+                            <span class="error" ng-show="(vm.instituteSetupSave.$dirty||submitted) && vm.instituteSetupSave.InstituteCode.$error.required">*</span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label">Resigtration No</label>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control" placeholder="Resigtration No" ng-model="vm.instituteSetup.ResigtrationNo">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label">Institute No</label>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control" placeholder="Institute No" ng-model="vm.instituteSetup.InstituteNo">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label">Institute Type</label>
+                            <div class="col-sm-6">
+                                <ui-select ng-model="vm.insTypes.selected" name="insTYpe" theme="bootstrap" ng-click="vm.InstituteTypeID = $select.selected.InstituteTypeID" required>
+                                    <ui-select-match placeholder="-Select Ins. Type-">
+                                        {{$select.selected.InstituteTypeName}}
+                                        <span style="float:right" ng-click="vm.InstituteTypeID = null; $select.selected=undefined">
+                                            <i class="fa fa-remove" aria-hidden="true"></i>
+                                        </span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="insTypes in vm.insType | filter: $select.search">
+                                        <div ng-bind-html="insTypes.InstituteTypeName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            <span class="error" ng-show="(vm.instituteSetupSave.$dirty||submitted) && vm.instituteSetupSave.insTYpe.$error.required">*</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label"></label>
+                            <div class="col-sm-6">
+                                <span class="input-group-btn">
+                                    <input class="form-check-input" type="checkbox" ng-checked="vm.UIsActive===true" ng-model="vm.IsActive" />
+                                    <label style="margin-left:14px; margin-top:-17px">&nbsp;Is Active</label>
+                                </span>
+                                <!--<div class="checkbox check-primary">
+                                    <input class="form-check-input" type="checkbox" ng-checked="vm.UIsActive===true" ng-model="vm.IsActive" />
+                                    <label for="checkbox3">&nbsp;Is Active</label>
+                                </div>-->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label">Institute Name</label>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control" name="InsName" placeholder="Institute Name" ng-model="vm.instituteSetup.InstituteName" required>
+                                <!-- <input type="hidden" class="form-control" placeholder="Articel No" ng-model="vm.instituteSetup.InstituteNo"> -->
+                                <!-- <input type="text" class="form-control" placeholder="InstituteName" ng-model="vm.instituteSetup.InstituteName"> -->
+                            </div>
+                            <span class="error" ng-show="(vm.instituteSetupSave.$dirty||submitted) && vm.instituteSetupSave.InsName.$error.required">*</span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label"><span style="font-size:11px">Institute Short Name</span></label>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control" placeholder="Institute Short Name" ng-model="vm.instituteSetup.InstituteShortName">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label">Board</label>
+                            <div class="col-sm-6">
+                                <ui-select ng-model="vm.board.selected" theme="bootstrap" ng-click="vm.BoardID = $select.selected.BoardID">
+                                    <ui-select-match placeholder="-Select Board -">
+                                        {{$select.selected.BoardName}}
+                                        <span style="float:right" ng-click="vm.BoardID = null; $select.selected=undefined">
+                                            <i class="fa fa-remove" aria-hidden="true"></i>
+                                        </span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="board in vm.boards | filter: $select.search">
+                                        <div ng-bind-html="board.BoardName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label">Founder Name</label>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control" placeholder="FounderName" ng-model="vm.instituteSetup.FounderName">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label">Institute Logo</label>
+                            <div class="col-sm-7">
+                                <button class="uploadBtn" type="file" ngf-select="uploadFiles($file, $invalidFiles)" ng-submit="uploadFiles(vm.userSetup.UserImage)"
+                                        accept="image/*" ngf-max-height="1000" ngf-max-size="1MB" ng-model="vm.userSetup.UserImage" ngf-multiple="false"
+                                        name="UserImage">
+                                    UPLOAD FILE
+                                </button>
+                                <br>
+                                <br>
+
+                                <!--<img src="{{Uimage}}" style="height:94.488189px; width:75.590551px" ng-show="imgShow" />-->
+                                <img src="{{vm.imgHost}}{{vm.ImageUrl}}" style="height:94.488189px; width:75.590551px" ng-if="vm.ImageUrl !== undefined" />
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-4">
+
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label">Establish Year</label>
+                            <div class="col-sm-6">
+                                <input type="number" class="form-control" placeholder="Establish Year" ng-model="vm.instituteSetup.EstublishedYear" ng-blur="ChecEstYear(vm.instituteSetup.EstublishedYear)"
+                                       min=0 oninput="validity.valid||(value=null);">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label">Contact No</label>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control" placeholder="Contact No" ng-model="vm.instituteSetup.ContactNo">
+                            </div>
+                        </div>
+
+
+
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label">No Of Building</label>
+                            <div class="col-sm-6">
+                                <input type="number" class="form-control" placeholder="No Of Building" ng-model="vm.instituteSetup.NoOfBuilding" min=0 oninput="validity.valid||(value=null);">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label">Status</label>
+                            <div class="col-sm-6">
+                                <ui-select ng-model="vm.status.selected" theme="bootstrap" ng-click="vm.statusID = $select.selected.StatusID">
+                                    <ui-select-match placeholder="-Select Status-">
+                                        {{$select.selected.status}}
+                                        <span style="float:right" ng-click="vm.statusID = null; $select.selected=undefined">
+                                            <i class="fa fa-remove" aria-hidden="true"></i>
+                                        </span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="status in vm.statuses | filter: $select.search">
+                                        <div ng-bind-html="status.status | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-6 control-label">Principal Signature</label>
+                            <div class="col-sm-6">
+                                <button class="uploadBtn" type="file" ngf-select="uploadFilesSignature($file, $invalidFiles)" ng-submit="uploadFilesSignature(vm.userSetup.UserImage)"
+                                        accept="image/*" ngf-max-height="1000" ngf-max-size="1MB" ng-model="vm.userSetup.UserImage" ngf-multiple="false"
+                                        name="UserImage">
+                                    UPLOAD FILE
+                                </button>
+                                <br>
+                                <br>
+                                <!--<img src="{{Simage}}" style="height:94.488189px; width:75.590551px" ng-show="imgShowSignature" />-->
+                                <img src="{{vm.imgHost}}{{vm.SignatureUrl}}" style="height:94.488189px; width:75.590551px" ng-show="vm.SignatureUrl !== undefined" />
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<!-- Item Entry List Grid -->
+<!--<div class="grid simple col-md-12" ng-show="showItem">
+    <div class="grid-title">
+        <div class="row">
+            <div class="col-md-11">
+                <div class="page-title">
+                    <i class="fa fa-keyboard-o" aria-hidden="true"></i>
+                    <h3>
+                        Institute -
+                        <span class="semi-bold">List</span>
+                    </h3>
+                </div>
+            </div>
+
+            <div class="col-md-1 marginOff">
+                <button type="submit" class="btn btn-primary btn-block saveBtn" ng-click="listEvent()">Create</button>
+            </div>
+        </div>
+    </div>
+    <div class="grid-body">
+        <div class="row">
+            <div class="col-md-12">
+                <table st-table="rowCollection" class="table table-bordered">
+                    <thead>
+                        <tr>
+
+                            <th>Institute Code</th>
+                            <th>Resigtration No</th>
+                            <th>Institute Type Name</th>
+                            <th>Institute Name</th>
+
+                            <th>Institute Short Name</th>
+                            <th>Board</th>
+                            <th>Founder Name</th>
+                            <th>Estublished Year</th>
+                            <th>Contact No</th>
+                            <th>No Of Building</th>
+                            <th>Status</th>
+                            <th>IS Active</th>
+                            <th>Option</th>
+                        </tr>
+                        <tr></tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="institute in vm.institutes">
+
+                            <td>{{institute.InstituteCode}}</td>
+                            <td>{{institute.ResigtrationNo}}</td>
+                            <td>{{institute.InstituteTypeName}}</td>
+                            <td>{{institute.InstituteName}}</td>
+                            <td>{{institute.InstituteShortName}}</td>
+                            <td>{{institute.Board}}</td>
+                            <td>{{institute.FounderName}}</td>
+                            <td>{{institute.EstublishedYear}}</td>
+                            <td>{{institute.ContactNo}}</td>
+                            <td>{{institute.NoOfBuilding}}</td>
+                            <td>{{institute.Status}}</td>
+                            <td>{{institute.IsActive}}</td>
+                            <td>
+                                <button href="#" class="btn btn-info btn-xs btn-mini" data-toggle="modal" data-target="#myModal" ng-click="vm.getInstituteByID(institute.InstituteID)">Edit</button>
+                                <button href="/manage-deliveryman-info/edit/1" class="btn btn-primary btn-xs btn-mini" ng-click="vm.deleteInstitutes(institute.InstituteID)">Delete</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>-->
+
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" style="float:left">Edit Institute</h4>
+            </div>
+            <div class="modal-body">
+                <div class="grid-body">
+                    <div class="row">
+                        <form class="form-horizontal col-md-12" name="vm.instituteSetupUpdate">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label class="col-sm-5 control-label">Institute Code</label>
+                                        <div class="col-sm-6">
+                                            <input type="text" class="form-control" name="InsCode" placeholder="Institute Code" ng-model="vm.instituteSetup.InstituteCode" required>
+                                            <input type="hidden" class="form-control" placeholder="Articel No" ng-model="vm.instituteSetup.InstituteID">
+                                        </div>
+                                        <span class="error" ng-show="(vm.instituteSetupUpdate.$dirty||submitted) && vm.instituteSetupUpdate.InsCode.$error.required">*</span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-5 control-label">Resigtration No</label>
+                                        <div class="col-sm-6">
+                                            <input type="text" class="form-control" placeholder="Resigtration No" ng-model="vm.instituteSetup.ResigtrationNo">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-5 control-label">Institute No</label>
+                                        <div class="col-sm-6">
+                                            <input type="text" class="form-control" placeholder="Institute No" ng-model="vm.instituteSetup.InstituteNo">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-5 control-label">Institute Type</label>
+                                        <div class="col-sm-6">
+                                            <ui-select ng-model="vm.insTypes.selected" name="insTYpe" theme="bootstrap" ng-click="vm.InstituteTypeID = $select.selected.InstituteTypeID" required>
+                                                <ui-select-match placeholder="-Select Ins. Type-">
+                                                    {{$select.selected.InstituteTypeName}}
+                                                    <span style="float:right" ng-click="vm.InstituteTypeID = null; $select.selected=undefined">
+                                                        <i class="fa fa-remove" aria-hidden="true"></i>
+                                                    </span>
+                                                </ui-select-match>
+                                                <ui-select-choices repeat="insTypes in vm.insType | filter: $select.search">
+                                                    <div ng-bind-html="insTypes.InstituteTypeName | highlight: $select.search"></div>
+                                                </ui-select-choices>
+                                            </ui-select>
+                                        </div>
+                                        <span class="error" ng-show="(vm.instituteSetupUpdate.$dirty||submitted) && vm.instituteSetupUpdate.insTYpe.$error.required">*</span>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="col-md-7" style="text-align:right; margin-left: -19px;">
+                                            <span class="input-group-btn">
+                                                <input class="form-check-input" type="checkbox" ng-checked="vm.UIsActive===true" ng-model="vm.UIsActive" />
+                                            </span>
+                                        </div>
+                                        <label class="col-md-5 control-label" style="text-align:left; margin-top: -14px; margin-left: -20px;">Is Active</label>
+                                    </div>
+
+
+                                </div>
+                                <div class="col-md-4">
+
+                                    <div class="form-group">
+                                        <label class="col-sm-5 control-label">Institute Name</label>
+                                        <div class="col-sm-6">
+                                            <input type="text" class="form-control" name="InsName" placeholder="Institute Name" ng-model="vm.instituteSetup.InstituteName" required>
+                                        </div>
+                                        <span class="error" ng-show="(vm.instituteSetupUpdate.$dirty||submitted) && vm.instituteSetupUpdate.InsName.$error.required">*</span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-5 control-label"><span style="font-size:12px">Institute Short Name</span></label>
+                                        <div class="col-sm-6">
+                                            <input type="text" class="form-control" placeholder="Institute Short Name" ng-model="vm.instituteSetup.InstituteShortName">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-sm-5 control-label">Board</label>
+                                        <div class="col-sm-6">
+                                            <ui-select ng-model="vm.board.selected" theme="bootstrap" ng-click="vm.boardID = $select.selected.BoardID">
+                                                <ui-select-match placeholder="-Select Board -">
+                                                    {{$select.selected.BoardName}}
+                                                    <span style="float:right" ng-click="vm.boardID = null; $select.selected=undefined">
+                                                        <i class="fa fa-remove" aria-hidden="true"></i>
+                                                    </span>
+                                                </ui-select-match>
+                                                <ui-select-choices repeat="board in vm.boards | filter: $select.search">
+                                                    <div ng-bind-html="board.BoardName | highlight: $select.search"></div>
+                                                </ui-select-choices>
+                                            </ui-select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-5 control-label">Founder Name</label>
+                                        <div class="col-sm-6">
+                                            <input type="text" class="form-control" placeholder="Founder Name" ng-model="vm.instituteSetup.FounderName">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-sm-5 control-label">Institute Logo</label>
+                                        <div class="col-sm-7">
+                                            <button class="uploadBtn" type="file" ngf-select="uploadFiles($file, $invalidFiles)" ng-submit="uploadFiles(vm.userSetup.UserImage)"
+                                                    accept="image/*" ngf-max-height="1000" ngf-max-size="1MB" ng-model="vm.userSetup.UserImage" ngf-multiple="false"
+                                                    name="UserImage">
+                                                UPLOAD FILE
+                                            </button>
+
+                                            <br>
+                                            <br>
+
+                                            <!--<img src="{{Uimage}}" style="height:94.488189px; width:75.590551px" ng-show="imgShow" />-->
+                                            <img src="{{vm.imgHost}}{{vm.ImageUrl}}" style="height:94.488189px; width:75.590551px" ng-if="vm.ImageUrl !== undefined" />
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="col-md-4">
+
+                                    <div class="form-group">
+                                        <label class="col-sm-5 control-label">Establish Year</label>
+                                        <div class="col-sm-6">
+                                            <input type="number" class="form-control" placeholder="Founder Name" ng-model="vm.instituteSetup.EstublishedYear" ng-blur="ChecEstYear(vm.instituteSetup.EstublishedYear)"
+                                                   min=0 oninput="validity.valid||(value=null);">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-5 control-label">Contact No</label>
+                                        <div class="col-sm-6">
+                                            <input type="text" class="form-control" placeholder="Contact No" ng-model="vm.instituteSetup.ContactNo">
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <label class="col-sm-5 control-label">No Of Building</label>
+                                        <div class="col-sm-6">
+                                            <input type="number" class="form-control" placeholder="No Of Building" ng-model="vm.instituteSetup.NoOfBuilding" min=0 oninput="validity.valid||(value=null);">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-5 control-label">Status</label>
+                                        <div class="col-sm-6">
+                                            <ui-select ng-model="vm.status.selected" theme="bootstrap" ng-click="vm.statusID = $select.selected.StatusID">
+                                                <ui-select-match placeholder="-Select Status-">
+                                                    {{$select.selected.status}}
+                                                    <span style="float:right" ng-click="vm.statusID = null; $select.selected=undefined">
+                                                        <i class="fa fa-remove" aria-hidden="true"></i>
+                                                    </span>
+                                                </ui-select-match>
+                                                <ui-select-choices repeat="status in vm.statuses | filter: $select.search">
+                                                    <div ng-bind-html="status.status | highlight: $select.search"></div>
+                                                </ui-select-choices>
+                                            </ui-select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-sm-6 control-label">Principal Signature</label>
+                                        <div class="col-sm-6">
+                                            <button class="uploadBtn" type="file" ngf-select="uploadFilesSignature($file, $invalidFiles)" ng-submit="uploadFilesSignature(vm.userSetup.UserImage)"
+                                                    accept="image/*" ngf-max-height="1000" ngf-max-size="1MB" ng-model="vm.userSetup.UserImage" ngf-multiple="false"
+                                                    name="UserImage">
+                                                UPLOAD FILE
+                                            </button>
+                                            <br>
+                                            <br>
+                                            <!--<img src="{{Simage}}" style="height:94.488189px; width:75.590551px" ng-show="imgShowSignature" />-->
+                                            <img src="{{vm.imgHost}}{{vm.SignatureUrl}}" style="height:94.488189px; width:75.590551px" ng-show="vm.SignatureUrl !== undefined" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" ng-click="vm.patchInstitute()" ng-disabled="vm.instituteSetupUpdate.$invalid">Save changes</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+<!-- ---------------------------------------------------- Start UI-Grid ------------------------------------------------ -->
+<div class="grid simple col-md-12 col-sm-12 col-xs-12" ng-show="showItem">
+    <div class="grid-title">
+        <div class="row">
+            <div class="col-md-11">
+                <div class="page-title">
+                    <i class="fa fa-keyboard-o" aria-hidden="true"></i>
+                    <h3>
+                        Institute -
+                        <span class="semi-bold">List</span>
+                    </h3>
+                </div>
+            </div>
+
+            <div class="col-md-1 marginOff">
+                <button type="submit" class="btn btn-primary btn-block saveBtn" ng-click="listEvent()">Create</button>
+            </div>
+        </div>
+    </div>
+    <div class="grid-body">
+        <div class="row">
+            <div class="col-md-12" style="text-align:right">
+                <input type="text" ng-model="SearchProperty" placeholder="Institute Name" ng-keyup="$event.keyCode == 13 ? SearchNow(SearchProperty) : null" />
+                <button type="button" class="close" aria-label="Close" ng-click="SearchCancel('')">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div ui-grid="gridOptions" ui-grid-resize-columns ui-grid-auto-resize ui-grid-move-columns ui-grid-exporter ui-grid-pinning
+                     class="grid" style="height:550px"></div>
+
+                <div class="loadmore">
+                    <div ng-show="loaderMore" ng-class="result">
+                        <!-- <img src="~/Content/img/ng-loader.gif" /> -->
+                        {{lblMessage}}
+                    </div>
+                </div>
+                <div class="row"></div>
+                <div role="contentinfo" style="margin-bottom: -20px;" class="ui-grid-pager-panel ng-scope">
+                    <div role="navigation" class="ui-grid-pager-container">
+                        <div role="menubar" class="ui-grid-pager-control">
+                            <!-- Start Page -->
+                            <button type="button" role="menuitem" class="ui-grid-pager-first" ui-grid-one-bind-title="aria.pageToFirst" ui-grid-one-bind-aria-label="aria.pageToFirst"
+                                    ng-click="pagination.firstPage()" ng-disabled="cantPageBackward()" title="Page to first" aria-label="Page to first"
+                                    disabled="disabled">
+                                <div class="first-triangle">
+                                    <div class="first-bar"></div>
+                                </div>
+                            </button>
+
+                            <!-- Prev Page -->
+                            <button type="button" role="menuitem" class="ui-grid-pager-previous" ui-grid-one-bind-title="aria.pageBack" ui-grid-one-bind-aria-label="aria.pageBack"
+                                    ng-click="pagination.previousPage()" ng-disabled="cantPageBackward()" title="Page back" aria-label="Page back"
+                                    disabled="disabled">
+                                <div class="first-triangle prev-triangle"></div>
+                            </button>
+
+                            <input type="number" ui-grid-one-bind-title="aria.pageSelected" ui-grid-one-bind-aria-label="aria.pageSelected" class="ui-grid-pager-control-input ng-pristine ng-untouched ng-valid ng-not-empty ng-valid-min ng-valid-max ng-valid-required"
+                                   ng-model="pagination.pageNumber" min="1" max="{{pagination.getTotalPages()}}" required="" title="Selected page"
+                                   aria-label="Selected page" />
+
+                            <span class="ui-grid-pager-max-pages-number ng-binding" ng-show="pagination.getTotalPages() > 0">
+                                <abbr ui-grid-one-bind-title="paginationOf" title="of">/</abbr>{{pagination.getTotalPages()}}
+                            </span>
+
+                            <!-- Next Page -->
+                            <button type="button" role="menuitem" class="ui-grid-pager-next" ui-grid-one-bind-title="aria.pageForward" ui-grid-one-bind-aria-label="aria.pageForward"
+                                    ng-click="pagination.nextPage()" ng-disabled="cantPageForward()" title="Page forward" aria-label="Page forward">
+                                <div class="last-triangle next-triangle"></div>
+                            </button>
+
+                            <!-- Last Page -->
+                            <button type="button" role="menuitem" class="ui-grid-pager-last" ui-grid-one-bind-title="aria.pageToLast" ui-grid-one-bind-aria-label="aria.pageToLast"
+                                    ng-click="pagination.lastPage()" ng-disabled="cantPageToLast()" title="Page to last" aria-label="Page to last">
+                                <div class="last-triangle">
+                                    <div class="last-bar"></div>
+                                </div>
+                            </button>
+                        </div>
+                        <!-- ngIf: grid.options.paginationPageSizes.length > 1 -->
+
+                        <div class="ui-grid-pager-row-count-picker ng-scope">
+                            <select ng-model="pagination.ddlpageSize" ng-options="o as o for o in pagination.paginationPageSizes" ng-change="pagination.pageSizeChange()"
+                                    class="ng-pristine ng-untouched ng-valid ng-not-empty"></select>
+                            <span class="ui-grid-pager-row-count-label ng-binding">&nbsp;items per page</span>
+                        </div>
+                        <!-- end ngIf: grid.options.paginationPageSizes.length > 1 -->
+                        <!-- ngIf: grid.options.paginationPageSizes.length <= 1 -->
+                    </div>
+                    <div class="ui-grid-pager-count-container">
+                        <div class="ui-grid-pager-count">
+                            <span ng-show="pagination.totalItems > 0" class="ng-binding">
+                                {{pagination.pageNumber}}
+                                <abbr ui-grid-one-bind-title="paginationThrough" title="through">-</abbr>
+                                {{pagination.ddlpageSize}} of {{pagination.totalItems}} items
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ----------------------------------------------------- End UI-Grid ------------------------------------------------- -->
+
+
+
+<style>
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        margin: 0;
+    }
+
+    .thumb {
+        width: 24px;
+        height: 24px;
+        float: none;
+        position: relative;
+        top: 7px;
+    }
+
+    .modal-content {
+        width: 1660px;
+        margin-left: -405px;
+    }
+</style>

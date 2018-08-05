@@ -1,0 +1,261 @@
+
+<div class="grid simple col-md-12 vertical green" ng-show="createItem">
+
+	<div class="grid-title">
+		<div class="row">
+			<div class="col-md-10">
+				<div class="page-title">
+					<i class="fa fa-keyboard-o" aria-hidden="true"></i>
+					<h3>Pass Marks -
+						<span class="semi-bold">Setup</span>
+					</h3>
+				</div>
+			</div>
+			<!--<div class="col-md-2 marginOff">
+				<button type="submit" class="btn btn-primary btn-block showBtn" ng-click="vm.showInsExamePassMark()">Show List</button>
+			</div>-->
+			<div class="col-md-1 marginOff">
+				<button type="submit" class="btn btn-primary btn-block resetBtn" ng-click="clearField()">Reset</button>
+			</div>
+			<div class="col-md-1 marginOff">
+				<button type="submit" class="btn btn-primary btn-block saveBtn" ng-click="vm.postExameExampassMark()" ng-disabled="saveBtn || !addRoutin">Save</button>
+				<!-- <button type="submit" class="btn btn-primary btn-block saveBtn" ng-click="vm.postUserSetupStudent()">Update</button> -->
+			</div>
+
+		</div>
+
+	</div>
+
+
+
+	<div class="grid-body">
+	  <div class="row">
+          <form class="form-horizontal col-sm-12" name="vm.passMarkSetup">
+              <div class="row col-sm-6">
+                  <div class="form-group">
+                      <label class="col-sm-3 control-label">Institute</label>
+                      <div class="col-sm-8">
+                          <ui-select ng-model="vm.institute.selected" name="Ins" theme="bootstrap" ng-click="vm.instituteID = $select.selected.InstituteID" on-select="vm.getmediumNameDdl(vm.instituteID); vm.getExame(vm.instituteID);" ng-disabled="vm.InstituteID!==1?true:false" ng-change="change()">
+                              <ui-select-match placeholder=" -Select-">
+                                  {{$select.selected.InstituteName}}
+                                  <span style="float:right" ng-click="vm.instituteID = null; vm.medium = undefined; vm.class = undefined; vm.section=undefined; vm.department = undefined; DisBtn(); $select.selected=undefined">
+                                      <i class="fa fa-remove" aria-hidden="true"></i>
+                                  </span>
+                              </ui-select-match>
+
+                              <ui-select-choices value="Please select" repeat="Institute in vm.institutes | filter: $select.search">
+                                  <div ng-bind-html="Institute.InstituteName | highlight: $select.search"></div>
+                              </ui-select-choices>
+                          </ui-select>
+
+                      </div>
+                      <span class="error" ng-show="(vm.passMarkSetup.$dirty||submitted) && vm.passMarkSetup.Ins.$error.required">*</span>
+
+                  </div>
+                  <div class="form-group">
+                      <label class="col-sm-3 control-label">Medium</label>
+                      <div class="col-sm-8">
+                          <ui-select ng-model="vm.medium.selected" name="Med" on-select="vm.MediumWiseClassDDL(vm.MediumID)" theme="bootstrap" ng-click="vm.MediumID = $select.selected.MediumID" ng-change="changeMed()" required>
+                              <ui-select-match placeholder="- Select Medium -">
+                                  {{$select.selected.MameName}}
+                                  <span style="float:right" ng-click="vm.MediumID = null; DisBtn(); vm.class=undefined; vm.department=undefined; $select.selected=undefined">
+                                      <i class="fa fa-remove" aria-hidden="true"></i>
+                                  </span>
+                              </ui-select-match>
+                              <ui-select-choices repeat="med in   vm.mediums | filter: $select.search">
+                                  <div ng-bind-html="med.MameName | highlight: $select.search"></div>
+                              </ui-select-choices>
+                          </ui-select>
+                      </div>
+                      <span class="error" ng-show="(vm.passMarkSetup.$dirty||submitted) && vm.passMarkSetup.Med.$error.required">*</span>
+                  </div>
+
+                  <div class="form-group">
+                      <label class="col-sm-3 control-label">Class</label>
+                      <div class="col-sm-8">
+                          <ui-select ng-model="vm.class.selected" name="Cls" on-select="vm.ClassWiseDepartmentDDL(vm.ClassID,'')" theme="bootstrap" ng-click="vm.ClassID = $select.selected.ClassID" ng-change="changeCls()" required>
+                              <ui-select-match placeholder="- Select Class -">
+                                  {{$select.selected.ClassName}}
+                                  <span style="float:right" ng-click="vm.ClassID = null; DisBtn(); vm.department=undefined; $select.selected=undefined">
+                                      <i class="fa fa-remove" aria-hidden="true"></i>
+                                  </span>
+                              </ui-select-match>
+                              <ui-select-choices repeat="cls in   vm.classes | filter: $select.search">
+                                  <div ng-bind-html="cls.ClassName | highlight: $select.search"></div>
+                              </ui-select-choices>
+                          </ui-select>
+
+                      </div>
+                      <span class="error" ng-show="(vm.passMarkSetup.$dirty||submitted) && vm.passMarkSetup.Cls.$error.required">*</span>
+                  </div>
+
+              </div>
+              <div class="row col-sm-6">
+                  <div class="form-group">
+                      <label class="col-sm-3 control-label">Department</label>
+                      <div class="col-sm-8">
+                          <ui-select ng-model="vm.department.selected" name="Dep" theme="bootstrap" ng-click="vm.DepartmentID = $select.selected.DepartmentID" ng-required="IsRequired" ng-change="changeDep()">
+                              <ui-select-match placeholder="- Select Department -">
+                                  {{$select.selected.DepartmentName}}
+                                  <span style="float:right" ng-click="vm.DepartmentID = null; DisBtn(); $select.selected=undefined">
+                                      <i class="fa fa-remove" aria-hidden="true"></i>
+                                  </span>
+                              </ui-select-match>
+                              <ui-select-choices repeat="dept in    vm.departments | filter: $select.search">
+                                  <div ng-bind-html="dept.DepartmentName | highlight: $select.search"></div>
+                              </ui-select-choices>
+                          </ui-select>
+
+                      </div>
+                      <span class="error" ng-show="(vm.passMarkSetup.$dirty||submitted) && vm.passMarkSetup.Dep.$error.required">*</span>
+                  </div>
+                  <div class="form-group">
+                      <label class="col-sm-3 control-label">Exam</label>
+                      <div class="col-sm-8">
+                          <ui-select ng-model="vm.Exame.selected" theme="bootstrap" ng-click="vm.ExamID = $select.selected.ExamID" name="Exm" ng-change="changexm()" required>
+                              <ui-select-match placeholder="- Select Exame Type -">
+                                  {{$select.selected.ExamName}}
+                                  <span style="float:right" ng-click="vm.ExamID = null; DisBtn(); $select.selected=undefined">
+                                      <i class="fa fa-remove" aria-hidden="true"></i>
+                                  </span>
+                              </ui-select-match>
+                              <ui-select-choices repeat="Exame in   vm.Exames | filter: $select.search">
+                                  <div ng-bind-html="Exame.ExamName | highlight: $select.search"></div>
+                              </ui-select-choices>
+                          </ui-select>
+
+                      </div>
+                      <span class="error" ng-show="(vm.passMarkSetup.$dirty||submitted) && vm.passMarkSetup.Exm.$error.required">*</span>
+                  </div>
+                  <div class="col-md-3 marginOff col-sm-offset-3">
+                      <button type="submit" class="btn btn-primary btn-block showsub" ng-click="vm.showSubject()" ng-disabled="vm.passMarkSetup.$invalid">Show Subject</button>
+
+                  </div>
+              </div>
+
+          </form>
+	</div>
+</div>
+</div>
+<!-- Exame routine Show -->
+
+
+
+
+
+
+<div class="grid simple col-md-12 vertical green" ng-show = "addRoutin">
+	<div class="grid-body">
+		<div class="row">
+			<div class="col-md-12">		
+				<h4 class="clearfix">Marks Entry</h4>
+                <!--<pre>{{subjectArr|json}}</pre>-->  
+				<form class="newOvDiscount" name="pre" ng-model="vm.from">
+					<table class="newDiscounts dynaRows table table-hover table-condensed">
+						<thead>
+                            <tr>
+                                <th>SL</th>
+                                <th>Subject</th>
+                                <th>MCQ</th>
+                                <th>Written</th>
+                                <th>Practical</th>
+                                <th>Attendence</th>
+                                <th>Is Calculate Total</th>
+                                <th>Total</th>
+                            </tr>
+						</thead>
+						<tbody>
+                            <tr ng-repeat="sub in subjects">
+                                <!-- <tr ng-repeat="sub in data">	 -->
+                                <td>{{$index + 1}}</td>
+                                <td>{{sub.SubjectName}}</td>
+                                <td ng-click="openSubjectIndex($index)">
+                                    <div>
+                                        <input id="{{sub.id+$index}}" type="number" min="0" max="100" oninput="validity.valid||(value=null);" ng-keydown="$event.keyCode == 13 ? $event.preventDefault() : null" ng-model="sub.MCQ" ng-change="vm.CalculateColumns(sub)" ng-readonly="!IsReadOnly[$index]">
+                                        <label for="{{sub.id+$index}}"></label>
+                                    </div>
+                                </td>
+                                <td ng-click="openSubjectIndex($index)">
+                                    <div>
+                                        <input id="{{sub.id+$index}}" type="number" min="0" max="100" oninput="validity.valid||(value=null);" ng-keydown="$event.keyCode == 13 ? $event.preventDefault() : null" ng-model="sub.Written" ng-change="vm.CalculateColumns(sub)" ng-readonly="!IsReadOnly[$index]">
+                                        <label for="{{sub.id+$index}}"></label>
+                                    </div>
+                                </td>
+                                <td ng-click="openSubjectIndex($index)">
+                                    <div>
+                                        <input id="{{sub.id+$index}}" type="number" min="0" max="100" oninput="validity.valid||(value=null);" ng-keydown="$event.keyCode == 13 ? $event.preventDefault() : null" ng-model="sub.Precticle" ng-change="vm.CalculateColumns(sub)" ng-readonly="!IsReadOnly[$index]">
+                                        <label for="{{sub.id+$index}}"></label>
+                                    </div>
+                                </td>
+                                <td ng-click="openSubjectIndex($index)">
+                                    <div>
+                                        <input id="{{sub.id+$index}}" type="number" min="0" max="100" ng-model="sub.Attendance" oninput="validity.valid||(value=null);" ng-keydown="$event.keyCode == 13 ? $event.preventDefault() : null" ng-change="vm.CalculateColumns(sub)" ng-readonly="!IsReadOnly[$index]">
+                                        <label for="{{sub.id+$index}}"></label>
+                                    </div>
+                                </td>
+                                <td ng-click="openSubjectIndexActive($index)">
+                                    <div class="checkbox check-primary">
+                                        <input id="{{$index + 100}}" type="checkbox" ng-model="sub.IsCalculateOnTotal" ng-checked="{{sub.IsCalculateOnTotal}}"  ng-click="IsCalTotal(sub.IsCalculateOnTotal,$index)">
+                                        <label for="{{$index + 100}}"></label>
+                                    </div>
+                                </td>
+                                <td ng-click="openSubjectIndex($index)">
+                                    <div>
+                                        <input id="{{sub.id+$index+1}}" type="number" min="0" ng-model="sub.Total" ng-readonly="IsReadOnly[$index]">
+                                        <label for="{{sub.id+$index+1}}"></label>
+                                    </div>
+                                </td>
+                            </tr>
+							
+						</tbody>
+					</table>
+				</form>	
+			</div>
+		</div>
+	</div>	
+</div>	 
+
+
+
+
+
+
+
+<!-- Edit Html -->
+
+
+
+  
+
+<style>
+	a {
+		cursor: pointer;
+	}
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+	.thumb {
+    width: 24px;
+    height: 24px;
+    float: none;
+    position: relative;
+    top: 7px;
+}
+.hungry table.dynaRows tr td input {
+    width: 100%;
+	border: 1px solid #0aa69994;
+	
+}
+
+</style>

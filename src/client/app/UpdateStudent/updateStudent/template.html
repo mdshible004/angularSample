@@ -1,0 +1,705 @@
+<iframe id="txtArea1" style="display:none"></iframe>
+
+
+<div class="grid simple col-md-12" ng-show="createItem">
+
+    <div class="grid-title">
+        <div class="row">
+            <div class="col-md-9">
+                <div class="page-title">
+                    <i class="fa fa-keyboard-o" aria-hidden="true"></i>
+                    <h3>
+                        Find Class Wise -
+                        <span class="semi-bold">Student</span>
+                    </h3>
+                </div>
+            </div>
+
+            <div class="col-md-1 marginOff">
+                <button href="#" class="btn btn-primary btn-block showBtn" data-toggle="modal" ng-click="RefreshList()">Find</button>
+            </div>
+            <div class="col-md-1 marginOff">
+                <button type="button" class="btn btn-primary btn-block resetBtn" ng-click="clearField()">Reset</button>
+            </div>
+
+
+        </div>
+    </div>
+    <div class="grid-body">
+        <div class="row">
+            <form class="form-horizontal col-sm-12" name="vm.classSetup">
+                <div class="row col-sm-12">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label">Institute</label>
+                            <div class="col-sm-7">
+                                <ui-select ng-model="vm.institute.selected" theme="bootstrap" ng-click="vm.instituteID = $select.selected.InstituteID" on-select="vm.getmediumNameDdl(vm.instituteID)" ng-disabled="vm.InstituteID!==1?true:false" ng-change="change()">
+                                    <ui-select-match placeholder=" -Select-">
+                                        {{$select.selected.InstituteName}}
+                                        <span style="float:right" ng-click="vm.instituteID = null; vm.medium = undefined; vm.class = undefined; vm.section=undefined; vm.department = undefined; DisBtn(); $select.selected=undefined">
+                                            <i class="fa fa-remove" aria-hidden="true"></i>
+                                        </span>
+                                    </ui-select-match>
+
+                                    <ui-select-choices value="Please select" repeat="Institute in vm.institutes | filter: $select.search">
+                                        <div ng-bind-html="Institute.InstituteName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label">Department</label>
+                            <div class="col-sm-7">
+                                <ui-select ng-model="vm.department.selected" theme="bootstrap" ng-click="vm.DepartmentID = $select.selected.DepartmentID" on-select="vm.ClassSelected(0, '')" ng-change="changeDep()">
+                                    <ui-select-match placeholder=" -Select-">
+                                        {{$select.selected.DepartmentName}}
+                                        <span style="float:right" ng-click="vm.DepartmentID = null; vm.section=undefined; DisBtn(); $select.selected=undefined">
+                                            <i class="fa fa-remove" aria-hidden="true"></i>
+                                        </span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="dep in vm.departments | filter: $select.search">
+                                        <div ng-bind-html="dep.DepartmentName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+                </div>
+
+                <div class="row col-sm-12">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label">Medium</label>
+                            <div class="col-sm-7">
+                                <ui-select ng-model="vm.medium.selected" theme="bootstrap" ng-click="vm.MediumID = $select.selected.MediumID" on-select="vm.MediumWiseClassDDL(vm.MediumID)" ng-change="changeMed()">
+                                    <ui-select-match placeholder=" -Select-">
+                                        {{$select.selected.MameName}}
+                                        <span style="float:right" ng-click="vm.MediumID = null; vm.class = undefined; vm.section=undefined; vm.department = undefined; DisBtn(); $select.selected=undefined">
+                                            <i class="fa fa-remove" aria-hidden="true"></i>
+                                        </span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="medium in vm.mediums | filter: $select.search">
+                                        <div ng-bind-html="medium.MameName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label">Section</label>
+                            <div class="col-sm-7">
+                                <ui-select ng-model="vm.section.selected" theme="bootstrap" ng-click="vm.SectionID = $select.selected.SectionID">
+                                    <ui-select-match placeholder=" -Select-">
+                                        {{$select.selected.SectionName}}
+                                        <span style="float:right" ng-click="vm.SectionID = null; DisBtn(); $select.selected=undefined">
+                                            <i class="fa fa-remove" aria-hidden="true"></i>
+                                        </span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="section in vm.sections | filter: $select.search">
+                                        <div ng-bind-html="section.SectionName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="row col-sm-12">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label">Class</label>
+                            <div class="col-sm-7">
+                                <ui-select ng-model="vm.class.selected" theme="bootstrap" ng-click="vm.ClassID = $select.selected.ClassID" on-select="vm.ClassWiseDepartmentDDL(vm.ClassID,'')" ng-change="changeCls()">
+                                    <ui-select-match placeholder=" -Select-">
+                                        {{$select.selected.ClassName}}
+                                        <span style="float:right" ng-click="vm.ClassID = null; vm.section=undefined; vm.department = undefined; DisBtn(); $select.selected=undefined">
+                                            <i class="fa fa-remove" aria-hidden="true"></i>
+                                        </span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="class in vm.classes | filter: $select.search">
+                                        <div ng-bind-html="class.ClassName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label">Shift</label>
+                            <div class="col-sm-7">
+                                <ui-select ng-model="vm.shift.selected" theme="bootstrap" ng-click="vm.ShiftID = $select.selected.ShiftID">
+                                    <ui-select-match placeholder=" -Select-">
+                                        {{$select.selected.ShiftName}}
+                                        <span style="float:right" ng-click="vm.ShiftID = null; DisBtn(); $select.selected=undefined">
+                                            <i class="fa fa-remove" aria-hidden="true"></i>
+                                        </span>
+                                    </ui-select-match>
+
+                                    <ui-select-choices value="Please select" repeat="shift in vm.shifts | filter: $select.search">
+                                        <div ng-bind-html="shift.ShiftName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<!--
+<div class="modal fade " id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+
+                <div class="grid-body">
+                    <div class="row">
+                        <div class="col-md-12">
+
+                            <label for="items">items by page</label>
+                            <input class="input-sm form-control" name="items" id="items" type="number" ng-model="itemsByPage" />
+                            <table st-table="rowCollection" class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>SL</th>
+                                        <th>UserID</th>
+                                        <th>UserName</th>
+                                        <th>RFID</th>
+                                        <th>RollNo</th>
+                                        <th>Guardian</th>
+                                        <th>Phone</th>
+                                        <th>Shift</th>
+                                        <th>Medium</th>
+                                        <th>Department</th>
+                                        <th>Class</th>
+                                        <th>Section</th>
+                                        <th>Image</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="student in studentInfo">
+                                        <td>{{$index}}</td>
+                                        <td>{{student.UserID}}</td>
+                                        <td>{{student.UserName}}</td>
+                                        <td>{{student.RFID}}</td>
+                                        <td>{{student.RollNo}}</td>
+                                        <td>{{student.Guardian}}</td>
+                                        <td>{{student.GuardianPhone}}</td>
+                                        <td>{{student.ShiftName}}</td>
+                                        <td>{{student.MameName}}</td>
+                                        <td>{{student.DepartmentName}}</td>
+                                        <td>{{student.ClassName}}</td>
+                                        <td>{{student.SectionName}}</td>
+                                        <td>
+                                            <img src="{{vm.imgHost}}{{student.ImageUrl}}" style="height:45px; width:45px" ng-if="vm.ImageURL !== null" />
+                                            <img src="images/profiles/no-user-image.png" style="height:35px; width:35px" ng-if="vm.ImageURL === null" />
+                                        </td>
+
+                                        <td>
+                                            <button type="submit" class="btn btn-primary btn-block saveBtn" ng-click="vm.selectedEvent($index)" data-dismiss="modal">Select</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+ -->
+
+
+
+
+<!-- ---------------------------------------------------- Start UI-Grid ------------------------------------------------ -->
+<div class="modal fade " id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="height:500px">
+        <div class="modal-content">
+            <div class="modal-head">
+                <h3 style="margin-left:30px; font-weight:bold">Student List</h3>
+            </div>
+            <div class="modal-body">
+                <div class="col-md-12">
+                    <div ui-grid="gridOptions" ui-grid-resize-columns ui-grid-auto-resize ui-grid-move-columns ui-grid-exporter ui-grid-pinning
+                         class="grid" style="height:550px">
+                    </div>
+
+                    <div class="loadmore">
+                        <div ng-show="loaderMore" ng-class="result">
+                            <!-- <img src="~/Content/img/ng-loader.gif" /> -->
+                            {{lblMessage}}
+                        </div>
+                    </div>
+                    <div class="row"></div>
+                    <div role="contentinfo" style="margin-bottom:-20px" class="ui-grid-pager-panel ng-scope">
+                        <div role="navigation" class="ui-grid-pager-container">
+                            <div role="menubar" class="ui-grid-pager-control">
+                                <!-- Start Page -->
+                                <button type="button" role="menuitem" class="ui-grid-pager-first" ui-grid-one-bind-title="aria.pageToFirst" ui-grid-one-bind-aria-label="aria.pageToFirst"
+                                        ng-click="pagination.firstPage()" ng-disabled="cantPageBackward()" title="Page to first" aria-label="Page to first"
+                                        disabled="disabled">
+                                    <div class="first-triangle">
+                                        <div class="first-bar"></div>
+                                    </div>
+                                </button>
+
+                                <!-- Prev Page -->
+                                <button type="button" role="menuitem" class="ui-grid-pager-previous" ui-grid-one-bind-title="aria.pageBack" ui-grid-one-bind-aria-label="aria.pageBack"
+                                        ng-click="pagination.previousPage()" ng-disabled="cantPageBackward()" title="Page back" aria-label="Page back" disabled="disabled">
+                                    <div class="first-triangle prev-triangle"></div>
+                                </button>
+
+                                <input type="number" ui-grid-one-bind-title="aria.pageSelected" ui-grid-one-bind-aria-label="aria.pageSelected" class="ui-grid-pager-control-input ng-pristine ng-untouched ng-valid ng-not-empty ng-valid-min ng-valid-max ng-valid-required"
+                                       ng-model="pagination.pageNumber" min="1" max="{{pagination.getTotalPages()}}" required="" title="Selected page" aria-label="Selected page">
+
+                                <span class="ui-grid-pager-max-pages-number ng-binding" ng-show="pagination.getTotalPages() > 0">
+                                    <abbr ui-grid-one-bind-title="paginationOf" title="of">/</abbr>{{pagination.getTotalPages()}}
+                                </span>
+
+                                <!-- Next Page -->
+                                <button type="button" role="menuitem" class="ui-grid-pager-next" ui-grid-one-bind-title="aria.pageForward" ui-grid-one-bind-aria-label="aria.pageForward"
+                                        ng-click="pagination.nextPage()" ng-disabled="cantPageForward()" title="Page forward" aria-label="Page forward">
+                                    <div class="last-triangle next-triangle"></div>
+                                </button>
+
+                                <!-- Last Page -->
+                                <button type="button" role="menuitem" class="ui-grid-pager-last" ui-grid-one-bind-title="aria.pageToLast" ui-grid-one-bind-aria-label="aria.pageToLast"
+                                        ng-click="pagination.lastPage()" ng-disabled="cantPageToLast()" title="Page to last" aria-label="Page to last">
+                                    <div class="last-triangle">
+                                        <div class="last-bar"></div>
+                                    </div>
+                                </button>
+                            </div>
+                            <!-- ngIf: grid.options.paginationPageSizes.length > 1 -->
+
+                            <div class="ui-grid-pager-row-count-picker ng-scope">
+                                <select ng-model="pagination.ddlpageSize" ng-options="o as o for o in pagination.paginationPageSizes" ng-change="pagination.pageSizeChange()"
+                                        class="ng-pristine ng-untouched ng-valid ng-not-empty"></select>
+                                <span class="ui-grid-pager-row-count-label ng-binding">&nbsp;items per page</span>
+                            </div>
+                            <!-- end ngIf: grid.options.paginationPageSizes.length > 1 -->
+                            <!-- ngIf: grid.options.paginationPageSizes.length <= 1 -->
+                        </div>
+                        <div class="ui-grid-pager-count-container">
+                            <div class="ui-grid-pager-count">
+                                <span ng-show="pagination.totalItems > 0" class="ng-binding">
+                                    {{pagination.pageNumber}}
+                                    <abbr ui-grid-one-bind-title="paginationThrough" title="through">-</abbr>
+                                    {{pagination.ddlpageSize}} of {{pagination.totalItems}} items
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer" data-dismiss="modal">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <!--ng-click="clearField()"-->
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ----------------------------------------------------- End UI-Grid ------------------------------------------------- -->
+
+
+
+
+<!-- Edit -->
+<div class="grid simple col-md-12" ng-show="UpdateItem">
+
+    <div class="grid-title">
+        <div class="row">
+            <div class="col-md-9">
+                <div class="page-title">
+                    <i class="fa fa-keyboard-o" aria-hidden="true"></i>
+                    <h3>
+                        Update Student -
+                        <span class="semi-bold">Details</span>
+                    </h3>
+                </div>
+            </div>
+            <div class="col-md-1 marginOff">
+                <button type="button" class="btn btn-primary btn-block showBtn" ng-click="FuncToBack()">Back</button>
+            </div>
+            <div class="col-md-1 marginOff">
+                <button type="button" class="btn btn-primary btn-block resetBtn" ng-click="clearField()">Reset</button>
+            </div>
+            <div class="col-md-1 marginOff">
+                <button href="#" class="btn btn-primary btn-block saveBtn" ng-click="vm.UpdateStudent()">Save</button>
+            </div>
+
+
+        </div>
+    </div>
+    <div class="grid-body">
+        <div class="row">
+            <form class="form-horizontal col-sm-12" name="vm.studentSetup">
+                <div class="row col-sm-12">
+                    <div class="col-sm-4">
+
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label">Student Name </label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" placeholder="Name" ng-model="vm.studentSetup.Name" name="fname" />
+                                <input type="hidden" class="form-control" placeholder=" Name" ng-model="vm.studentSetup.UserClassID">
+                                <input type="hidden" class="form-control" placeholder=" Name" ng-model="vm.studentSetup.UserID">
+                                <input type="hidden" class="form-control" placeholder=" Name" ng-model="vm.studentSetup.StudentNo">
+                                <input type="hidden" class="form-control" placeholder=" Name" ng-model="vm.studentSetup.BrunchID">
+                                <input type="hidden" class="form-control" placeholder=" Name" ng-model="vm.studentSetup.UserTypeID">
+                                <input type="hidden" class="form-control" placeholder=" Name" ng-model="vm.studentSetup.PhoneNo">
+                                <input type="hidden" class="form-control" placeholder=" Name" ng-model="vm.studentSetup.EmailID">
+                                <!-- <input type="hidden" class="form-control" placeholder=" Name" ng-model="vm.studentSetup.ImageUrl"> -->
+                                <input type="hidden" class="form-control" placeholder=" Name" ng-model="vm.studentSetup.FingerUrl">
+                                <input type="hidden" class="form-control" placeholder=" Name" ng-model="vm.studentSetup.SignatureUrl">
+                                <input type="hidden" class="form-control" placeholder=" Name" ng-model="vm.studentSetup.ReligionID">
+                                <input type="hidden" class="form-control" placeholder=" Name" ng-model="vm.studentSetup.IsImageCaptured">
+                                <input type="hidden" class="form-control" placeholder=" Name" ng-model="vm.studentSetup.GuardianID">
+
+                                <input type="hidden" class="form-control" placeholder=" Name" ng-model="vm.studentSetup.UserNo">
+                                <input type="hidden" class="form-control" placeholder=" Name" ng-model="vm.studentSetup.UserTitleID">
+                                <input type="hidden" class="form-control" placeholder=" Name" ng-model="vm.studentSetup.UserFirstName">
+                                <input type="hidden" class="form-control" placeholder=" Name" ng-model="vm.studentSetup.UserMiddleName">
+                                <input type="hidden" class="form-control" placeholder=" Name" ng-model="vm.studentSetup.UserLastName">
+                                <input type="hidden" class="form-control" placeholder=" Name" ng-model="vm.studentSetup.NickName">
+                                <input type="hidden" class="form-control" placeholder=" Name" ng-model="vm.studentSetup.SkypeID">
+                                <input type="hidden" class="form-control" placeholder=" Name" ng-model="vm.studentSetup.FacebookID">
+                                <input type="hidden" class="form-control" placeholder=" Name" ng-model="vm.studentSetup.WhatsApp">
+                                <input type="hidden" class="form-control" placeholder=" Name" ng-model="vm.studentSetup.Viber">
+                                <input type="hidden" class="form-control" placeholder=" Name" ng-model="vm.studentSetup.LinkedIN">
+                                <input type="hidden" class="form-control" placeholder=" Name" ng-model="vm.studentSetup.ParAddress">
+                                <input type="hidden" class="form-control" placeholder=" Name" ng-model="vm.studentSetup.ParThana">
+                                <input type="hidden" class="form-control" placeholder=" Name" ng-model="vm.studentSetup.ParPostCode">
+                                <input type="hidden" class="form-control" placeholder=" Name" ng-model="vm.studentSetup.ParCountryID">
+                                <input type="hidden" class="form-control" placeholder=" Name" ng-model="vm.studentSetup.ParStateID">
+                                <input type="hidden" class="form-control" placeholder=" Name" ng-model="vm.studentSetup.ParCityID">
+                                <input type="hidden" class="form-control" placeholder=" Name" ng-model="vm.studentSetup.PreThana">
+                                <input type="hidden" class="form-control" placeholder=" Name" ng-model="vm.studentSetup.PrePostCode">
+                                <input type="hidden" class="form-control" placeholder=" Name" ng-model="vm.studentSetup.PreCountryID">
+                                <input type="hidden" class="form-control" placeholder=" Name" ng-model="vm.studentSetup.PreStateID">
+                                <input type="hidden" class="form-control" placeholder=" Name" ng-model="vm.studentSetup.PreCityID">
+                                <input type="hidden" class="form-control" placeholder=" Name" ng-model="vm.studentSetup.MobileNo">
+                                <input type="hidden" class="form-control" placeholder=" Name" ng-model="vm.studentSetup.UniqueIdentity">
+                                <input type="hidden" class="form-control" placeholder=" Name" ng-model="vm.studentSetup.BloodGroupID">
+                                <input type="hidden" class="form-control" placeholder=" Name" ng-model="vm.studentSetup.Weigth">
+                                <input type="hidden" class="form-control" placeholder=" Name" ng-model="vm.studentSetup.Height">
+                                <input type="hidden" class="form-control" placeholder=" Name" ng-model="vm.studentSetup.BirthCertificate">
+                                <input type="hidden" class="form-control" placeholder=" Name" ng-model="vm.studentSetup.PassportNO">
+                                <input type="hidden" class="form-control" placeholder=" Name" ng-model="vm.studentSetup.NID">
+                                <input type="hidden" class="form-control" placeholder=" Name" ng-model="vm.studentSetup.IsActive">
+                                <input type="hidden" class="form-control" placeholder=" Name" ng-model="vm.studentSetup.StatusID">
+                                <input type="hidden" class="form-control" placeholder=" Name" ng-model="vm.studentSetup.GuardianMobileNo">
+                                <input type="hidden" class="form-control" placeholder=" Name" ng-model="vm.studentSetup.GuardianUserFirstName">
+                                <input type="hidden" class="form-control" placeholder=" Name" ng-model="vm.studentSetup.GuardianUserMiddleName">
+                                <input type="hidden" class="form-control" placeholder=" Name" ng-model="vm.studentSetup.GuardianUserLastName">
+                                <input type="hidden" class="form-control" placeholder=" Name" ng-model="vm.studentSetup.GuardianNickName">
+                                <input type="hidden" class="form-control" placeholder=" Name" ng-model="vm.studentSetup.GuardianUniqueIdentity">
+                                <input type="hidden" class="form-control" placeholder=" Name" ng-model="vm.studentSetup.GuardianBloodGroupID">
+                                <input type="hidden" class="form-control" placeholder=" Name" ng-model="vm.studentSetup.GuardianPassportNO">
+                                <input type="hidden" class="form-control" placeholder=" Name" ng-model="vm.studentSetup.GuardianNID">
+                                <input type="hidden" class="form-control" placeholder=" Name" ng-model="vm.studentSetup.RelationID">
+                                <input type="hidden" class="form-control" placeholder=" Name" ng-model="vm.studentSetup.IsLocalGuardian">
+                                <input type="hidden" class="form-control" placeholder=" Name" ng-model="vm.studentSetup.IsActiveFamily">
+                                <input type="hidden" class="form-control" placeholder=" Name" ng-model="vm.studentSetup.SessionID">
+                                <input type="hidden" class="form-control" placeholder=" Name" ng-model="vm.studentSetup.BoardID">
+                                <input type="hidden" class="form-control" placeholder=" Name" ng-model="vm.studentSetup.IsActiveStudent">
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label">Guardian Name</label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" placeholder="Guardian" ng-model="vm.studentSetup.Guardian" name="fname" />
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label"><span style="font-size:13px">Guardian Phone</span></label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" placeholder="Phone" ng-model="vm.studentSetup.GuardianPhone" name="fname" />
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row col-sm-12">
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label">Guardian Email</label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" placeholder="Email" ng-model="vm.studentSetup.GuardianEmail" name="fname" />
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label">Gender</label>
+                            <div class="col-sm-7">
+                                <ui-select ng-model="vm.gender.selected" theme="bootstrap" ng-click="vm.GenderID = $select.selected.GenderID">
+                                    <ui-select-match placeholder=" -Select-">
+                                        {{$select.selected.GenderName}}
+                                        <span style="float:right" ng-click="vm.GenderID = null; DisBtn(); $select.selected=undefined">
+                                            <i class="fa fa-remove" aria-hidden="true"></i>
+                                        </span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="gender in vm.genders | filter: $select.search">
+                                        <div ng-bind-html="gender.GenderName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                                <!-- value:{{vm.shift.selected.ShiftID}} -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label">Shift</label>
+                            <div class="col-sm-7">
+                                <ui-select ng-model="vm.shift.selected" theme="bootstrap" ng-click="vm.ShiftID = $select.selected.ShiftID">
+                                    <ui-select-match placeholder=" -Select-">
+                                        {{$select.selected.ShiftName}}
+                                        <span style="float:right" ng-click="vm.ShiftID = null; DisBtn(); $select.selected=undefined">
+                                            <i class="fa fa-remove" aria-hidden="true"></i>
+                                        </span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="shift in vm.shifts | filter: $select.search">
+                                        <div ng-bind-html="shift.ShiftName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                                <!-- value:{{vm.shift.selected.ShiftID}} -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row col-sm-12">
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label">Medium</label>
+                            <div class="col-sm-7">
+                                <ui-select ng-model="vm.medium.selected" theme="bootstrap" ng-click="vm.MediumID = $select.selected.MediumID" on-select="vm.MediumWiseClassDDL($select.selected.MediumID, '')">
+                                    <ui-select-match placeholder=" -Select-">
+                                        {{$select.selected.MameName}}
+                                        <span style="float:right" ng-click="vm.MediumID = null; vm.class = undefined; vm.classes = []; vm.section=undefined; vm.department = undefined; vm.departments = [];vm.sections = []; DisBtn(); $select.selected=undefined">
+                                            <i class="fa fa-remove" aria-hidden="true"></i>
+                                        </span>
+                                    </ui-select-match>
+
+                                    <ui-select-choices repeat="medium in vm.mediums | filter: $select.search">
+
+                                        <div ng-bind-html="medium.MameName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label">Class</label>
+                            <div class="col-sm-7">
+                                <ui-select ng-model="vm.class.selected" theme="bootstrap" ng-click="vm.ClassID = $select.selected.ClassID" on-select="vm.ClassWiseDepartmentDDL(vm.ClassID,'')">
+                                    <ui-select-match placeholder=" -Select-">
+                                        {{$select.selected.ClassName}}
+                                        <span style="float:right" ng-click="vm.ClassID = null; vm.section=undefined; vm.department = undefined; DisBtn(); vm.departments = [];vm.sections = []; $select.selected=undefined">
+                                            <i class="fa fa-remove" aria-hidden="true"></i>
+                                        </span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="class in vm.classes | filter: $select.search">
+                                        <div ng-bind-html="class.ClassName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+
+                                </ui-select>
+                                <!--value:{{vm.class.selected.ClassID}}-->
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label">Department</label>
+                            <div class="col-sm-7">
+                                <ui-select ng-model="vm.department.selected" theme="bootstrap" ng-click="vm.DepartmentID = $select.selected.DepartmentID" on-select="vm.ClassSelected(0, '')">
+                                    <ui-select-match placeholder=" -Select-">
+                                        {{$select.selected.DepartmentName}}
+                                        <span style="float:right" ng-click="vm.DepartmentID = null; vm.section=undefined; vm.sections = []; DisBtn(); $select.selected=undefined">
+                                            <i class="fa fa-remove" aria-hidden="true"></i>
+                                        </span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="dep in vm.departments | filter: $select.search">
+                                        <div ng-bind-html="dep.DepartmentName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+
+                                <!-- value:{{vm.mon.selected.MonthID}} -->
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row col-sm-12">
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label">Section</label>
+                            <div class="col-sm-7">
+                                <ui-select ng-model="vm.section.selected" theme="bootstrap" ng-click="vm.SectionID = $select.selected.SectionID">
+                                    <ui-select-match placeholder=" -Select-">
+                                        {{$select.selected.SectionName}}
+                                        <span style="float:right" ng-click="vm.SectionID = null; DisBtn(); $select.selected=undefined">
+                                            <i class="fa fa-remove" aria-hidden="true"></i>
+                                        </span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="section in vm.sections | filter: $select.search">
+                                        <div ng-bind-html="section.SectionName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label">RFID</label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" placeholder="RFID" ng-model="vm.studentSetup.RFID" name="fname" />
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label">Roll No</label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" placeholder="Roll No" ng-model="vm.studentSetup.RollNo" name="fname" />
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row col-sm-12">
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label">DOB</label>
+                            <div class="col-sm-7 input-groups margin-bottom-sm">
+                                <datepicker date-format="dd-MM-yyyy" selector="form-control">
+                                    <div class="input-group">
+                                        <input class="form-control" placeholder="Choose a date" ng-model="vm.studentSetup.DOB " />
+                                        <span class="input-group-addon" style="cursor: pointer">
+                                            <i class="fa fa-lg fa-calendar"></i>
+                                        </span>
+                                    </div>
+                                    <!--<font color="red">* MM-DD-YYYY</font>-->
+                                </datepicker>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label">Address</label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" placeholder="First Name" ng-model="vm.studentSetup.Address" name="fname" />
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label">Remarks</label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" placeholder="First Name" ng-model="vm.studentSetup.Remarks" name="fname" />
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row col-sm-12">
+                    <div class="col-md-4">
+
+
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label">User Image</label>
+                            <div class="col-sm-7">
+                                <button class="uploadBtn" type="file" ngf-select="uploadFiles($file, $invalidFiles)" ng-submit="uploadFiles(vm.userSetup.UserImage)"
+                                        accept="image/*" ngf-max-height="100000" ngf-max-size="2MB" ng-model="vm.userSetup.UserImage" ngf-multiple="false"
+                                        name="UserImage">
+                                    UPLOAD FILE
+                                </button>
+                                <br>
+                                <br>
+                                <img src="{{vm.imgHost}}{{vm.ImageUrl}}" style="height:94.488189px; width:75.590551px" />
+
+                                <!--<img src="http://www.qygjxz.com/data/out/190/4688329-profile-pics.jpg" style="height:94.488189px; width:75.590551px" />-->
+
+
+                                <!--<img src="{{Uimage}}" style="height:94.488189px; width:75.590551px" ng-show="imgShow" />-->
+                                <!--<img src="{{vm.imgHost}}{{vm.ImageUrl}}" style="height:94.488189px; width:75.590551px" ng-show="IsShow = Uimage === undefined ? true:false" />
+    <img src="{{vm.ImageUrl}}" style="height:94.488189px; width:75.590551px" ng-show="IsShow = Uimage === undefined &&  vm.ImageUrl ==='' ? true:false" />-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+<style>
+    .thumb {
+        width: 24px;
+        height: 24px;
+        float: none;
+        position: relative;
+        top: 7px;
+    }
+
+    .modal-content {
+        width: 1500px;
+        margin-left: -367px;
+    }
+
+    .no-margin {
+        padding-top: 11px;
+    }
+
+    .studentInfo h4 {
+        font-size: 14px;
+    }
+   
+</style>

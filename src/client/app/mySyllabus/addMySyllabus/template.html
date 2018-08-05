@@ -1,0 +1,313 @@
+
+<div class="grid simple col-md-12 vertical green" ng-show="createItem">
+
+	<div class="grid-title">
+        <div class="row">
+            <div class="col-md-10">
+                <div class="page-title">
+                    <i class="fa fa-keyboard-o" aria-hidden="true"></i>
+                    <h3>
+                        My Syllabus
+
+                    </h3>
+                </div>
+            </div>
+            <div class="col-md-1 marginOff">
+                <button type="submit" class="btn btn-primary btn-block resetBtn" ng-click="clearField()">Reset</button>
+            </div>
+        </div>
+
+	</div>
+
+
+
+	<div class="grid-body">
+        <div class="row">
+            <form class="form-horizontal col-sm-12" name="vm.MySyllabus">
+                <div class="row col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Exam</label>
+                        <div class="col-sm-8">
+                            <ui-select ng-model="vm.Exame.selected" theme="bootstrap" ng-click="vm.ExamID = $select.selected.ExamID" name="Exm" ng-change="changeGrid()" required>
+                                <ui-select-match placeholder="- Select Exame Type -">
+                                    {{$select.selected.ExamName}}
+                                    <span style="float:right" ng-click="vm.ExamID = null; syllabusUrlList=[]; DisBtn(); $select.selected=undefined">
+                                        <i class="fa fa-remove" aria-hidden="true"></i>
+                                    </span>
+                                </ui-select-match>
+                                <ui-select-choices repeat="Exame in   vm.Exames | filter: $select.search">
+                                    <div ng-bind-html="Exame.ExamName | highlight: $select.search"></div>
+                                </ui-select-choices>
+                            </ui-select>
+
+                        </div>
+                        <span class="error" ng-show="(vm.MySyllabus.$dirty||submitted) && vm.MySyllabus.Exm.$error.required">*</span>
+                    </div>
+                </div>
+                <div class="row col-sm-6">
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Subject</label>
+                        <div class="col-sm-8">
+                            <ui-select ng-model="vm.subject.selected" name="sec" theme="bootstrap" ng-click="vm.SubjectID = $select.selected.SubjectID"  ng-change="changeGrid()" required>
+                                <ui-select-match placeholder="- Select Subject -">
+                                    {{$select.selected.SubjectName}}
+                                    <span style="float:right" ng-click="vm.SubjectID = null; syllabusUrlList=[]; DisBtn(); $select.selected=undefined">
+                                        <i class="fa fa-remove" aria-hidden="true"></i>
+                                    </span>
+                                </ui-select-match>
+                                <ui-select-choices repeat="subject in   vm.subjects | filter: $select.search">
+                                    <div ng-bind-html="subject.SubjectName | highlight: $select.search"></div>
+                                </ui-select-choices>
+                            </ui-select>
+
+                        </div>
+                        <span class="error" ng-show="(vm.MySyllabus.$dirty||submitted) && vm.MySyllabus.sec.$error.required">*</span>
+                    </div>
+                </div>
+
+
+            <!--</form>-->
+
+            <div class="form-group ">
+                <!--ngf-max-size="1MB"-->
+                <div class="col-sm-9 ">
+                    <br><br>
+                    <table ng-show="syllabusUrlList[0].SyllabusUrl!==''">
+                        <tbody>
+                            <tr>
+                                <!--onerror="this.src='images/imageExcel.png'"-->
+                                <td ng-repeat="sul in syllabusUrlList track by $index" style="text-align:center">
+                                    <img href="javascript:void(0);" target="_blank" ng-click="OpenFile(sul.FileName, sul.SyllabusUrl)" src="{{vm.imgHost}}{{sul.SyllabusUrl}}" onerror="this.src='images/imageExcel.png'" style="height:94.488189px; width:75.590551px; border:3px solid #f5efef; margin-bottom:4px" ng-if="sul.SyllabusUrl != 'undefined' && sul.SyllabusUrl != undefined" /><br />
+                                    {{sul.FileName}}
+                                </td>
+
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+
+
+            <div class="row">
+                <div class="col-md-10">
+                    <div class="page-title">
+                        <i class="" aria-hidden="true"></i>
+                        <h3>
+                            <b>Lesson Plan</b>
+
+                        </h3>
+                    </div>
+                </div>
+
+            </div>
+            
+            <hr>
+            <!--<form class="form-horizontal col-sm-12" name="vm.passMarkSetup">-->
+                <div class="row col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">From Date</label>
+                        <div class="col-sm-8">
+
+                            <datepicker date-format="MM-dd-yyyy" selector="form-control" ng-click="date()">
+                                <div class="input-group">
+                                    <input class="form-control" placeholder="Choose a date" ng-model="vm.formDateSetup" name="fmDate" required>
+                                    <span class="input-group-addon" style="cursor: pointer">
+                                        <i class="fa fa-lg fa-calendar"></i>
+                                    </span>
+                                </div>
+                            </datepicker>
+
+                        </div>
+                        <span class="error" ng-show="(vm.MySyllabus.$dirty||submitted) && vm.MySyllabus.fmDate.$error.required">*</span>
+                    </div>
+                </div>
+                <div class="row col-sm-6">
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">To Date</label>
+                        <div class="col-sm-8">
+
+                            <datepicker date-format="MM-dd-yyyy" selector="form-control" ng-click="date()">
+                                <div class="input-group">
+                                    <input class="form-control" placeholder="Choose a date" ng-model="vm.toDateSetup" name="fmDate" required>
+                                    <span class="input-group-addon" style="cursor: pointer">
+                                        <i class="fa fa-lg fa-calendar"></i>
+                                    </span>
+                                </div>
+                            </datepicker>
+
+                        </div>
+                        <span class="error" ng-show="(vm.MySyllabus.$dirty||submitted) && vm.MySyllabus.fmDate.$error.required">*</span>
+                    </div>
+                </div>
+                <div class="col-md-2 col-md-offset-8 marginOff">
+                    <button type="submit" class="btn btn-primary btn-block showBtn" ng-click="vm.getAcademicClassDayForMySyllabus()" ng-disabled="vm.MySyllabus.$invalid">Show</button>
+                    <!-- <button type="submit" class="btn btn-primary btn-block saveBtn" ng-click="vm.postUserSetupStudent()">Update</button> -->
+                </div>
+            </form>
+        </div>
+        </div>
+</div>
+
+
+<div class="grid simple col-md-12 vertical green" ng-show = "addRoutin">
+	<div class="grid-body">
+		<div class="row">
+			<div class="col-md-12">		
+				<!-- <pre>{{subjectArr|json}}</pre>  -->
+				<form class="newOvDiscount" name="pre" ng-model="vm.from">
+					<table class="newDiscounts dynaRows table table-hover table-condensed">
+						<thead>
+							<tr>
+								<th>SL</th>
+								<th>Date</th>
+								<th>Day</th>
+								<th>Syllabus</th>
+							</tr>
+						</thead>
+                        <tbody>
+                            <!--<tr ng-repeat="sub in subjects">-->
+                            <tr ng-repeat="CD in vm.classDays">
+                                <td>{{$index + 1}}</td>
+                                <td>{{CD.ClassDate}}</td>
+                                <td>
+                                    {{CD.ClassDay}}
+                                </td>
+                                <td>
+                                    <div class="form-group">
+                                        <div class="col-sm-11">
+                                            {{CD.Topic}}
+
+                                        </div>
+                                        <div class="popUpDiv col-sm-1">
+                                            <i class="fa fa-share-square-o" data-toggle="modal" data-target="#myModal" ng-click="loadTopicPopUp(CD, $index)"></i>
+                                        </div>
+                                    </div>
+
+                                </td>
+                            </tr>
+
+                        </tbody>
+					</table>
+				</form>	
+			</div>
+		</div>
+	</div>	
+</div>	 
+
+
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" style="float:left">Home Work</h4>
+            </div>
+            <div class="modal-body">
+                <div class="grid-body">
+                    <div class="row">
+                        <form class="form-horizontal col-md-12" name="vm.homeWorkSetup">
+                            <div class="row">
+
+
+                                <div class="col-md-12">
+
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">Topic</label>
+                                        <div class="col-sm-9" style="margin-top: 9px;">
+                                            {{vm.Topic}}
+
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="col-md-12">
+
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">Topic Details</label>
+                                        <div class="col-sm-9" style="margin-top: 8px; width:750px ; max-height:325px ; overflow:auto;">
+                                            <!-- <input type="text" class="form-control" placeholder="Contact No" ng-model="vm.instituteSetup.ContactNo">-->
+                                            <p align="justify">{{vm.TopicDetails}}</p>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group ">
+
+                                        <div class="col-sm-5 col-sm-offset-3">
+                                            <button class="uploadBtn" >
+                                                Digital Content
+                                            </button>
+                                            <br><br>
+
+                                            <table ng-show="syllabusTopicUrlList[0].ContentUrl!==''">
+                                                <tbody>
+                                                    <tr>
+                                                        <td style="text-align:center" ng-repeat="sul in syllabusTopicUrlList track by $index">
+                                                            <img href="javascript:void(0);" target="_blank" ng-click="OpenFile(sul.FileName, sul.ContentUrl)" src="{{vm.imgHost}}{{sul.ContentUrl}}" style="height:94.488189px; width:75.590551px; border:3px solid #f5efef; margin-bottom:4px" ng-if="sul.ContentUrl != 'undefined' && sul.ContentUrl != undefined" /><br />
+                                                            {{sul.FileName}}
+                                                        </td>
+
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <!--<button type="button" class="btn btn-primary" data-dismiss="modal">Save changes</button>-->
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+
+
+  
+
+<style>
+	a {
+		cursor: pointer;
+	}
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+	.thumb {
+    width: 24px;
+    height: 24px;
+    float: none;
+    position: relative;
+    top: 7px;
+}
+.hungry table.dynaRows tr td input {
+    width: 100%;
+	border: 1px solid #0aa69994;
+	
+}
+
+</style>

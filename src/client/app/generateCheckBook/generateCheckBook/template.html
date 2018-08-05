@@ -1,0 +1,228 @@
+<div class="grid simple col-md-12" ng-show="createItem">
+
+	<div class="grid-title">
+		<div class="row">
+			<div class="col-md-9">
+				<div class="page-title">
+
+					<h3>
+						<span class="semi-bold">Generate Check Book</span>
+					</h3>
+				</div>
+
+			</div>
+			<div class="col-md-1 marginOff">
+				<button type="submit" class="btn btn-primary btn-block showBtn" ng-click="itemEvent()">Show List</button>
+				<!-- <button type="submit" class="btn btn-primary btn-block" ng-click="">Update</button> -->
+			</div>
+			<div class="col-md-1 marginOff">
+				<button type="submit" class="btn btn-primary btn-block resetBtn" ng-click="clearField()">Reset</button>
+			</div>
+			<div class="col-md-1 marginOff">
+				<button type="submit" class="btn btn-primary btn-block saveBtn" ng-click="vm.AddMenuSetting()">Save</button>
+			</div>
+
+		</div>
+	</div>
+	<div class="grid-body">
+		<div class="row">
+			<form class="form-horizontal col-sm-12" name="vm.attendance">
+				<div class="row">
+
+					<div class="col-md-3">
+						<div class="form-group">
+							<label class="col-sm-5 control-label">Cheque Book No</label>
+							<div class="col-sm-7">
+								<input type="text" class="form-control" placeholder="Cheque Book No" ng-model="vm.menuSetup.MenuName">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-5 control-label">Account Number</label>
+							<div class="col-sm-7">
+								<ui-select ng-model="vm.department.selected" theme="bootstrap" ng-click="vm.DepartmentID = $select.selected.DepartmentID">
+									<ui-select-match placeholder="-Select-">{{$select.selected.DepartmentName}}</ui-select-match>
+									<ui-select-choices repeat="department in vm.departments | filter: $select.search">
+										<div ng-bind-html="department.DepartmentName | highlight: $select.search"></div>
+									</ui-select-choices>
+								</ui-select>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label class="col-sm-5 control-label">Receive Date</label>
+							<div class="col-sm-7 input-groups margin-bottom-sm">
+								<datepicker date-format="yyyy-MM-dd" selector="form-control">
+									<div class="input-group">
+										<input class="form-control" placeholder="Choose a date" ng-model="vm.userSetup.DOB" />
+										<span class="input-group-addon" style="cursor: pointer">
+										<i class="fa fa-lg fa-calendar"></i>
+										</span>
+									</div>
+								</datepicker>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-5 control-label">Stating Number</label>
+							<div class="col-sm-7">
+								<input type="text" class="form-control" placeholder="Stating Number" ng-model="vm.menuSetup.MenuName">
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label class="col-sm-5 control-label">Pre fix</label>
+							<div class="col-sm-7">
+								<input type="text" class="form-control" placeholder="Pre fix" ng-model="vm.menuSetup.MenuName">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-5 control-label">Number Of Pages</label>
+							<div class="col-sm-7">
+								<input type="number" class="form-control" placeholder="Number Of Pages" ng-model="vm.menuSetup.MenuName">
+							</div>
+						</div>
+					</div>
+
+
+					<div class="col-md-3">
+						<div class="form-group">
+							<label class="col-sm-5 control-label">Sur fix</label>
+							<div class="col-sm-7">
+								<input type="text" class="form-control" placeholder="Sur fix" ng-model="vm.menuSetup.MenuName">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-5 control-label">Number Length</label>
+							<div class="col-sm-7">
+								<input type="number" class="form-control" placeholder="Number Length" ng-model="vm.menuSetup.MenuName">
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-sm-4">
+							</div>
+							<div class="col-sm-8">
+								<button type="submit" class="btn btn-primary btn-block saveBtn" ng-click="vm.AddMenuSetting()">Generate</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</form>
+
+		</div>
+	</div>
+	<div class="grid-title">
+		<div class="row">
+			<div class="col-md-9">
+				<div class="page-title">
+
+					<h3>
+						<span class="semi-bold"> Check Book Details</span>
+					</h3>
+				</div>
+			</div>
+
+		</div>
+	</div>
+	<div class="grid-body">
+		<div class="row">
+			<form class="form-horizontal col-sm-12" name="vm.attendance">
+				<div class="row">
+					<div class="col-md-3">
+						<div class="form-group">
+							<label class="col-sm-5 control-label">Cheque No</label>
+							<div class="col-sm-7">
+								<input type="text" class="form-control" placeholder="Cheque No" ng-model="vm.menuSetup.MenuName">
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label class="col-sm-5 control-label">Sequence No</label>
+							<div class="col-sm-7">
+								<input type="text" class="form-control" placeholder="Sequence No" ng-model="vm.menuSetup.MenuName">
+							</div>
+						</div>
+					</div>
+					<div class="col-md-1">
+						<button type="submit" class="btn btn-info btn-block" ng-click="Add()">Add</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<!-- Item Entry List Grid -->
+
+<div class="grid simple col-md-12" ng-show="showItem">
+	
+	<div class="grid-body">
+		<div class="row">
+			<div class="col-md-12">
+
+				<table st-table="rowCollection" class="table table-bordered">
+					<thead>
+						<tr>
+							<th>SL</th>
+							<th>Custom Code</th>
+						    <th>Account No</th>
+							<th>Receive Date</th>
+							<th>No of Pages</th>
+							<th>Starting Number</th>
+							<th>Pre fix</th>
+							<th>Sur fix</th>
+							<th></th>
+						</tr>
+						
+					</thead>
+					<tbody>
+						<tr >
+							<td>{{$index+1}}</td>
+							<td>{{$index+1}}</td>
+							<td>{{$index+1}}</td>
+							<td>{{$index+1}}</td>
+							<td>{{$index+1}}</td>
+							<td>{{$index+1}}</td>
+							<td>{{$index+1}}</td>
+							<td>{{$index+1}}</td>
+						
+							<td>
+								<button href="#" class="btn btn-info btn-xs btn-mini" data-toggle="modal" data-target="#myModal" ng-click="vm.getFeesByID(fee.InsFeesHeadID)">Edit</button>
+								<button href="#" class="btn btn-primary btn-xs btn-mini" data-toggle="modal" ng-click="vm.deleteFee(fee.InsFeesHeadID)">Delete</button>
+							</td>
+						</tr>
+					</tbody>
+	
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+	.thumb {
+		width: 24px;
+		height: 24px;
+		float: none;
+		position: relative;
+		top: 7px;
+	}
+
+	.modal-content {
+		width: 1660px;
+		margin-left: -405px;
+	}
+</style>

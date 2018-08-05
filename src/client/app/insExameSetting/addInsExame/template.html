@@ -1,0 +1,172 @@
+<div class="grid simple col-md-12" ng-show = "createItem">
+    
+    <div class="grid-title">
+        <div class="row">
+            <div class="col-md-9">
+                <div class="page-title">
+                    <i class="fa fa-keyboard-o" aria-hidden="true"></i>
+                    <h3>Institute Exam - <span class="semi-bold">Settings</span></h3>
+                </div>
+            </div>
+            <div class="col-md-1 marginOff">
+                <button type="submit" class="btn btn-primary btn-block resetBtn" ng-click="clearField()">Reset</button>
+            </div>
+            <div class="col-md-1 marginOff">
+                <button type="submit" class="btn btn-primary btn-block saveBtn" ng-click="vm.saveExame()">Save</button>
+            </div>
+        </div>
+    </div>
+    <div class="grid-body">
+        <div class="row">
+
+            <form class="form-horizontal col-sm-12" name="vm.insExameSetup">
+                <div class="row">
+                    <div class="row col-sm-6">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Institute</label>
+                            <div class="col-sm-8">
+                                <ui-select ng-model="vm.institute.selected" theme="bootstrap" ng-click="vm.instituteID = $select.selected.InstituteID" ng-disabled="vm.InstituteID!==1?true:false" ng-change="ReloadDll()" on-select="vm.getmediumNameDdl(vm.instituteID);" required>
+                                    <ui-select-match placeholder="-Select Institute-">
+                                        {{$select.selected.InstituteName}}
+                                        <span style="float:right" ng-click="vm.instituteID = null; vm.class=undefined; vm.medium=undefined; vm.classes=[]; vm.mediums=[]; DisBtn(); $select.selected=undefined">
+                                            <i class="fa fa-remove" aria-hidden="true"></i>
+                                        </span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="institute in vm.institutes | filter: $select.search">
+                                        <div ng-bind-html="institute.InstituteName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            <span class="error" ng-show="(vm.insExameSetup.$dirty||submitted) && vm.insExameSetup.Med.$error.required">*</span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Medium</label>
+                            <div class="col-sm-8">
+                                <ui-select ng-model="vm.medium.selected" name="Med" on-select="vm.MediumWiseClassDDL(vm.MediumID)" theme="bootstrap" ng-click="vm.MediumID = $select.selected.MediumID" ng-change="ReloadMedium()" required>
+                                    <ui-select-match placeholder="- Select Medium -">
+                                        {{$select.selected.MameName}}
+                                        <span style="float:right" ng-click="vm.MediumID = null; DisBtn(); vm.class=undefined; vm.classes=[]; $select.selected=undefined">
+                                            <i class="fa fa-remove" aria-hidden="true"></i>
+                                        </span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="med in   vm.mediums | filter: $select.search">
+                                        <div ng-bind-html="med.MameName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            <span class="error" ng-show="(vm.insExameSetup.$dirty||submitted) && vm.insExameSetup.Med.$error.required">*</span>
+                        </div>
+                    </div>
+                    <div class="row col-sm-6">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Class</label>
+                            <div class="col-sm-8">
+                                <ui-select ng-model="vm.class.selected" name="Cls" on-select="vm.ClassWiseDepartmentDDL(vm.ClassID,'')" theme="bootstrap" ng-click="vm.ClassID = $select.selected.ClassID" ng-change="ReloadClass()" required>
+                                    <ui-select-match placeholder="- Select Class -">
+                                        {{$select.selected.ClassName}}
+                                        <span style="float:right" ng-click="vm.ClassID = null; DisBtn(); vm.department=undefined; $select.selected=undefined">
+                                            <i class="fa fa-remove" aria-hidden="true"></i>
+                                        </span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="cls in   vm.classes | filter: $select.search">
+                                        <div ng-bind-html="cls.ClassName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+
+                            </div>
+                            <span class="error" ng-show="(vm.insExameSetup.$dirty||submitted) && vm.insExameSetup.Cls.$error.required">*</span>
+                        </div>
+                        <label class="col-sm-3 control-label"></label>
+                        <div class="col-sm-8 marginOff">
+                            <button type="submit" class="btn btn-primary btn-block showBtn" ng-click="vm.showexams()" ng-disabled="vm.insExameSetup.$invalid">Show Exam</button>
+                        </div>
+                    </div>
+
+                </div>
+</form>
+
+        </div>
+    </div>
+</div>
+
+<!-- Item Entry List Grid -->
+  <!-- <pre>{{exames|json}}</pre>   -->
+<div class="grid simple col-md-12" ng-show = "showExames" >
+    <div class="grid-title">
+        <div class="row">
+            <div class="col-md-11">
+                <div class="page-title"> <i class="fa fa-keyboard-o" aria-hidden="true"></i>
+                    <h3>Exam Name - <span class="semi-bold">List</span></h3>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="grid-body">
+        <div class="row">
+            <div class="col-md-12">
+                <table st-table="rowCollection" class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>SL</th>
+                            <th>Exam Name</th>
+                            <th>Custom Name</th>
+                            <th>Sequence</th>
+                            <th>Is Active</th>
+                        </tr>
+                        <tr>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="exame in exames">
+                            <td>{{$index + 1}}</td>
+                            <td>{{exame.ExamName}}</td>
+                            <td ng-click="openExameIndex($index)">
+                                <div>
+                                    <input id="{{exame.id+$index}}" type="text" ng-model="exame.CustomName">
+                                    <label for="{{exame.id+$index}}"></label>
+                                </div>
+                            </td>
+                            <td ng-click="openExameIndex($index)">
+                                <div>
+                                    <input id="{{$index}}" type="number" ng-model="exame.Sequence">
+                                    <label for="{{$index}}"></label>
+                                </div>
+                            </td>
+                            <td ng-click="openExameIndex($index)">
+                                <div class="checkbox check-primary">
+                                    <input id="{{exame.id+100}}" type="checkbox" ng-model="exame.IsActive" ng-checked="exame.IsActive===1" ng-click="switch(exame.IsActive)">
+                                    <label for="{{exame.id +100}}"></label>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table> 
+            </div> 
+        </div>
+    </div>	
+</div>	
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+    .thumb {
+    width: 24px;
+    height: 24px;
+    float: none;
+    position: relative;
+    top: 7px;
+}
+.modal-content{
+    width: 1660px;
+    margin-left: -405px;
+}
+</style>

@@ -1,0 +1,379 @@
+<div class="grid simple col-md-12" id="cmnCustomCode">
+
+    <div class="grid-title">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="page-title">
+                    <i class="fa fa-keyboard-o" aria-hidden="true"></i>
+                    <h3>
+                        Custom Code  -
+                        <span class="semi-bold">Settings</span>
+                    </h3>
+                </div>
+            </div>
+            <div class="col-md-2 marginOff">
+                <button type="button" class="btn btn-primary btn-block showBtn" ng-click="ShowList()">Show Class</button>
+            </div>
+            <div class="col-md-1 marginOff ">
+                <button type="button" class="btn btn-primary btn-block resetBtn" ng-click="NewInstance()">Reset</button>
+            </div>
+            <div class="col-md-1 marginOff ">
+                <button type="button" class="btn btn-success btn-block" ng-click="Save()" ng-disabled="frmCmnCustomCode.$invalid">{{btnSaveUpdateText}}</button>
+            </div>
+        </div>
+    </div>
+    <div class="grid-body">
+        <form novalidate name="frmCmnCustomCode" id="cmnCustomCode" class="form-horizontal col-sm-12">
+            <input type="hidden" id="recordID " readonly="readonly" ng-model="RecordID " />
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label"> Menu</label>
+                            <div class="col-sm-7">
+                                <ui-select name="menu" ng-model="vm.menu.selected" theme="bootstrap" ng-click="vm.MenuID = $select.selected.MenuID" required>
+                                    <ui-select-match placeholder="- Select Menu -">
+                                        {{$select.selected.MenuName}}
+                                        <span style="float:right" ng-click="vm.MenuID = null; $select.selected=undefined"><i class="fa fa-remove" aria-hidden="true"></i></span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="menu in   vm.ListMenues | filter: $select.search">
+                                        <div ng-bind-html="menu.MenuName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            <span class="error" ng-show="(vm.frmCmnCustomCode.$dirty||submitted) && vm.frmCmnCustomCode.menu.$error.required">*</span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Institute</label>
+                            <div class="col-sm-7">
+                                <ui-select ng-model="vm.institute.selected" name="InstID" theme="bootstrap" ng-click="vm.instituteID = $select.selected.InstituteID" ng-disabled="IsDis=vm.InstituteID!==1?true:false" on-select="vm.loadRecords_Branch('', vm.instituteID);" required>
+                                    <ui-select-match placeholder="-Select Institute-">
+                                        {{$select.selected.InstituteName}}
+                                        <span style="float:right" ng-click="vm.instituteID = null; $select.selected=undefined">
+                                            <i class="fa fa-remove" aria-hidden="true"></i>
+                                        </span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="institute in vm.institutes | filter: $select.search">
+                                        <div ng-bind-html="institute.InstituteName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+
+
+
+                                    <!-- {{vm.institute.selected.InstituteID}} -->
+                            </div>
+                            <span class="error" ng-show="(vm.frmCmnCustomCode.$dirty||submitted) && vm.frmCmnCustomCode.InstID.$error.required">*</span>
+                        </div>
+
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Branch</label>
+                            <div class="col-sm-7">
+                                <ui-select ng-model="vm.Branch.selected" theme="bootstrap" ng-click="vm.BrunchID = $select.selected.BrunchID">
+                                    <ui-select-match placeholder="-Select-">
+                                        {{$select.selected.BrunchName}}
+                                        <span class="pull-right" ng-click="vm.BrunchID = null; $select.selected=undefined">
+                                            <i class="fa fa-remove" aria-hidden="true"></i>
+                                        </span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="branch in vm.branches | filter: $select.search">
+                                        <div ng-bind-html="branch.BrunchName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>                            
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Prefix</label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" placeholder="Prefix" ng-model="vm.Prefix">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Suffix</label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" placeholder="Suffix" ng-model="vm.Suffix">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3  ">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label"></label>
+                            <div class="col-sm-7 checkbox check-primary" style="margin-left: 16px;">
+                                <input id="chkIsInstitute" type="checkbox" ng-model="vm.IsInstitute" ng-checked="vm.IsInstitute===true?true:false">
+                                <label for="chkIsInstitute">Is Institute?</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label"></label>
+                            <div class="col-sm-7 checkbox check-primary" style="margin-left: 16px;">
+                                <input id="chkIsActive" type="checkbox" ng-model="vm.IsBranchCode" ng-checked="vm.IsBranchCode===true?true:false">
+                                <label for="chkIsActive">Is Active?</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Parameter</label>
+                            <div class="col-sm-7">
+                                <ui-select ng-model="vm.parameter.Selected" theme="bootstrap" ng-click="vm.ParameterName = $select.selected.ParameterName">
+                                    <ui-select-match placeholder="-Select-">
+                                        {{$select.selected.ParameterName}}
+                                        <span class="pull-right" ng-click="vm.ParameterName = undefined; $select.selected=undefined">
+                                            <i class="fa fa-remove" aria-hidden="true"></i>
+                                        </span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="parameter in vm.parameterList | filter: $select.search">
+                                        <div ng-bind-html="parameter.ParameterName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            <span class="error" ng-show="(vm.classTeacherSectionSetups.$dirty||submitted) && vm.classTeacherSectionSetups.InstID.$error.required">*</span>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Sequence</label>
+                            <div class="col-sm-7">
+                                <input type="number" class="form-control" placeholder="Sequence" ng-model="vm.Sequence">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Length</label>
+                            <div class="col-sm-7">
+                                <input type="number" class="form-control" placeholder="Length" ng-model="vm.Length">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Separator</label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" placeholder="Seperator" ng-model="vm.Seperator">
+                            </div>
+                        </div>
+                    </div>
+                </div> <!-- /.col-md-12 -->
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="col-md-3">
+                        <input type="button" id="btnAdd" class="btn btn-success " value="Add" ng-click="AddCustomCodeDetails(vm.ParameterName)" />
+                        <input type="button" id="reset" class="btn btn-danger" value="Clear" ng-click="clearDetailsParameter()" />
+                    </div>
+                </div> <!-- /.col-md-12 -->
+            </div>
+        </form>
+
+
+    </div>
+</div>
+
+<!-- Item Entry List Grid -->
+<div class="grid simple col-md-12" id="rowDetials">    
+    <div class="grid-body">
+        <div class="row">
+            <div class="col-md-12">
+
+                <input id="custSearch" ng-model="custSearch" type="text" class="form-control search" placeholder="Search...">
+                <table class="table table-striped table-bordered table-hover table-checkable table-tabletools datatable dataTable ">
+                    <thead class="grid-top-panel">
+                        <tr>
+                            <th class="text-center col-md-1">SL.</th>
+                            <th class="text-center col-md-3">Parameter Name</th>
+                            <th class="text-center col-md-2">Sequence</th>
+                            <th class="text-center col-md-2">Length</th>
+                            <th class="text-center col-md-2">Seperator</th>
+                            <th style="text-align:right;">Options</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="dataModel in ListCustomCodeDetails | filter:custSearch | orderBy:'IsDeleted' " ng-show="!dataModel.IsDeleted">
+                            <td class="text-center col-md-1">{{$index+1}}</td>
+                            <td class="text-center col-md-3">{{dataModel.ParameterName}}</td>
+                            <td class="text-center col-md-2">{{dataModel.Sequence}}</td>
+                            <td class="text-center col-md-2">{{dataModel.Length}}</td>
+                            <td class="text-center col-md-2">{{dataModel.Seperator}}</td>
+                            <td style="text-align:right; color:white">
+                                <span class="label label-danger label-mini">
+                                    <a href="javascript:void(0);" class="bs-tooltip" title="Delete" ng-click="deleteDetailsList(dataModel, $index)">
+                                        <i class="fa fa-trash"></i>
+                                    </a>
+                                </span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p ng-show="(ListCustomCodeDetails ).length == 0" style="color:red">Nothing found!</p>
+
+                <!--<div class="loadmore">
+                    <div ng-show="loaderMore" ng-class="result">
+                        {{lblMessage}}
+                    </div>
+                    <div ng-show="scrollended" ng-class="result">
+                        {{lblMessage}}
+                    </div>
+                </div>-->
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ---------------------------------------------------- Start UI-Grid ------------------------------------------------ -->
+<div class="grid simple col-md-12" id="rowList">
+    <div class="col-md-12">
+        <div class="grid-title">
+            <div class="row">
+                <div class="col-md-11">
+                    <div class="page-title">
+                        <!--<i class="fa fa-keyboard-o" aria-hidden="true"></i>-->
+                        <h3>
+                            Custom Code -
+                            <span class="semi-bold">List</span>
+                        </h3>
+                    </div>
+                </div>
+
+                <div class="col-md-1 marginOff">
+                    <button type="submit" class="btn btn-primary btn-block saveBtn" ng-click="NewInstance()">Create</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="grid-body">
+        <div class="row">
+            <div class="col-md-12" style="text-align:right">
+                <input type="text" ng-model="SearchProperty" placeholder="Search Custom Code" ng-keyup="$event.keyCode == 13 ? SearchNow(SearchProperty) : null" />
+                <button type="button" class="close" aria-label="Close" ng-click="SearchCancel('')">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div ui-grid="gridOptionsCustomCodeList"
+                     ui-grid-resize-columns
+                     ui-grid-auto-resize
+                     ui-grid-move-columns
+                     ui-grid-exporter
+                     ui-grid-pinning class="grid" style="min-height:550px;"></div>
+
+                <!--<div class="loadmore">
+                    <div ng-show="loaderMore" ng-class="result">
+                        <img src="~/Content/img/ng-loader.gif" />
+                        {{lblMessage}}
+                    </div>
+                </div>-->
+
+                <div role="contentinfo" style="margin-bottom: -20px;" class="ui-grid-pager-panel ng-scope">
+                    <div role="navigation" class="ui-grid-pager-container">
+                        <div role="menubar" class="ui-grid-pager-control">
+                            <!-- Start Page -->
+                            <button type="button" role="menuitem" class="ui-grid-pager-first" ui-grid-one-bind-title="aria.pageToFirst"
+                                    ui-grid-one-bind-aria-label="aria.pageToFirst"
+                                    ng-click="pagination.firstPage()"
+                                    ng-disabled="cantPageBackward()" title="Page to first" aria-label="Page to first"
+                                    disabled="disabled">
+                                <div class="first-triangle">
+                                    <div class="first-bar"></div>
+                                </div>
+                            </button>
+
+                            <!-- Prev Page -->
+                            <button type="button" role="menuitem" class="ui-grid-pager-previous"
+                                    ui-grid-one-bind-title="aria.pageBack" ui-grid-one-bind-aria-label="aria.pageBack"
+                                    ng-click="pagination.previousPage()"
+                                    ng-disabled="cantPageBackward()" title="Page back" aria-label="Page back" disabled="disabled">
+                                <div class="first-triangle prev-triangle"></div>
+                            </button>
+
+                            <input type="number" ui-grid-one-bind-title="aria.pageSelected" ui-grid-one-bind-aria-label="aria.pageSelected"
+                                   class="ui-grid-pager-control-input ng-pristine ng-untouched ng-valid ng-not-empty ng-valid-min ng-valid-max ng-valid-required"
+                                   ng-model="pagination.pageNumber"
+                                   min="1" max="{{pagination.getTotalPages()}}" required="" title="Selected page"
+                                   aria-label="Selected page">
+
+                            <span class="ui-grid-pager-max-pages-number ng-binding"
+                                  ng-show="pagination.getTotalPages() > 0">
+                                <abbr ui-grid-one-bind-title="paginationOf" title="of">/</abbr>{{pagination.getTotalPages()}}
+                            </span>
+
+                            <!-- Next Page -->
+                            <button type="button" role="menuitem" class="ui-grid-pager-next" ui-grid-one-bind-title="aria.pageForward"
+                                    ui-grid-one-bind-aria-label="aria.pageForward"
+                                    ng-click="pagination.nextPage()"
+                                    ng-disabled="cantPageForward()"
+                                    title="Page forward" aria-label="Page forward">
+                                <div class="last-triangle next-triangle"></div>
+                            </button>
+
+                            <!-- Last Page -->
+                            <button type="button" role="menuitem" class="ui-grid-pager-last"
+                                    ui-grid-one-bind-title="aria.pageToLast" ui-grid-one-bind-aria-label="aria.pageToLast"
+                                    ng-click="pagination.lastPage()" ng-disabled="cantPageToLast()" title="Page to last" aria-label="Page to last">
+                                <div class="last-triangle"><div class="last-bar"></div></div>
+                            </button>
+                        </div><!-- ngIf: grid.options.paginationPageSizes.length > 1 -->
+
+                        <div class="ui-grid-pager-row-count-picker ng-scope">
+                            <select ng-model="pagination.ddlpageSize"
+                                    ng-options="o as o for o in pagination.paginationPageSizes" ng-change="pagination.pageSizeChange()"
+                                    class="ng-pristine ng-untouched ng-valid ng-not-empty"></select>
+                            <span class="ui-grid-pager-row-count-label ng-binding">&nbsp;items per page</span>
+                        </div>
+                    </div>
+                    <div class="ui-grid-pager-count-container">
+                        <div class="ui-grid-pager-count">
+                            <span ng-show="pagination.totalItems > 0"
+                                  class="ng-binding" style="">
+                                {{pagination.pageNumber}}<abbr ui-grid-one-bind-title="paginationThrough" title="through">-</abbr>
+                                {{pagination.ddlpageSize}} of {{pagination.totalItems}} items
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<style>
+    .thumb {
+        width: 24px;
+        height: 24px;
+        float: none;
+        position: relative;
+        top: 7px;
+    }
+
+    .modal-content {
+        width: 1660px;
+        margin-left: -405px;
+    }
+</style>

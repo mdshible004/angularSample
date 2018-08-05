@@ -1,0 +1,421 @@
+<style>
+    .btnAlign {
+        float: left;
+        position: relative;
+        top: -1px;
+        left: 5px;
+    }
+
+    .chkc {
+        position: relative;
+        left: 5%;
+    }
+
+    .abc {
+        float: left;
+        width: 73%;
+    }
+</style>
+<div class="grid simple col-md-12" ng-show="createItem">
+    <div class="grid-title">
+        <div class="row">
+            <div class="col-md-9">
+                <div class="page-title">
+                    <i class="fa fa-keyboard-o" aria-hidden="true"></i>
+                    <h3>CHEQUE -
+                        <span class="semi-bold"> TRANSACTION </span>
+                    </h3>
+                </div>
+            </div>
+            <div class="col-md-1 marginOff">
+                <button type="submit" class="btn btn-primary btn-block showBtn" ng-click="itemEvent()">Show List</button>
+            </div>
+            <div class="col-md-1 marginOff">
+                <button type="submit" class="btn btn-primary btn-block resetBtn" ng-click="vm.clearField()">Reset</button>
+            </div>
+            <div class="col-md-1 marginOff">
+                <button type="submit" class="btn btn-primary btn-block saveBtn" ng-click="vm.addScholar()">Save</button>
+            </div>
+        </div>
+    </div>
+    <div class="grid-body">
+        <div class="row">
+            <form class="form-horizontal col-sm-8" name="vm.FeesSetup">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="col-md-10">
+                            <div class="form-group">
+                                <label class="col-sm-5 control-label">Custom Code</label>
+                                <div class="col-sm-3">
+                                    <input type="text" class="form-control" placeholder="Student Name" ng-model="vm.studentName">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-5 control-label">Party</label>
+                                <div class="col-sm-3">
+                                    <ui-select ng-model="vm.med.selected" theme="bootstrap" ng-click="vm.MediumID = $select.selected.MediumID">
+                                        <ui-select-match placeholder="- Select Medium -">{{$select.selected.MameName}}</ui-select-match>
+                                        <ui-select-choices repeat="med in   vm.medium | filter: $select.search">
+                                            <div ng-bind-html="med.MameName | highlight: $select.search"></div>
+                                        </ui-select-choices>
+                                    </ui-select>
+
+                                </div>
+                                <div>
+                                    <button href="#" class="btn btn-primary" data-toggle="modal" data-target="#myModal" ng-click="vm.getHrmSubWiseAtdDetails($index)">
+                                        <i class="fa fa-th-large fa-share-square-o" item-height="100px"></i>
+                                    </button>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<br/>
+
+
+
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="page-title">
+                            <i class="fa fa-keyboard-o" aria-hidden="true"></i>
+                            <h3> Student -
+                                <span class="semi-bold">Info</span>
+                            </h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="grid-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <p>data:
+                                <br/>
+                                <!-- <pre>{{vm.monAtd|json}}</pre> -->
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Sl.</th>
+                                            <th>Student Name</th>
+                                            <th>Student Id</th>
+                                            <th>Roll No</th>
+                                            <th> Attendence</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="list in vm.monAtd">
+                                            <td>{{$index}}</td>
+                                            <td>{{list.UserFullName}}</td>
+                                            <td>{{list.RFID}}</td>
+                                            <td>{{list.RollNo}}</td>
+                                            <td>
+                                                <button type="submit" class="btn btn-primary btn-xs btn-mini" data-dismiss="modal" ng-click="vm.getMonthlyAtd($index)">Show</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="row">
+
+    <div class="col-md-8 col-md-offset-1">
+        <ul class="nav nav-tabs">
+            <li class="active">
+                <a data-toggle="tab" href="#0" ng-click="openFeesTabIndex(0)">Cheque Transaction Detail</a>
+            </li>
+            <li>
+                <a data-toggle="tab" href="#1" ng-click="openFeesTabIndex(1)">Invoice Detail</a>
+            </li>
+        </ul>
+
+        <div class="tab-content">
+
+
+            <div class="grid-body">
+                <button href="#" class="btn btn-info btn-xs btn-mini" data-toggle="modal" data-target="#" ng-click="">Add</button>
+                <button href="#" class="btn btn-info btn-xs btn-mini" data-toggle="modal" ng-click="vm.deleteScholarship(sc.ScholarshipID)">Clear</button>
+                <br/>
+                <br/>
+                <div class="row">
+                    <div class="col-md-12">
+                        <table st-table="rowCollection" class="table table-bordered">
+                            <thead>
+                                <tr>
+<<<<<<< HEAD
+                                    <th>SL</th>
+                                    <th>Cheque type</th>
+                                    <th>Bank Account No</th>
+                                    <th>Cheque No</th>
+                                    <th>Cheque date</th>
+                                    <th>Cheque Ammount</th>
+                                    <th>Party Bank</th>
+                                    <th>Status</th>
+                                    <th>Currency</th>
+=======
+                                    <th>Custom Code</th>
+                                    <th>Cheque Type</th>
+                                    <th>Bank Acc No</th>
+                                    <th>Cheque No</th>
+
+
+                                    <th>Cheque Amount</th>
+                                    <th>Cheque Date</th>
+                                    <th>Status Name</th>
+                                    <th>Party</th>
+                                    <th>Action</th>
+>>>>>>> a45c42c4b5c436f657831f3bef93a4473c9ee5d0
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="sc in vm.scholarshipList track by $index">
+                                    <td>{{$index+1}}</td>
+                                    <td> {{ sc.UserFullName}} </td>
+                                    <td> {{ sc.StudentID}}</td>
+                                    <td> {{ sc.RollNo}}</td>
+
+
+                                    <td> {{ sc.IsOnTution}}</td>
+                                    <td> {{ sc.IsOnTotal}}</td>
+                                    <td> {{ sc.IsParcent}}</td>
+                                    <td> {{ sc.RollNo}}</td>
+                                    <td>
+                                        <button href="#" class="btn btn-info btn-xs btn-mini" data-toggle="modal" data-target="#EditScholarshipList" ng-click="vm.getScholarshipByID(sc.StudentID,sc.ClassID)">Edit</button>
+                                        <button href="#" class="btn btn-primary btn-xs btn-mini" data-toggle="modal" ng-click="vm.deleteScholarship(sc.ScholarshipID)">Delete</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+
+
+
+
+<!-- zahid_profile card -->
+<div class="grid-body" id="print" ng-show="studentProfile">
+    <div class="user-profile-pic">
+        <br/>
+        <br/>
+        <br/>
+        <img width="69" height="69" data-src-retina="images/profiles/avatar_small.jpg" data-src="images/profiles/avatar_small.jpg"
+            src="images/profiles/avatar_small.jpg" alt="">
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <h5>Student Name</h5>
+            <h6 class="text-success report">
+                {{vm.monthlyAtd.UserFullName}}
+            </h6>
+            <h5 style="float:left">Student ID</h5>
+            <h6 class="text-success report">
+                {{vm.monthlyAtd.RFID}}
+            </h6>
+        </div>
+        <div class="col-md-6">
+            <h5 style="float:left">Roll No</h5>
+            <h6 class="text-success report">
+                {{vm.monthlyAtd.RollNo}}
+            </h6>
+            <h5 style="float:left">Guardian</h5>
+            <h6 class="text-success report">
+                {{vm.monthlyAtd.Guardian}}
+            </h6>
+        </div>
+    </div>
+    <div class="user-mini-description">
+        <h5>Guardian Email</h5>
+        <h3 class="text-success semi-bold">
+            {{vm.monthlyAtd.GuradianEmail}}
+        </h3>
+    </div>
+</div>
+
+<!-- for test purpose -->
+<!-- <pre>{{value|json}}</pre> -->
+<!-- Item Entry List Grid -->
+
+<div class="grid simple col-md-12" ng-show="showItem">
+    <div class="grid-title">
+        <div class="row">
+            <div class="col-md-11">
+                <div class="page-title">
+                    <i class="fa fa-keyboard-o" aria-hidden="true"></i>
+                    <h3>Scholarship -
+                        <span class="semi-bold">Grid</span>
+                    </h3>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="grid-body">
+        <div class="row">
+            <div class="col-md-12">
+                <table st-table="rowCollection" class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>SL</th>
+                            <th>Costome Code</th>
+                            <th>Cheque Type</th>
+                            <th>Back Account No</th>
+                            <th>Cheque No</th>
+                            <th>Cheque Ammount</th>
+                            <th>Cheque Date</th>
+                            <th>Status Name</th>
+                            <th>party</th>
+                           
+                                <th>Custom Code</th>
+                                <th>Cheque Type</th>
+                                <th>Bank Acc No</th>
+                                <th>Cheque No</th>
+
+
+                                <th>Cheque Amount</th>
+                                <th>Cheque Date</th>
+                                <th>Status Name</th>
+                                <th>Party</th>
+                                <th>Action</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="sc in vm.scholarshipList track by $index">
+                            <td>{{$index+1}}</td>
+                            <td> {{ sc.UserFullName}} </td>
+                            <td> {{ sc.StudentID}}</td>
+                            <td> {{ sc.RollNo}}</td>                          
+                            <td> {{ sc.Session}}</td>                     
+                            <td> {{ sc.Shift}}</td>
+                            <td> {{ sc.Medium}}</td>
+                            <td> {{ sc.Medium}}</td>                         
+                            <td> {{sc.Section}}</td>                         
+                            <td>
+                                <button href="#" class="btn btn-info btn-xs btn-mini" data-toggle="modal" data-target="#EditScholarshipList" ng-click="vm.getScholarshipByID(sc.StudentID,sc.ClassID)">Edit</button>
+                                <button href="#" class="btn btn-primary btn-xs btn-mini" data-toggle="modal" ng-click="vm.deleteScholarship(sc.ScholarshipID)">Delete</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="EditScholarshipList" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="page-title">
+                            <i class="fa fa-keyboard-o" aria-hidden="true"></i>
+                            <h3>Edit Fees -
+                                <span class="semi-bold">Entry</span>
+                            </h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="grid-body">
+                    <div class="row">
+                        <form class="form-horizontal col-sm-8" name="vm.FeesSetup">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="col-md-10">
+                                        <div class="form-group">
+                                            <label class="col-sm-5 control-label">Custom Code</label>
+                                            <div class="col-sm-3">
+                                                <input type="text" class="form-control" placeholder="Student Name" ng-model="vm.EstudentName">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="col-sm-5 control-label">Party</label>
+                                            <div class="col-sm-3">
+                                                <ui-select ng-model="vm.Emed.selected" theme="bootstrap" ng-click="vm.MediumID = $select.selected.MediumID">
+                                                    <ui-select-match placeholder="- Select Medium -">{{$select.selected.MameName}}</ui-select-match>
+                                                    <ui-select-choices repeat="med in   vm.medium | filter: $select.search">
+                                                        <div ng-bind-html="med.MameName | highlight: $select.search"></div>
+                                                    </ui-select-choices>
+                                                </ui-select>
+
+                                            </div>
+                                            <div>
+                                                <button href="#" class="btn btn-primary" data-toggle="modal" data-target="#myModal" ng-click="vm.getHrmSubWiseAtdDetails($index)">
+                                                    <i class="fa fa-th-large fa-share-square-o" item-height="100px"></i>
+                                                </button>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.Refresh()">Close</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="vm.updateScholar()">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+
+
+
+<style>
+    .thumb {
+        width: 24px;
+        height: 24px;
+        float: none;
+        position: relative;
+        top: 7px;
+    }
+
+    .modal-content {
+        width: 1660px;
+        margin-left: -405px;
+    }
+
+    input[type="checkbox"] {
+        display: inline-block;
+        width: 19px;
+        height: 19px;
+        margin: -2px 10px 0 0;
+        vertical-align: middle;
+        background: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/210284/check_radio_sheet.png) left top no-repeat;
+        cursor: pointer;
+    }
+</style>

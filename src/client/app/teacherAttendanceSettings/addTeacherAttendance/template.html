@@ -1,0 +1,378 @@
+<div class="grid simple col-md-12" ng-show="createItem">
+
+    <div class="grid-title">
+        <div class="row">
+            <div class="col-md-9">
+                <div class="page-title">
+                    <i class="fa fa-keyboard-o" aria-hidden="true"></i>
+                    <h3>
+                        Teacher Attendance -
+                        <span class="semi-bold">Report</span>
+                    </h3>
+                </div>
+            </div>
+            <div class="col-md-1 marginOff">
+                <button type="submit" class="btn btn-primary btn-block showBtn" ng-click="vm.getTeacherAttendanceByParams()">Show</button>
+            </div>
+            <div class="col-md-1 marginOff">
+                <button type="submit" class="btn btn-primary btn-block resetBtn" ng-click="clearField()">Reset</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Input Parameter Start from here -->
+    <div class="grid-body">
+        <div class="row">
+
+            <form class="form-horizontal col-sm-12" name="vm.attendance">
+                <div class="row">
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Branch</label>
+                            <div class="col-sm-8">
+                                <ui-select ng-model="vm.brunch.selected" theme="bootstrap" ng-click="vm.BrunchID = $select.selected.BrunchID" ng-change="changegrid()">
+                                    <ui-select-match placeholder="-Select Branch-">
+                                        {{$select.selected.BrunchName}}
+                                        <span style="float:right" ng-click="vm.BrunchID = null; $select.selected=undefined">
+                                            <i class="fa fa-remove" aria-hidden="true"></i>
+                                        </span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="branch in vm.branches | filter: $select.search">
+                                        <div ng-bind-html="branch.BrunchName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Department</label>
+                            <div class="col-sm-8">
+                                <ui-select ng-model="vm.department.selected" theme="bootstrap" ng-click="vm.DepartmentID = $select.selected.DepartmentID" ng-change="changegrid()">
+                                    <ui-select-match placeholder="-Select Department-">
+                                        {{$select.selected.DepartmentName}}
+                                        <span style="float:right" ng-click="vm.DepartmentID = null; $select.selected=undefined">
+                                            <i class="fa fa-remove" aria-hidden="true"></i>
+                                        </span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="department in vm.departments | filter: $select.search">
+                                        <div ng-bind-html="department.DepartmentName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Date</label>
+                            <div class="col-sm-8">
+                                <datepicker date-format="dd-MM-yyyy" selector="form-control">
+                                    <div class="input-group">
+                                        <input class="form-control" placeholder="Choose a date" ng-model="vm.dateSetup" required ng-change="changegrid()">
+                                        <span class="input-group-addon" style="cursor: pointer">
+                                            <i class="fa fa-lg fa-calendar"></i>
+                                        </span>
+                                    </div>
+                                </datepicker>
+                            </div>
+                        </div>
+                    </div>
+                    <!--<div class="col-md-2">
+
+                            <button type="submit" class="btn btn-primary btn-block showBtn" ng-click="vm.getTeacherAttendanceByParams()">Show</button>
+
+                    </div>-->
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- End Input Parameter -->
+</div>
+
+<!-- Daily Teacher Attendance Report table Start from here(1st table) -->
+
+<div class="grid simple col-md-12" ng-show="showItem">
+    <div class="grid-title">
+        <div class="row">
+            <div class="col-md-11">
+
+            </div>
+            <!--<div class="col-md-1 marginOff">
+                <button type="submit" class="btn btn-danger clearfix btn-block" ng-click="generatePDF('print')">
+                    <span class="fa fa-file-pdf-o"></span> PDF
+                </button>
+            </div>
+            <div class="col-md-1 marginOff">
+                <button type="submit" class="btn btn-primary btn-block " ng-click="vm.exportToExcel('export')">
+                    <span class="fa fa-file-excel-o"></span>Excel
+                </button>
+            </div>-->
+            <div class="col-md-1 marginOff">
+                <button type="submit" class="btn btn-primary btn-block saveBtn" ng-click="vm.printDiv('print')">
+                    <span class="glyphicon glyphicon-print"></span> Print
+                </button>
+            </div>
+
+        </div>
+    </div>
+    <div class="grid-body">
+        <div class="row">
+            <div class="col-md-12">
+                <table st-table="rowCollection" class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>SL</th>
+                            <!--<th st-sort="ItemID">Branch</th>
+                            <th st-sort="ItemName">Department</th>-->
+                            <th>Teacher Name</th>
+                            <th>Teacher ID</th>
+                            <th>Email</th>
+                            <th>Phone No</th>
+                            <th>InTime</th>
+                            <th>OutTime</th>
+                            <th>Status</th>
+                            <th>Late in Min</th>
+                            <th>Leave</th>
+                        </tr>
+
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="attendance in vm.attendances">
+                            <td>{{$index+1}}</td>
+                            <!--<td>{{attendance.Brunch}}</td>
+                            <td>{{attendance.Department}}</td>-->
+                            <td>{{attendance.Name}}</td>
+                            <td>{{attendance.RFID}}</td>
+                            <td>{{attendance.EmailID}}</td>
+                            <td>{{attendance.PhoneNo}}</td>
+                            <td>
+                                {{attendance.Intimes   }}
+                            </td>
+
+                            <td>{{attendance.Outtimes  }}</td>
+
+                            <td>
+
+                                {{attendance.Present ===1 && attendance.Late ===0?"P":(attendance.Present ===1 && attendance.Late !==0?"L":(attendance.Leave ===1?"Leave":"A"))}}
+
+                            </td>
+                            <td>{{((-1)*attendance.Late)>0?((-1)*attendance.Late)-1:((-1)*attendance.Late)}}</td>
+                            <td>
+                                <div class="checkbox check-primary">
+                                    <input type="checkbox" ng-checked="{{attendance.Leave}}">
+                                    <label for="b"></label>
+                                </div>
+                            </td>
+
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- End Item Entry List Grid -->
+<!-- Total Teacher Attendance Report table Start from here(2nd Table) -->
+<div class="grid simple col-md-12" ng-show="showItem">
+    <div class="grid-body">
+        <div class="row">
+            <div class="col-md-12">
+                <table st-table="rowCollection" class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th st-sort="ItemID">Total Teacher</th>
+                            <th st-sort="ItemName">Present</th>
+                            <th st-sort="ItemBrandID">Absent</th>
+                            <th st-sort="ItemBrandID">Late</th>
+                            <th st-sort="ItemBrandID">Leave</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="totalattendance in vm.totalattendances">
+                            <td>{{totalattendance.TotalTeacher}}</td>
+                            <td>{{totalattendance.Present}}</td>
+                            <td>{{totalattendance.TotalTeacher-(totalattendance.Present+totalattendance.Leave)}}</td>
+                            <td>{{totalattendance.Late}}</td>
+                            <td>{{totalattendance.Leave}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Total Teacher Attendance Report table -->
+<div class="grid-body" id="print" ng-show="printthis">
+    <!-- logo title -->
+    <table width=100%>
+        <tr>
+            <td width=6%>
+                <div>
+                    <img alt="" height="70px" width="90px" ng-src="{{imgHost}}{{InstituteLogo}}" />
+                </div>
+            </td>
+            <td>
+                <div>
+                    <b style="color: #131212;">
+                        {{InstituteName}}
+                        <!--<br />{{Address}}-->
+                    </b>
+                </div>
+            </td>
+            <td>
+                <div class="col-md-5 pull-right">
+                    <div style="float:right;">
+                        <p style="color: #131212;">
+                            Phone : {{InsPhoneNo}}
+                            <br style="color: #131212;"> Email : {{InsEmail}}
+                            <br style="color: #131212;"> Web :{{InsWeb}}
+                        </p>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </table>
+    <div id="export">
+        <div class="row">
+            <table align="center" width="100%" style="  border-collapse: collapse; border-spacing: 10px; border: 1px solid gray; ">
+                <tr>
+                    <td align="center">
+                        <div>
+                            <b style="color: #131212;">
+                                Branch:
+                            </b>
+                            {{vm.brunch.selected.BrunchName}}
+
+                        </div>
+                    </td>
+                    <td align="center">
+                        <div>
+                            <b style="color: #131212;">
+                                Department:
+                            </b>
+                            {{vm.department.selected.DepartmentName}}
+
+                        </div>
+                    </td>
+                    <td align="center">
+                        <div>
+                            <b style="color: #131212;">
+                                Date:
+                            </b>
+                            {{vm.dateSetup}}
+
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="row">
+            <div style="margin-top : 50px">
+                <i aria-hidden="true"></i>
+
+                <h3>
+                    <pre>                 <font size="6"><b><u>Daily Teacher Attendance Report</u></b></font>
+</pre>
+                </h3>
+
+            </div>
+        </div>
+
+
+
+        <table class="table1" style="  border-collapse: collapse; border-spacing: 10px; border: 1px solid gray; " width=100%>
+            <thead>
+                <tr>
+                    <th style=" border: 1px solid gray; color: #131212;text-align:center">Sl </th>
+                    <th style=" border: 1px solid gray; color: #131212;text-align:center">Teacher</th>
+                    <th style=" border: 1px solid gray; color: #131212;text-align:center">Teacher ID</th>
+                    <th style=" border: 1px solid gray; color: #131212;text-align:center">Mail</th>
+                    <th style=" border: 1px solid gray; color: #131212;text-align:center">Phone</th>
+                    <th style=" border: 1px solid gray; color: #131212;text-align:center">InTime</th>
+                    <th style=" border: 1px solid gray; color: #131212;text-align:center">OutTime</th>
+                    <th style=" border: 1px solid gray; color: #131212;text-align:center">Status</th>
+                    <th style=" border: 1px solid gray; color: #131212;text-align:center">Late In Min</th>
+                    <th style=" border: 1px solid gray; color: #131212;text-align:center">Leave</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                <tr style=" border: 1px solid gray;" ng-repeat="attendance in vm.attendances">
+                    <td style=" border: 1px solid gray;color: #131212" align="center">{{$index+1}}</td>
+                    <td style=" border: 1px solid gray;color: #131212" align="center">{{attendance.Name }}</td>
+                    <td style=" border: 1px solid gray;color: #131212" align="center">{{attendance.RFID}}</td>
+                    <td style=" border: 1px solid gray;color: #131212" align="center">{{attendance.EmailID}}</td>
+                    <td style=" border: 1px solid gray;color: #131212" align="center">{{attendance.PhoneNo}}</td>
+                    <td style=" border: 1px solid gray;color: #131212" align="center">{{attendance.Intimes}}</td>
+                    <td style=" border: 1px solid gray;color: #131212" align="center">{{attendance.Outtimes}}</td>
+                    <td style=" border: 1px solid gray;color: #131212" align="center">{{attendance.Present ===1 && attendance.Late ===0?"P":(attendance.Present ===1 && attendance.Late !==0?"L":"A")}}</td>
+                    <td style=" border: 1px solid gray;color: #131212" align="center">{{(-1)*attendance.Late}}</td>
+                    <td style=" border: 1px solid gray;color: #131212" align="center">{{attendance.Leave}}</td>
+
+                </tr>
+
+            </tbody>
+        </table><br><br>
+        <table class="table1" style="  border-collapse: collapse; border-spacing: 10px; border: 1px solid gray; " width=100%>
+            <thead>
+                <tr>
+                    <th style=" border: 1px solid gray; color: #131212;text-align:center">Total Teacher</th>
+                    <th style=" border: 1px solid gray; color: #131212;text-align:center">Present</th>
+                    <th style=" border: 1px solid gray; color: #131212;text-align:center">Absent</th>
+                    <th style=" border: 1px solid gray; color: #131212;text-align:center">Late</th>
+                    <th style=" border: 1px solid gray; color: #131212;text-align:center">Leave</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                <tr style=" border: 1px solid gray;" ng-repeat="totalattendance in vm.totalattendances">
+                    <td style=" border: 1px solid gray;color: #131212" align="center">{{totalattendance.TotalTeacher}}</td>
+                    <td style=" border: 1px solid gray;color: #131212" align="center">{{totalattendance.Present}}</td>
+                    <td style=" border: 1px solid gray;color: #131212" align="center">{{totalattendance.TotalTeacher-(totalattendance.Present+totalattendance.Leave)}}</td>
+                    <td style=" border: 1px solid gray;color: #131212" align="center">{{totalattendance.Late}}</td>
+                    <td style=" border: 1px solid gray;color: #131212" align="center">{{totalattendance.Leave}}</td>
+
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+
+    <br>
+    <br>
+    <br>
+    <footer style="position: fixed;bottom: 70px;">
+        <pre style="bottom: 20px;">   ______________________            _______________________               ______________________</pre>
+        <pre style="bottom: 10px;">        Signed by                          Approved by                         Final approved</pre>
+        <br />
+        </footer>
+        <!-- <p>
+     Powered by : OnAir Int'l Ltd
+    </p> -->
+
+
+</div>
+<style>
+    .thumb {
+        width: 24px;
+        height: 24px;
+        float: none;
+        position: relative;
+        top: 7px;
+    }
+
+    .modal-content {
+        width: 1660px;
+        margin-left: -405px;
+    }
+</style>
+<script src="https://rawgithub.com/eligrey/FileSaver.js/master/FileSaver.js" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.debug.js"></script>
+<script src="http://mrrio.github.io/jsPDF/dist/jspdf.debug.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/2.3.2/jspdf.plugkkin.autotable.js"></script>
+<script src="http://kendo.cdn.telerik.com/2017.3.1026/js/kendo.all.min.js"></script>
+<script src="bower_components/pdfExport/kendo.all.min.js"></script> 

@@ -1,0 +1,144 @@
+
+
+<div class="grid simple col-md-12" ng-show = "createItem">
+	
+    <div class="grid-title">
+		<div class="row">
+			<div class="col-md-9">
+				<div class="page-title"> <i class="fa fa-keyboard-o" aria-hidden="true"></i>
+					<h3> Institute Department - <span class="semi-bold">Settings</span></h3>
+				</div>
+				
+			</div>
+			<!-- <div class="col-md-1 marginOff">
+				<button type="submit" class="btn btn-primary btn-block showBtn" ng-click="itemEvent()">Show List</button>
+				<!-- <button type="submit" class="btn btn-primary btn-block" ng-click="">Update</button> -->
+			<!-- </div>  -->
+			<!-- <div class="col-md-1 marginOff">
+				<button type="submit" class="btn btn-primary btn-block resetBtn" ng-click="clearField()">Reset</button>
+			</div>
+			<div class="col-md-1 marginOff">
+				<button type="submit" class="btn btn-primary btn-block saveBtn" ng-click="vm.AddShiftSettings()">Save</button>
+			</div>	 -->
+		</div>
+    </div>
+    <div class="grid-body">
+		<div class="row">
+
+			<form class="form-horizontal col-sm-12" name="vm.addDepartment">
+				<div class="row">
+					<div class="col-md-7">
+						<div class="form-group">
+							<label class="col-sm-5 control-label">Institute Name</label>
+							<div class="col-sm-6">
+                                <ui-select ng-model="vm.institute.selected" name="InsID" theme="bootstrap" ng-click="vm.instituteID = $select.selected.InstituteID" ng-disabled="vm.InstituteID!==1?true:false"  ng-change="gridChange()" required>
+                                    <ui-select-match placeholder="-Select Institute-">{{$select.selected.InstituteName}}
+                                        <span style="float:right" ng-click="vm.instituteID = null; $select.selected=undefined">
+                                            <i class="fa fa-remove" aria-hidden="true"></i>
+                                        </span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="institute in vm.institutes | filter: $select.search">
+                                        <div ng-bind-html="institute.InstituteName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select> 
+                            </div>
+                           
+                        </div>
+                        
+					
+                    </div>
+                    <div class="col-md-2 marginOff">
+						<button type="submit" class="btn btn-primary btn-block showBtn" ng-click="vm.showDepartment()">Show Department</button>
+					</div>
+					<div class="col-md-1 marginOff ">
+						<button type="submit" class="btn btn-primary btn-block resetBtn" ng-click="clearField()">Reset</button>
+					</div>
+					<div class="col-md-1 marginOff">
+						<button type="submit" ng-show = "showDepeartment"  id="saveBtn" class="btn btn-primary btn-block saveBtn" ng-click="vm.insdepartments()">Save</button >
+                        <!-- <button type="submit" class="btn btn-primary btn-block" ng-click="">Update</button> -->
+					</div>
+					
+				</div>
+			</form>
+
+		</div>
+    </div>
+</div>
+
+<!-- Item Entry List Grid -->
+ <!-- <pre>{{departments|json}}</pre>  -->
+<div class="grid simple col-md-12" ng-show = "showDepeartment" >
+    <div class="grid-title">
+		<div class="row">
+			<div class="col-md-11">
+				<!-- <div class="page-title"> <i class="fa fa-keyboard-o" aria-hidden="true"></i>
+					<h3>Department Name - <span class="semi-bold">List</span></h3>
+				</div> -->
+			</div>
+			
+			<div class="col-md-1 marginOff">
+				
+			</div>
+		</div>
+	</div>
+	<div class="grid-body">
+		<div class="row">
+			<div class="col-md-12">
+				<table st-table="rowCollection" class="table table-bordered">
+					<thead>
+						<tr>
+							<th >sl</th>
+							<th >Department Name</th>
+							<th >Is Active</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="department in departments">
+							<td>{{$index + 1}}</td>
+							<td>{{department.DepartmentName}}</td>						
+							<td ng-click="openDepartmentIndex($index)">
+								<div class="checkbox check-primary">
+									<input id="{{department.DepartmentID}}" type="checkbox" ng-model="department.IsActive" ng-checked = "department.IsActive===1" ng-click="switch(department.IsActive)">	
+									<label for="{{department.DepartmentID}}"></label>
+								</div>
+							</td>
+						</tr>
+					</tbody>
+					<tfoot>
+					</tfoot>
+				</table> 
+			</div> 
+		</div>
+	</div>	
+</div>	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+	.thumb {
+    width: 24px;
+    height: 24px;
+    float: none;
+    position: relative;
+    top: 7px;
+}
+.modal-content{
+	width: 1660px;
+    margin-left: -405px;
+}
+</style>

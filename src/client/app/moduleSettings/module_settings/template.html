@@ -1,0 +1,185 @@
+
+
+<div class="grid simple col-md-12"  ng-show="createItem">
+
+    <div class="grid-title">
+        <div class="row">
+            <div class="col-md-9">
+                <div class="page-title">
+                    <i class="fa fa-keyboard-o" aria-hidden="true"></i>
+                    <h3>Module - <span class="semi-bold">Entry</span></h3>
+                </div>
+            </div>
+            <div class="col-md-1 col-sm-3 marginOff">
+                <button type="submit" class="btn btn-primary btn-block showBtn" ng-click="itemEvent()">Show List</button>
+                <!-- <button type="submit" class="btn btn-primary btn-block" ng-click="">Update</button> -->
+            </div>
+            <div class="col-md-1 col-sm-3 marginOff">
+                <button type="submit" class="btn btn-primary btn-block resetBtn" ng-click="clearField()">Reset</button>
+            </div>
+            <div class="col-md-1  col-sm-3 marginOff">
+                <button type="submit" class="btn btn-primary btn-block saveBtn" ng-click="vm.AddModuleSetting()">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid-body">
+        <div class="row">
+
+
+            <form novalidate name="frmModule" id="modForm" class="form-horizontal row-border">
+                <input type="hidden" id="modID" readonly="readonly" ng-model="ModID" />
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label class="col-md-5 control-label"> Name</label>
+                        <div class="col-md-6">
+                            <input type="text" id="modName" class="form-control" name="modName" ng-model="vm.ModName" required />
+                        </div>
+                        <img src="~/Content/img/TickMark.png" ng-show="frmModule.modName.$dirty && frmModule.modName.$valid" Class="iconClass" />
+                        <img src="~/Content/img/Cross.png" ng-show="frmModule.modName.$dirty && frmModule.modName.$invalid" Class="iconClass" />
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-5 control-label">Code</label>
+                        <div class="col-md-6">
+                            <input type="text" id="code" class="form-control" name="code" ng-model="vm.ModCode" required />
+                        </div>
+                        <img src="~/Content/img/TickMark.png" ng-show="frmModule.code.$dirty && frmModule.code.$valid" Class="iconClass" />
+                        <img src="~/Content/img/Cross.png" ng-show="frmModule.code.$dirty && frmModule.code.$invalid" Class="iconClass" />
+                    </div>                    
+                </div>
+
+                <div class="col-md-4">
+
+                    <div class="form-group">
+                        <label class="col-md-5 control-label">Sequence</label>
+                        <div class="col-md-6">
+                            <input type="text" id="modSequence" class="form-control" ng-model="vm.Modequence" required/>
+                        </div>
+                        <br>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-5 control-label">URL Path</label>
+                        <div class="col-md-6">
+                            <input type="text" id="modPath" class="form-control" ng-model="vm.Modepath" required/>
+                        </div>
+                        <br>
+                    </div>
+                   
+                </div>
+
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label class="col-md-5 control-label">Description</label>
+                        <div class="col-md-6">
+                            <input type="text"  id="modDesc" class="form-control" ng-model="vm.ModDesc" required />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-5 control-label" for="input"> Icon</label>
+                        <div class="col-md-6">
+                            <select id="ModeIconDropDown" class="select2-select-00" style="width:100%;" ng-model="vm.ddlModeIcon" name="modeIconDropDown" data-placeholder="--Select Icon--">
+                                <option></option>
+                                <option style="float:left;" class="icon-cogs" value="fa fa-cogs">fa fa-cogs </option>
+                                <option style="float:left;" class="icon-angle-right" value="fa fa-university">fa fa-university</option>
+                                <option style="float:left;" class="icon-shopping-cart" value="fa fa-book">fa fa-book  </option>
+                                <option style="float:left;" class="icon-bar-chart" value="fa fa-graduation-cap">fa fa-graduation-cap  </option>
+                                <option style="float:left;" class="icon-truck" value="fa fa-check-square-o">fa fa-check-square-o</option>
+                                <option style="float:left;" class="icon-hdd" value="fa fa-area-chart">fa fa-area-chart  </option>
+                                <option style="float:left;" class="icon-usd" value="fa fa-money">fa fa-money  </option>
+                                <option style="float:left;" class="icon-coffee" value="fa fa-usd">fa fa-usd</option>
+                                
+                            </select>
+                        </div>
+                    </div>
+
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+
+<div class="grid simple col-md-12" ng-show="showItem">
+    <div class="grid-title">
+        <div class="row">
+            <div class="col-md-11">
+                <div class="page-title">
+                    <i class="fa fa-keyboard-o" aria-hidden="true"></i>
+                    <h3>Module - <span class="semi-bold">Records</span></h3>
+                </div>
+            </div>
+
+            <div class="col-md-1 marginOff">
+                <button type="submit" class="btn btn-primary btn-block saveBtn" ng-click="listEvent()">Create</button>
+            </div>
+        </div>
+    </div>
+    <div class="grid-body">
+        <div class="row">
+
+            <input id="custSearch" ng-model="custSearch" type="text" class="form-control search" placeholder="Search...">
+
+            <input type="hidden" class="form-control" placeholder="Articel No" ng-model="vm.ModuleID">
+
+            <table class="table table-striped table-bordered table-hover table-checkable datatable">
+                <thead class="grid-top-panel">
+                    <tr>
+                        <th style="display:none">ModuleID</th>
+                        <th style="display:none">ComPany</th>
+                        <th>SL.</th>
+                        <th>Code</th>
+                        <th>Name</th>
+                        <th>Path</th>
+                        <th>Icon</th>
+                        <th style="text-align:right;">Options</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="dataModel in vm.modules | filter:custSearch">
+                        <td style="display:none">{{dataModel.ModuleID}}</td>
+                        <td style="display:none">{{dataModel.CompanyName}}</td>
+                        <td>{{$index+1}}</td>
+                        <td>{{dataModel.ModuleNo}}</td>
+                        <td>{{dataModel.ModuleName}}</td>
+                        <td>{{dataModel.ModulePath}}</td>
+                        <td>{{dataModel.IconCss}}</td>
+                        <td style="text-align:right; color:white">
+                            <button href="#" class="btn btn-info btn-xs btn-mini" ng-click="vm.EditModule(dataModel.ModuleID)">Edit</button>
+                            <button href="/manage-deliveryman-info/edit/1" class="btn btn-primary btn-xs btn-mini"  ng-click="vm.DeleteModule(dataModel.ModuleID,true)">Delete</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p ng-show="(vm.modules | filter:custSearch).length == 0" style="color:red">Nothing found!</p>
+
+            <div class="loadmore">
+                <div ng-show="loaderMore" ng-class="result">
+                    <img src="~/Content/img/ng-loader.gif" />
+                    {{lblMessage}}
+                </div>
+                <div ng-show="scrollended" ng-class="result">
+                    {{lblMessage}}
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<style>
+    .thumb {
+        width: 24px;
+        height: 24px;
+        float: none;
+        position: relative;
+        top: 7px;
+    }
+
+    .modal-content {
+        width: 1660px;
+        margin-left: -405px;
+    }
+</style>

@@ -1,0 +1,452 @@
+
+
+<div class="grid simple col-md-12" ng-show="createItem">
+
+    <div class="grid-title">
+        <div class="row">
+            <div class="col-md-9">
+                <div class="page-title">
+                    <i class="fa fa-keyboard-o" aria-hidden="true"></i>
+                    <h3>Notice - <span class="semi-bold">Setup</span></h3>
+                </div>
+            </div>
+            <div class="col-md-1 marginOff">
+                <button type="submit" class="btn btn-primary btn-block showBtn" ng-click="RefreshList()">Show</button>
+                <!-- <button type="submit" class="btn btn-primary btn-block" ng-click="">Update</button> -->
+            </div>
+            <div class="col-md-1 marginOff">
+                <button type="submit" class="btn btn-primary btn-block resetBtn" ng-click="clearField()">Reset</button>
+            </div>
+            <div class="col-md-1 marginOff">
+                <button type="submit" class="btn btn-primary btn-block saveBtn" ng-click="vm.AddNotificationSettings()" ng-disabled="vm.NoticeSetups.$invalid">Save</button>
+            </div>
+        </div>
+    </div>
+    <div class="grid-body">
+        <div class="row">
+
+            <form class="form-horizontal col-sm-9" name="vm.NoticeSetups">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label"> Notice Type</label>
+                            <div class="col-sm-7">
+                                <ui-select ng-model="vm.noticeType.selected" name="nt" theme="bootstrap" ng-click="vm.noticeTypeID = $select.selected.NoticeTypeID" required>
+                                    <ui-select-match placeholder="-Select-">
+                                        {{$select.selected.NoticeTypeName}}
+                                        <span style="float:right" ng-click="vm.noticeTypeID = null; $select.selected=undefined">
+                                            <i class="fa fa-remove" aria-hidden="true"></i>
+                                        </span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="noticeType in  vm.noticeTypes | filter: $select.search">
+                                        <div ng-bind-html="noticeType.NoticeTypeName| highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+
+                            </div>
+                            <span class="error" ng-show="(vm.NoticeSetups.$dirty||submitted) && vm.NoticeSetups.nt.$error.required">*</span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Notice Date</label>
+                            <div class="col-sm-7">
+                                <datepicker date-format="dd-MM-yyyy" selector="form-control">
+                                    <div class="input-group">
+                                        <input class="form-control" placeholder="Choose a date" ng-model="vm.dateSetup" name="dt" required ng-change="changegrid()">
+                                        <span class="input-group-addon" style="cursor: pointer">
+                                            <i class="fa fa-lg fa-calendar"></i>
+                                        </span>
+                                    </div>
+                                </datepicker>
+                            </div>
+                            <span class="error" ng-show="(vm.NoticeSetups.$dirty||submitted) && vm.NoticeSetups.dt.$error.required">*</span>
+
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Expire Date</label>
+                            <div class="col-sm-7">
+                                <datepicker date-format="dd-MM-yyyy" selector="form-control">
+                                    <div class="input-group">
+                                        <input class="form-control" placeholder="Choose a date" ng-model="vm.dateExpSetup" name="Exdt" ng-change="changegrid()">
+                                        <span class="input-group-addon" style="cursor: pointer">
+                                            <i class="fa fa-lg fa-calendar"></i>
+                                        </span>
+                                    </div>
+                                </datepicker>
+                            </div>
+                            <span class="error" ng-show="(vm.NoticeSetups.$dirty||submitted) && vm.NoticeSetups.Exdt.$error.required">*</span>
+
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label"> Notice For </label>
+                            <div class="col-sm-7">
+                                <div class="wrapper">
+                                    <div class="selected-items-box">
+                                        <div class="col-md-4 checkbox check-primary pull-left" style="margin-left:-4px" ng-show="ShowItemList">
+                                            <input id="1" type="checkbox" ng-click="setSelectedItemsChecked(CheckedAll)" ng-checked="CheckedAll===true" ng-model="CheckedAll">
+                                            <label for="1">{{ChecView=CheckedAll===true?'Uncheck All':'Check All'}}</label>
+                                        </div>
+                                        <div class="control-label" ng-click="setSlid('caret')">
+                                            <span style="color:#808080; margin-right: 30px;"></span>
+                                        </div>
+                                        <div class="pull-left" style="margin-top: -30px;margin-left: 33px;" ng-show="ShowItemList">
+                                            <input type="text" placeholder="Search" ng-model="SearchNoticeFor" />
+                                        </div>
+                                        <div ng-hide="ShowItemList" style="text-align:center; margin-top: -25px" ng-click="setSlid('caret')">
+                                            <span style="color:#808080" ng-hide="{{ShowItemList===true}}">{{CheckedNames=CheckedName.Name===''?'--Select--': CheckedName.Name.substring(2)}}</span>
+                                        </div>
+                                        <span class="caret pull-right" style="margin-top: -13px;" ng-click="setSlid('caret')"></span>
+                                    </div>
+                                    <div class="list">
+                                        <ul class="items-list">
+                                            <li ng-repeat="notice in vm.noticesFor | filter: SearchNoticeFor">
+                                                <div class="checkbox check-primary">
+                                                    <input id="{{$index + 100}}" type="checkbox" ng-click="getSelectedItems(notice)" ng-checked="notice.selected===true" ng-model="notice.selected" />
+                                                    <label for="{{$index + 100}}">{{notice.UserTypeName}}</label>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--<div class="form-group">
+        <label class="col-sm-4 control-label"> Notice For </label>
+        <div class="col-sm-7">
+            <ui-select ng-model="vm.notice.selected" name="nf" theme="bootstrap" ng-click="vm.userTypeID = $select.selected.UserTypeID" required>
+                <ui-select-match placeholder="-Select-">
+                    {{$select.selected.UserTypeName}}
+                    <span style="float:right" ng-click="vm.userTypeID = null; $select.selected=undefined">
+                        <i class="fa fa-remove" aria-hidden="true"></i>
+                    </span>
+                </ui-select-match>
+                <ui-select-choices repeat="notice in vm.noticesFor | filter: $select.search">
+                    <div ng-bind-html="notice.UserTypeName | highlight: $select.search"></div>
+                </ui-select-choices>
+            </ui-select>
+        </div>
+        <span class="error" ng-show="(vm.NoticeSetups.$dirty||submitted) && vm.NoticeSetups.nf.$error.required">*</span>
+    </div>-->
+
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label"> Notice Head</label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" placeholder="Subject" ng-model="vm.noticeHead" name="nh" required>
+                            </div>
+                            <span class="error" ng-show="(vm.NoticeSetups.$dirty||submitted) && vm.NoticeSetups.nh.$error.required">*</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Notice Body</label>
+                            <div class="col-sm-7">
+                                <!-- <input type="text" class="form-control" placeholder="Body" ng-model="vm.addNotification.Body"> -->
+                                <textarea class="form-control" ng-model="vm.noticeBody" name="nb" required></textarea>
+                            </div>
+                            <span class="error" ng-show="(vm.NoticeSetups.$dirty||submitted) && vm.NoticeSetups.nb.$error.required">*</span>
+                        </div>
+
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<!-- ---------------------------------------------------- Start UI-Grid ------------------------------------------------ -->
+<div class="grid simple col-md-12 col-sm-12 col-xs-12" ng-show="showItem">
+    <div class="grid-title">
+        <div class="row">
+            <div class="col-md-11">
+                <div class="page-title">
+                    <i class="fa fa-keyboard-o" aria-hidden="true"></i>
+                    <h3>
+                        Notice -
+                        <span class="semi-bold">List</span>
+                    </h3>
+                </div>
+            </div>
+
+            <div class="col-md-1 marginOff">
+                <button type="submit" class="btn btn-primary btn-block saveBtn" ng-click="listEvent()">Create</button>
+            </div>
+        </div>
+    </div>
+    <div class="grid-body">
+        <div class="row">
+            <div class="col-md-12" style="text-align:right">
+                <input type="text" ng-model="SearchProperty" placeholder="Search Notice Head" ng-keyup="$event.keyCode == 13 ? SearchNow(SearchProperty) : null" />
+                <button type="button" class="close" aria-label="Close" ng-click="SearchCancel('')">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div ui-grid="gridOptions" ui-grid-resize-columns ui-grid-auto-resize ui-grid-move-columns ui-grid-exporter ui-grid-pinning
+                     class="grid" style="height:550px"></div>
+
+                <div class="loadmore">
+                    <div ng-show="loaderMore" ng-class="result">
+                        <!-- <img src="~/Content/img/ng-loader.gif" /> -->
+                        {{lblMessage}}
+                    </div>
+                </div>
+                <div class="row"></div>
+                <div role="contentinfo" style="margin-bottom: -20px;" class="ui-grid-pager-panel ng-scope">
+                    <div role="navigation" class="ui-grid-pager-container">
+                        <div role="menubar" class="ui-grid-pager-control">
+                            <!-- Start Page -->
+                            <button type="button" role="menuitem" class="ui-grid-pager-first" ui-grid-one-bind-title="aria.pageToFirst" ui-grid-one-bind-aria-label="aria.pageToFirst"
+                                    ng-click="pagination.firstPage()" ng-disabled="cantPageBackward()" title="Page to first" aria-label="Page to first"
+                                    disabled="disabled">
+                                <div class="first-triangle">
+                                    <div class="first-bar"></div>
+                                </div>
+                            </button>
+
+                            <!-- Prev Page -->
+                            <button type="button" role="menuitem" class="ui-grid-pager-previous" ui-grid-one-bind-title="aria.pageBack" ui-grid-one-bind-aria-label="aria.pageBack"
+                                    ng-click="pagination.previousPage()" ng-disabled="cantPageBackward()" title="Page back" aria-label="Page back"
+                                    disabled="disabled">
+                                <div class="first-triangle prev-triangle"></div>
+                            </button>
+
+                            <input type="number" ui-grid-one-bind-title="aria.pageSelected" ui-grid-one-bind-aria-label="aria.pageSelected" class="ui-grid-pager-control-input ng-pristine ng-untouched ng-valid ng-not-empty ng-valid-min ng-valid-max ng-valid-required"
+                                   ng-model="pagination.pageNumber" min="1" max="{{pagination.getTotalPages()}}" required="" title="Selected page"
+                                   aria-label="Selected page" />
+
+                            <span class="ui-grid-pager-max-pages-number ng-binding" ng-show="pagination.getTotalPages() > 0">
+                                <abbr ui-grid-one-bind-title="paginationOf" title="of">/</abbr>{{pagination.getTotalPages()}}
+                            </span>
+
+                            <!-- Next Page -->
+                            <button type="button" role="menuitem" class="ui-grid-pager-next" ui-grid-one-bind-title="aria.pageForward" ui-grid-one-bind-aria-label="aria.pageForward"
+                                    ng-click="pagination.nextPage()" ng-disabled="cantPageForward()" title="Page forward" aria-label="Page forward">
+                                <div class="last-triangle next-triangle"></div>
+                            </button>
+
+                            <!-- Last Page -->
+                            <button type="button" role="menuitem" class="ui-grid-pager-last" ui-grid-one-bind-title="aria.pageToLast" ui-grid-one-bind-aria-label="aria.pageToLast"
+                                    ng-click="pagination.lastPage()" ng-disabled="cantPageToLast()" title="Page to last" aria-label="Page to last">
+                                <div class="last-triangle">
+                                    <div class="last-bar"></div>
+                                </div>
+                            </button>
+                        </div>
+                        <!-- ngIf: grid.options.paginationPageSizes.length > 1 -->
+
+                        <div class="ui-grid-pager-row-count-picker ng-scope">
+                            <select ng-model="pagination.ddlpageSize" ng-options="o as o for o in pagination.paginationPageSizes" ng-change="pagination.pageSizeChange()"
+                                    class="ng-pristine ng-untouched ng-valid ng-not-empty"></select>
+                            <span class="ui-grid-pager-row-count-label ng-binding">&nbsp;items per page</span>
+                        </div>
+                        <!-- end ngIf: grid.options.paginationPageSizes.length > 1 -->
+                        <!-- ngIf: grid.options.paginationPageSizes.length <= 1 -->
+                    </div>
+                    <div class="ui-grid-pager-count-container">
+                        <div class="ui-grid-pager-count">
+                            <span ng-show="pagination.totalItems > 0" class="ng-binding">
+                                {{pagination.pageNumber}}
+                                <abbr ui-grid-one-bind-title="paginationThrough" title="through">-</abbr>
+                                {{pagination.ddlpageSize}} of {{pagination.totalItems}} items
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ----------------------------------------------------- End UI-Grid ------------------------------------------------- -->
+
+<div class="grid-body" id="print" ng-show="printthis">
+    <!-- logo title -->
+    <table width=100%>
+        <tr>
+            <td width=6%>
+                <div style="color: #131212; ">
+                    <img alt="" style="height:70px; width:90px;font-size: 30px;" ng-src="{{imgHost}}{{InstituteLogo}}" />
+                </div>
+            </td>
+            <td>
+                <div>
+                    <b style="color: #131212; font-size: 30px;">
+                        {{InstituteName}}
+                        <br />{{Address}}
+                    </b>
+                </div>
+            </td>
+            <td>
+                <div class="a">
+                    <b style="color: #131212; font-size: 55px;">Notice</b>
+
+                </div>
+            </td>
+            <td>
+                <div class="col-md-5 pull-right">
+                    <div style="float:right;">
+                        <p style="color: #131212; font-size: 25px;">
+                            Phone : {{InsPhoneNo}}
+                            <br style="color: #131212;"> Email : {{InsEmail}}
+                            <br style="color: #131212;"> Web : {{InsWeb}}
+                        </p>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </table>
+    <div id="ExcelGenerate">
+        <div class="row">
+            <table width=100%>
+                <tr width=100%>
+                    <td>
+                        <div class="d">
+                            <b style="color: #131212; font-size: 26px;">Date : {{vm.dateSetup}}</b>
+                        </div>
+                    </td>
+                </tr>
+                <tr width=100%>
+                    <td align="center">
+                        <div class="b">
+                            <b style="color: #131212;text-align:center; font-size: 45px;"><u>{{vm.noticeHead}}</u></b>
+                        </div>
+                    </td>
+                </tr>
+                <tr></tr>
+                <tr></tr>
+                <tr></tr>
+                <tr width=100%>
+                    <td>
+                        <div class="c">
+                            <p class="p" style="color: #131212;font-size: 35px; text-align: justify;">{{vm.noticeBody}}</p>
+
+                        </div>
+                    </td>
+                </tr>
+
+            </table>
+        </div>
+    </div>
+    <br>
+    <br>
+    <br>
+    <pre>                                                                                                                             <!--<img alt="" height="70px" width="90px" ng-src="https://i.pinimg.com/originals/95/12/b9/9512b9ac44f5dc123e39cfe0659bbb48.jpg" />--></pre>
+    <pre>											                                 ______________________</pre>
+    <pre>      													               <b style="font-size: 20px;">Notice Verified By</b>   </pre>
+    <br />
+</div>
+
+
+
+
+<style>
+    .thumb {
+        width: 24px;
+        height: 24px;
+        float: none;
+        position: relative;
+        top: 7px;
+    }
+
+    .modal-content {
+        width: 1660px;
+        margin-left: -405px;
+    }
+
+    .form-group textarea {
+        border: solid 1px #0aa69994;
+    }
+
+    div.a {
+        font-size: 55px;
+    }
+
+    div.b {
+        font-size: 45px;
+    }
+
+    div.c {
+        font-size: 35px;
+    }
+
+    div.d {
+        font-size: 30px;
+    }
+
+    p {
+        letter-spacing: 1px;
+        text-align: justify;
+    }
+
+
+
+    .wrapper {
+        /*width: 200px;*/
+        position: relative;
+    }
+
+        .wrapper .selected-items-box {
+            cursor: pointer;
+            border: solid 1px #ddd;
+            padding: 10px;
+            background-color: #f0f8f5;
+            color: #131212;
+        }
+
+    .selected-items-box .items-list {
+        list-style-type: none;
+        width: 100%;
+        padding: 0;
+        margin: 0;
+    }
+
+        .selected-items-box .items-list li {
+            display: inline;
+        }
+
+    .wrapper .list {
+        display: none;
+        max-height: 200px;
+        overflow-y: auto;
+        overflow-x: hidden;
+        border-left: solid 1px #C7C6C7;
+        border-right: solid 1px #C7C6C7;
+        border-bottom: solid 1px #C7C6C7;
+        z-index: 100;
+        position: absolute;
+        width: 100%;
+    }
+
+    .list .items-list {
+        list-style-type: none;
+        width: 100%;
+        padding: 0;
+        margin: 0;
+    }
+
+        .list .items-list li {
+            margin: 0;
+            width: 100%;
+            padding: 0;
+            border-bottom: solid 1px #C7C6C7;
+            padding: 5px;
+            background-color: #fff;
+        }
+</style>
+
+<script src="https://rawgithub.com/eligrey/FileSaver.js/master/FileSaver.js" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.min.js"></script>
+<script src="http://kendo.cdn.telerik.com/2017.3.1026/js/kendo.all.min.js"></script>
+<script src="bower_components/pdfExport/kendo.all.min.js"></script>
+<script src="https://rawgithub.com/eligrey/FileSaver.js/master/FileSaver.js" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.debug.js"></script>
+<script src="http://mrrio.github.io/jsPDF/dist/jspdf.debug.js"></script>
+<script src="https://rawgithub.com/eligrey/FileSaver.js/master/FileSaver.js" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.debug.js"></script>
+<script src="http://mrrio.github.io/jsPDF/dist/jspdf.debug.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.min.js"></script>
+<script src="/bower_components/pdfExport/kendo.all.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/2.3.2/jspdf.plugkkin.autotable.js"></script>

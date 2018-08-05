@@ -1,0 +1,406 @@
+<div class="grid simple col-md-12" ng-show="createItem">
+    <div class="grid-title">
+        <div class="row">
+            <div class="col-md-9">
+                <div class="page-title">
+                    <i class="fa fa-keyboard-o" aria-hidden="true"></i>
+                    <h3>
+                        General-
+                        <span class="semi-bold">Payment</span>
+                    </h3>
+                </div>
+            </div>
+            <div class="col-md-1 marginOff">
+                <button type="submit" class="btn btn-primary btn-block showBtn" ng-click="showPayVouch()">Show List</button>
+            </div>
+            <div class="col-md-1 marginOff">
+                <button type="submit" class="btn btn-primary btn-block resetBtn" ng-click="clearField()">Reset</button>
+            </div>
+            <div class="col-md-1 marginOff">
+                <button type="submit" class="btn btn-primary btn-block saveBtn" ng-click="vm.Save()" ng-disabled="vm.GeneralVoucher.$invalid">Save</button>
+            </div>
+        </div>
+    </div>
+    <div class="grid-body">
+        <div class="row">
+            <form novalidate class="form-horizontal col-sm-12" name="vm.GeneralVoucher" id="vm.GeneralVoucher">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Payment No</label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" placeholder="Payment No" ng-model="vm.PayNO">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Branch</label>
+                            <div class="col-sm-7">
+                                <!--<input type="text" class="form-control" placeholder="Manual Voucher No." name="ManualVoucherNo" ng-model="vm.ManualVoucherNo" required>-->
+                                <ui-select ng-model="vm.brunch.selected" theme="bootstrap" ng-click="vm.BrunchID = $select.selected.BrunchID">
+                                    <ui-select-match placeholder="-Select Branch-">
+                                        {{$select.selected.BrunchName}}
+                                        <span style="float:right" ng-click="vm.BrunchID = null; $select.selected=undefined"><i class="fa fa-remove" aria-hidden="true"></i></span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="branch in vm.branches | filter: $select.search">
+                                        <div ng-bind-html="branch.BrunchName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+
+                            </div>
+                            <span class="error" ng-show="(vm.GeneralVoucher.$dirty||submitted) && vm.GeneralVoucher.ManualVoucherNo.$error.required">*</span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label"> Date</label>
+                            <div class="col-sm-7">
+                                <datepicker date-format="dd-MM-yyyy" selector="form-control">
+                                    <div class="input-group date">
+                                        <input class="form-control" placeholder="Choose a date" ng-model="vm.selectedDate">
+                                        <span class="input-group-addon" style="cursor: pointer">
+                                            <i class="fa fa-lg fa-calendar"></i>
+                                        </span>
+                                    </div>
+                                </datepicker>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+
+
+
+                        <div class="form-group" style="margin-left: 76px;">
+
+                            <label class="col-sm-3 control-label"> Payment To</label>
+                            <div class="col-sm-5">
+                                <ui-select ng-model="vm.Type.selected" theme="bootstrap" ng-click="vm.PayToID = $select.selected.UserID" on-select="vm.loadChequePopOnChangeVType(vm.PayToID)" required>
+                                    <ui-select-match placeholder="- Select Payment To -">
+                                        {{$select.selected.UserFullName}}
+                                        <span style="float:right" ng-click="vm.PayToID = null; $select.selected=undefined"><i class="fa fa-remove" aria-hidden="true"></i></span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="USR in vm.JournalTypeList | filter: $select.search">
+                                        <div ng-bind-html="USR.UserFullName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            <span class="error" ng-show="(vm.GeneralVoucher.$dirty||submitted) && vm.GeneralVoucher.JournalType.$error.required">*</span>
+
+                            <div class="marginOff col-sm-2">
+                                <button href="#" title="Select first" class="btn btn-primary btn-block" style="background-color:#205a39cf" data-toggle="modal"
+                                        data-target="#modalParty">
+                                    <i class="fa fa-plus" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                        </div>
+
+
+
+
+                        <div class="form-group" ng-show="vm.IsShowBA">
+                            <label class="col-sm-4 control-label"> Bank Account No</label>
+                            <div class="col-sm-{{IsUp}}">
+                                <!--{{vm.AccountID}}-->
+                                <ui-select ng-model="vm.BA.selected" theme="bootstrap" ng-click="vm.AccountID = $select.selected.AccountID" on-select="vm.loadChequeModal()">
+                                    <ui-select-match placeholder="- Select Bank Account No -">
+                                        {{$select.selected.AccountNo}}
+                                        <span style="float:right" ng-click="vm.AccountID = null; $select.selected=undefined"><i class="fa fa-remove" aria-hidden="true"></i></span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="BA in   vm.BankAccountList | filter: $select.search">
+                                        <div ng-bind-html="BA.AccountNo | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            <div class="col-sm-1 marginOff" ng-show="IsS=IsUp==6? true:false">
+                                <button href="#" title="Select first" class="btn btn-primary btn-block" style="background-color:#205a39cf" data-toggle="modal"
+                                        data-target="#modalCheque">
+                                    <i class="fa fa-search" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label"> Payment From</label>
+                            <div class="col-sm-7">
+                                <!--{{vm.PayFromID}}-->
+                                <ui-select name="CurrencyID" ng-model="vm.Curr.selected" theme="bootstrap" ng-click="vm.PayFromID = $select.selected.AccountNo" required>
+                                    <ui-select-match placeholder="- Select Payment from -">
+                                        {{$select.selected.COAName}}
+                                        <span style="float:right" ng-click="vm.PayFromID = null; $select.selected=undefined"><i class="fa fa-remove" aria-hidden="true"></i></span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="Curr in   vm.CurrencyList | filter: $select.search">
+                                        <div ng-bind-html="Curr.COAName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+
+                            </div>
+                            <span class="error" ng-show="(vm.GeneralVoucher.$dirty||submitted) && vm.GeneralVoucher.CurrencyID.$error.required">*</span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Remarks</label>
+                            <div class="col-sm-7">
+                                <textarea rows="2" cols="3" class="form-control" placeholder="Remarks" name="Narration" ng-model="vm.Remarks"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+
+
+<input type="hidden" class="form-control" placeholder="Class Name" ng-model=" vm.Journal_Detail_COAID_For_Sum">
+<input type="hidden" class="form-control" placeholder="Class Name" ng-model=" vm.Journal_Detail_ID_For_Sum">
+
+
+<input type="hidden" class="form-control" placeholder="Class Name" ng-model=" vm.Journal_MasterID">
+
+
+
+
+
+
+
+<!--********************************************plus Button ***********************************************-->
+<div class="modal fade in" id="modalParty" role="dialog" aria-labelledby="ModalParty" style="z-index: 1200;" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" style="float:left">Detail Party Modal</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="page-title">
+                            <!-- <button type="button" class="btn btn-primary pull-right" data-dismiss="modal" ng-click="vm.saveParty()">Save </button> -->
+                        </div>
+                    </div>
+                </div>
+                <div class="grid-body">
+                    <div class="row">
+                        <form class="form-horizontal col-md-12" name="vm.PartySetup">
+                            <div class="row">
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label class="col-sm-5 control-label">Name</label>
+                                        <div class="col-sm-7">
+                                            <input type="text" class="form-control" placeholder="Full Name" ng-model="vm.PartySetup.UserFullName">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label class="col-sm-5 control-label">Phone</label>
+                                        <div class="col-sm-7">
+                                            <input type="text" class="form-control" placeholder="Phone Number" ng-model="vm.PartySetup.PhoneNo">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label class="col-sm-5 control-label">Email</label>
+                                        <div class="col-sm-7">
+                                            <input type="text" class="form-control" placeholder="Email" ng-model="vm.PartySetup.EmailID">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label class="col-sm-5 control-label">Address</label>
+                                        <div class="col-sm-7">
+                                            <input type="text" class="form-control" placeholder="Address" ng-model="vm.PartySetup.PreAddress">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary btn-xs" data-dismiss="modal" ng-click="vm.saveParty()">Save </button>
+                <button type="button" class="btn btn-default btn-xs" data-dismiss="modal">Close </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--********************************************plus Button ***********************************************-->
+
+
+
+
+
+
+
+<!-- ---------------------------------------------------- Start UI-Grid ------------------------------------------------ -->
+<div class="modal fade " id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-head">
+                <h3 style="margin-left:30px; font-weight:bold">Journal Grid</h3>
+            </div>
+            <div class="modal-body">
+                <div class="col-md-12">
+                    <div ui-grid="gridOptions" ui-grid-resize-columns ui-grid-auto-resize ui-grid-move-columns ui-grid-exporter ui-grid-pinning
+                         class="grid">
+                    </div>
+
+                    <div class="loadmore">
+                        <div ng-show="loaderMore" ng-class="result">
+                            <!-- <img src="~/Content/img/ng-loader.gif" /> -->
+                            {{lblMessage}}
+                        </div>
+                    </div>
+                    <div class="row"></div>
+                    <div role="contentinfo" style="margin-bottom:-20px" class="ui-grid-pager-panel ng-scope">
+                        <div role="navigation" class="ui-grid-pager-container">
+                            <div role="menubar" class="ui-grid-pager-control">
+                                <!-- Start Page -->
+                                <button type="button" role="menuitem" class="ui-grid-pager-first" ui-grid-one-bind-title="aria.pageToFirst" ui-grid-one-bind-aria-label="aria.pageToFirst"
+                                        ng-click="pagination.firstPage()" ng-disabled="cantPageBackward()" title="Page to first" aria-label="Page to first"
+                                        disabled="disabled">
+                                    <div class="first-triangle">
+                                        <div class="first-bar"></div>
+                                    </div>
+                                </button>
+
+                                <!-- Prev Page -->
+                                <button type="button" role="menuitem" class="ui-grid-pager-previous" ui-grid-one-bind-title="aria.pageBack" ui-grid-one-bind-aria-label="aria.pageBack"
+                                        ng-click="pagination.previousPage()" ng-disabled="cantPageBackward()" title="Page back" aria-label="Page back" disabled="disabled">
+                                    <div class="first-triangle prev-triangle"></div>
+                                </button>
+
+                                <input type="number" ui-grid-one-bind-title="aria.pageSelected" ui-grid-one-bind-aria-label="aria.pageSelected" class="ui-grid-pager-control-input ng-pristine ng-untouched ng-valid ng-not-empty ng-valid-min ng-valid-max ng-valid-required"
+                                       ng-model="pagination.pageNumber" min="1" max="{{pagination.getTotalPages()}}" required="" title="Selected page" aria-label="Selected page">
+
+                                <span class="ui-grid-pager-max-pages-number ng-binding" ng-show="pagination.getTotalPages() > 0">
+                                    <abbr ui-grid-one-bind-title="paginationOf" title="of">/</abbr>{{pagination.getTotalPages()}}
+                                </span>
+
+                                <!-- Next Page -->
+                                <button type="button" role="menuitem" class="ui-grid-pager-next" ui-grid-one-bind-title="aria.pageForward" ui-grid-one-bind-aria-label="aria.pageForward"
+                                        ng-click="pagination.nextPage()" ng-disabled="cantPageForward()" title="Page forward" aria-label="Page forward">
+                                    <div class="last-triangle next-triangle"></div>
+                                </button>
+
+                                <!-- Last Page -->
+                                <button type="button" role="menuitem" class="ui-grid-pager-last" ui-grid-one-bind-title="aria.pageToLast" ui-grid-one-bind-aria-label="aria.pageToLast"
+                                        ng-click="pagination.lastPage()" ng-disabled="cantPageToLast()" title="Page to last" aria-label="Page to last">
+                                    <div class="last-triangle">
+                                        <div class="last-bar"></div>
+                                    </div>
+                                </button>
+                            </div>
+                            <!-- ngIf: grid.options.paginationPageSizes.length > 1 -->
+
+                            <div class="ui-grid-pager-row-count-picker ng-scope">
+                                <select ng-model="pagination.ddlpageSize" ng-options="o as o for o in pagination.paginationPageSizes" ng-change="pagination.pageSizeChange()"
+                                        class="ng-pristine ng-untouched ng-valid ng-not-empty"></select>
+                                <span class="ui-grid-pager-row-count-label ng-binding">&nbsp;items per page</span>
+                            </div>
+                            <!-- end ngIf: grid.options.paginationPageSizes.length > 1 -->
+                            <!-- ngIf: grid.options.paginationPageSizes.length <= 1 -->
+                        </div>
+                        <div class="ui-grid-pager-count-container">
+                            <div class="ui-grid-pager-count">
+                                <span ng-show="pagination.totalItems > 0" class="ng-binding">
+                                    {{pagination.pageNumber}}
+                                    <abbr ui-grid-one-bind-title="paginationThrough" title="through">-</abbr>
+                                    {{pagination.ddlpageSize}} of {{pagination.totalItems}} items
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer" data-dismiss="modal">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <!--ng-click="clearField()"-->
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ----------------------------------------------------- End UI-Grid ------------------------------------------------- -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="col-md-12" ng-show="detailGrid">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="grid-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <table st-table="rowCollection" class="table table-bordered" id="TableInput">
+                            <thead>
+                                <tr>
+                                    <th>SL</th>
+                                    <th>Account Head</th>
+                                    <th>Amount</th>
+                                    <th>Option</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="JDetail in vm.JournalDetailList track by $index">
+                                    <td style="width:5%">{{$index+1}}</td>
+                                    <td style="width:50%">
+                                        <div>
+                                            <ui-select ng-model="JDetail.CL.selected" theme="bootstrap" ng-click="JDetail.COAID = $select.selected.COAID" ng-keyup="$event.keyCode == 13 ? vm.EnterToTab('div', 2) : null">
+                                                <!-- ng-keyup="$event.keyCode == 13 ? vm.tabSetOnEnter(): null" -->
+                                                <ui-select-match placeholder="- Select Accounts Head -">
+                                                    {{$select.selected.COAName}}
+                                                    <span style="float:right" ng-click="JDetail.COAID = null; $select.selected=undefined"><i class="fa fa-remove" aria-hidden="true"></i></span>
+                                                </ui-select-match>
+                                                <ui-select-choices repeat="CL in vm.COAList | filter: $select.search">
+                                                    <div ng-bind-html="CL.COAName | highlight: $select.search"></div>
+                                                </ui-select-choices>
+                                            </ui-select>
+                                        </div>
+                                    </td>
+                                    <td style="width:20%">
+                                        <input type="number" text-aling="center" class="form-control text-center" placeholder="Amount" ng-model="JDetail.DrAmount" min=0 oninput="validity.valid||(value=null);"
+                                               ng-keyup="$event.keyCode == 13 ? vm.addToList(JDetail) : null"
+                                               ng-change="vm.SetDr(JDetail)" />
+                                    </td>
+                                    <td style="width:5% !important">
+                                        <button href="#" class="btn btn-primary btn-xs btn-mini" style="background-color:#be1e02cf" ng-click="vm.deleteDetailRows(JDetail, $index)">
+                                            <i class="fa fa-trash" aria-hidden="true"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td></td>
+                                    <td style="text-align:right; font-weight:bold">Total:</td>
+                                    <td style="text-align:center; font-weight:bold">{{ttlDrAmount}}</td>
+                                    <td></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+

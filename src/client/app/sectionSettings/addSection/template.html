@@ -1,0 +1,168 @@
+
+<div class="grid simple col-md-12" ng-show="createItem">
+	
+    <div class="grid-title">
+		<div class="row">
+			<div class="col-md-9">
+				<div class="page-title"> <i class="fa fa-keyboard-o" aria-hidden="true"></i>
+					<h3>Section - <span class="semi-bold">Settings</span></h3>
+				</div>
+			</div>
+			<div class="col-md-1 marginOff">
+				<button type="submit" class="btn btn-primary btn-block showBtn" ng-click="itemEvent()">Show List</button>
+			</div>
+			<div class="col-md-1 marginOff">
+				<button type="submit" class="btn btn-primary btn-block resetBtn" ng-click="clearField()">Reset</button>
+			</div>
+			<div class="col-md-1 marginOff">
+				<button type="submit" class="btn btn-primary btn-block saveBtn" ng-click="vm.AddSection()">Save</button>
+			</div>	
+		</div>
+	</div>
+	
+	<!-- Input Fields start from here-->
+    <div class="grid-body">
+		<div class="row">
+
+			<form class="form-horizontal col-sm-8" name="vm.sectionSetup">
+				<div class="row">
+					<div class="col-md-12">
+		
+						<div class="form-group">
+							<label class="col-sm-5 control-label">Section Name</label>
+							<div class="col-sm-7">
+								<input type="text" class="form-control" placeholder="Section Name" ng-model="vm.sectionSetup.SectionName">
+							</div>
+						</div>
+
+						<!-- <div class="form-group">
+							<label class="col-sm-5 control-label">Section No.</label>
+							<div class="col-sm-7">
+								<input type="text" class="form-control" placeholder="Section No." ng-model="vm.sectionSetup.SectionNo">
+							</div>
+						</div> -->
+						
+					</div>
+				</div>	
+					
+			</form>
+
+		</div>
+	</div>
+	<!-- End of Input Fields-->
+</div>
+
+<!-- Item Entry List Grid start from here-->
+<div class="grid simple col-md-12" ng-show = "showItem" >
+    <div class="grid-title">
+		<div class="row">
+			<div class="col-md-11">
+				<div class="page-title"> <i class="fa fa-keyboard-o" aria-hidden="true"></i>
+					<h3>Section - <span class="semi-bold">List</span></h3>
+				</div>
+			</div>
+			
+			<div class="col-md-1 marginOff">
+				<button type="submit" class="btn btn-primary btn-block saveBtn" ng-click="listEvent()">Create</button>
+			</div>
+		</div>
+	</div>
+	<div class="grid-body">
+		<div class="row">
+			<div class="col-md-12">
+				<table class="table table-bordered">
+					<thead>
+						<tr>
+							<th>SL</th>
+							<th>Section Name</th>
+                            <!-- <th>Section No.</th> -->
+                            
+							<th>Action</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="section in vm.sections">
+							<td>{{$index+1}}</td>
+							<td>{{section.SectionName}}</td>
+                            <!-- <td>{{section.SectionNo}}</td> -->
+                            
+							<td>
+								<button href="#" class="btn btn-info btn-xs btn-mini" data-toggle="modal" data-target="#myModal" ng-click="vm.editSection(section.SectionID)">Edit</button>
+								<button href="/manage-deliveryman-info/edit/1" class="btn btn-primary btn-xs btn-mini" ng-click="vm.deleteSection(section.SectionID)">Delete</button>
+							</td>
+						</tr>
+					</tbody>
+				</table> 
+			</div> 
+		</div>
+	</div>	
+</div>
+<!-- End Item Entry List Grid-->
+	
+<!-- Modal Start from here -->
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+	  	<div class="modal-content">
+			<div class="modal-body">	
+				<div class="row">
+					<div class="col-md-12">
+						<div class="page-title"> <i class="fa fa-keyboard-o" aria-hidden="true"></i>
+							<h3>Edit Section - <span class="semi-bold">Entry</span></h3>
+						</div>
+					</div>
+				</div>
+				<div class="grid-body">
+					<div class="row">
+			
+						<form class="form-horizontal col-sm-8" name="vm.sectionSetupModal">
+							<div class="row">
+								<div class="col-md-12">
+									
+									<div class="form-group">
+										<label class="col-sm-5 control-label">Section Name</label>
+										<div class="col-sm-7">
+											<input type="text" class="form-control" placeholder="Section Name" ng-model="vm.sectionSetupModal.SectionName">
+										</div>
+									</div>
+			
+									<!-- <div class="form-group">
+										<label class="col-sm-5 control-label">Section No.</label>
+										<div class="col-sm-7">
+											<input type="text" class="form-control" placeholder="Section No." ng-model="vm.sectionSetupModal.SectionNo">
+										</div>
+									</div> -->
+									
+								</div>
+							</div>	
+								
+						</form>
+			
+					</div>
+				</div>		
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-primary"  data-dismiss="modal" ng-click="vm.patchSection()">Save changes</button>
+			</div>
+	  	</div>
+	  
+	</div>
+
+</div>
+
+<!-- Modal End -->
+
+<style>
+	.thumb {
+    width: 24px;
+    height: 24px;
+    float: none;
+    position: relative;
+    top: 7px;
+}
+.modal-content{
+	width: 1660px;
+    margin-left: -405px;
+}
+</style>

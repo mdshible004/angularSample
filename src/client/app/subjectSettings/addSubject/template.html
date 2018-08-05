@@ -1,0 +1,190 @@
+<div class="grid simple col-md-12" ng-show="createItem">
+
+    <div class="grid-title">
+        <div class="row">
+            <div class="col-md-9">
+                <div class="page-title">
+                    <i class="fa fa-keyboard-o" aria-hidden="true"></i>
+                    <h3>
+                        Subject -
+                        <span class="semi-bold">Settings</span>
+                    </h3>
+                </div>
+            </div>
+            <div class="col-md-1 marginOff">
+                <button type="submit" class="btn btn-primary btn-block showBtn" ng-click="vm.showEvent()" ng-disabled="vm.SubjectSetups.$invalid">Show</button>
+            </div>
+            <div class="col-md-1 marginOff">
+                <button type="submit" class="btn btn-primary btn-block resetBtn" ng-click="clearField()">Reset</button>
+            </div>
+            <div class="col-md-1 marginOff">
+                <button type="submit" class="btn btn-primary btn-block saveBtn" ng-click="vm.insSubjects()" ng-disabled="btnDis">Save</button>
+            </div>
+        </div>
+    </div>
+    <div class="grid-body">
+        <div class="row">
+
+            <form class="form-horizontal col-sm-12 " name="vm.SubjectSetups">
+                <div class="row">
+                    <div class="col-md-6">
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Institute</label>
+                            <div class="col-sm-8">
+                                <ui-select ng-model="vm.institute.selected" on-select="vm.getmediumNameDdl(vm.instituteID)" name="InsID" theme="bootstrap" ng-click="vm.instituteID = $select.selected.InstituteID" ng-disabled="vm.InstituteID!==1?true:false" ng-change="changeGrid()" required>
+                                    <ui-select-match placeholder="-Select-">
+                                        {{$select.selected.InstituteName}}
+                                        <span class="pull-right" ng-click="vm.instituteID = null;vm.MediumID = null; vm.medium=undefined; vm.mediums=[];vm.ClassID = null; vm.class=undefined; vm.classes=[];vm.DepartmentID = null; vm.department=undefined; vm.departments=[]; DisBtn(); $select.selected=undefined">
+                                            <i class="fa fa-remove" aria-hidden="true"></i>
+                                        </span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="institute in vm.institutes | filter: $select.search">
+                                        <div ng-bind-html="institute.InstituteName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            <span class="error" ng-show="(vm.SubjectSetups.$dirty||submitted) && vm.SubjectSetups.InsID.$error.required">*</span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Class</label>
+                            <div class="col-sm-8">
+                                <ui-select ng-model="vm.class.selected" name="Cls" on-select="vm.ClassWiseDepartmentDDL(vm.ClassID)" theme="bootstrap" ng-click="vm.ClassID = $select.selected.ClassID" ng-change="changeGrid()" required>
+                                    <ui-select-match placeholder="-Select-">
+                                        {{$select.selected.ClassName}}
+                                        <span style="float:right" ng-click="vm.ClassID = null; DisBtn(); vm.DepartmentID = null; vm.department=undefined; vm.departments=[]; $select.selected=undefined">
+                                            <i class="fa fa-remove" aria-hidden="true"></i>
+                                        </span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="class in vm.classes | filter: $select.search">
+                                        <div ng-bind-html="class.ClassName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            <span class="error" ng-show="(vm.SubjectSetups.$dirty||submitted) && vm.SubjectSetups.Cls.$error.required">*</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Medium</label>
+                            <div class="col-sm-8">
+                                <ui-select ng-model="vm.medium.selected" name="Med" on-select="vm.MediumWiseClassDDL(vm.MediumID)" theme="bootstrap" ng-click="vm.MediumID = $select.selected.MediumID" ng-change="changeGrid()" required>
+                                    <ui-select-match placeholder="-Select-">
+                                        {{$select.selected.MameName}}
+                                        <span style="float:right" ng-click="vm.MediumID = null; DisBtn(); vm.ClassID = null; vm.class=undefined; vm.classes=[]; vm.DepartmentID = null; vm.department=undefined; vm.departments=[]; $select.selected=undefined">
+                                            <i class="fa fa-remove" aria-hidden="true"></i>
+                                        </span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="medium in vm.mediums | filter: $select.search">
+                                        <div ng-bind-html="medium.MameName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            <span class="error" ng-show="(vm.SubjectSetups.$dirty||submitted) && vm.SubjectSetups.Med.$error.required">*</span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Department</label>
+                            <div class="col-sm-8">
+                                <ui-select ng-model="vm.department.selected" name="Dep" theme="bootstrap" ng-click="vm.DepartmentID = $select.selected.DepartmentID" ng-change="changeGrid()" ng-required="IsRequired">
+                                    <ui-select-match placeholder="-Select-">
+                                        {{$select.selected.DepartmentName}}
+                                        <span style="float:right" ng-click="vm.DepartmentID = null; DisBtn(); $select.selected=undefined">
+                                            <i class="fa fa-remove" aria-hidden="true"></i>
+                                        </span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="department in vm.departments | filter: $select.search">
+                                        <div ng-bind-html="department.DepartmentName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            <span class="error" ng-show="(vm.SubjectSetups.$dirty||submitted) && vm.SubjectSetups.Dep.$error.required">*</span>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<!-- Item Entry List Grid -->
+<!-- <pre>{{subjectArr|json}}</pre> -->
+<div class="grid simple col-md-12" ng-show="showItem">
+    <div class="grid-body">
+        <div class="row">
+            <div class="col-md-12">
+                <table st-table="rowCollection" class="newDiscounts dynaRows table table-hover table-condensed">
+                    <thead>
+                        <tr>
+                            <th st-sort="ItemID">SL</th>
+                            <th st-sort="ItemName">Is Active</th>
+                            <th st-sort="ItemBrandID">Subject Name</th>
+                            <th st-sort="ItemBrandID">Is Combined</th>
+                            <th st-sort="ItemBrandID">Is Optional</th>
+                            <th st-sort="">Parent Subject</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="subject in subjectArr" style="height:65px">
+                            <td>{{$index+1}}</td>
+
+                            <td ng-click="openSubjectIndexActive($index)">
+                                <div class="checkbox check-primary">
+                                    <input id="{{$index + 100}}" type="checkbox" ng-model="subject.IsActive" ng-checked="subject.IsActive===1" ng-click="switchIsActive(subject.IsActive)">
+                                    <label for="{{$index + 100}}"></label>
+                                </div>
+                            </td>
+                            <td>{{subject.SubjectName}}</td>
+                            <td ng-click="openSubjectIndexCombined($index)">
+                                <div class="checkbox check-primary">
+                                    <input id="{{$index + 200}}" type="checkbox" ng-model="subject.IsCombined" ng-checked="subject.IsCombined === 1" ng-click="switchIsCombined(subject.IsCombined)">
+                                    <label for="{{$index + 200}}"></label>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="checkbox check-primary">
+                                    <input id="{{$index + 300}}" type="checkbox" ng-model="subject.IsOptional" ng-checked="subject.IsOptional === true">
+                                    <label for="{{$index + 300}}"></label>
+                                </div>
+                            </td>
+                            <td style="width:35%">
+                                <div class="form-group">
+                                    <div class="col-sm-7 col-sm-offset-3" ng-if="subject.IsCombined === 1">
+                                        <ui-select ng-model="subjectArr[$index].SubjectDdl" theme="bootstrap" ng-click="subject.ParentID = $select.selected.SubjectID">
+                                            <ui-select-match placeholder="-Select-">{{$select.selected.SubjectName || "-Select-"}}</ui-select-match>
+                                            <ui-select-choices repeat="subject in subjects | filter: $select.search">
+                                                <div ng-bind-html="subject.SubjectName | highlight: $select.search"></div>
+                                            </ui-select-choices>
+                                        </ui-select>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .thumb {
+        width: 24px;
+        height: 24px;
+        float: none;
+        position: relative;
+        top: 7px;
+    }
+
+    .modal-content {
+        width: 1660px;
+        margin-left: -405px;
+    }
+</style>

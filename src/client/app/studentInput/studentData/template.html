@@ -1,0 +1,482 @@
+<div class="grid simple col-md-12" ng-show="createItem">
+    <div class="grid-title">
+        <div class="row">
+            <div class="col-md-9">
+                <div class="page-title">
+                    <i class="fa fa-keyboard-o" aria-hidden="true"></i>
+                    <h3>
+                        Student
+                        <span class="semi-bold">Info</span>
+                    </h3>
+                </div>
+            </div>
+            <div class="col-md-1 marginOff">
+                <button type="submit" class="btn btn-primary btn-block showBtn" ng-click="RefreshList()">Show List</button>
+            </div>
+            <div class="col-md-1 marginOff">
+                <button type="submit" class="btn btn-primary btn-block resetBtn" ng-click="clearField()">Reset</button>
+            </div>
+            <div class="col-md-1 marginOff">
+                <!--ng-show="svButton"-->
+                <button type="submit" class="btn btn-primary btn-block saveBtn" ng-click="vm.postUserSetupStudent()">Save</button>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<div class="grid simple col-md-12" ng-show="Form">
+    <div class="grid-body">
+        <div class="row">
+            <form class="form-horizontal col-sm-11" name="vm.BulkStudentSetup">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label">Institute</label>
+                            <div class="col-sm-7">
+                                <ui-select ng-model="vm.institute.selected" name="InsID" theme="bootstrap" ng-click="vm.instituteID = $select.selected.InstituteID" ng-disabled="IsDis=vm.InstituteID!==1?true:false" on-select="vm.instituteSelected($select.selected.InstituteID, $select.selected.InstituteName )" ng-change="change()" required>
+                                    <ui-select-match placeholder=" -Select-">
+                                        {{$select.selected.InstituteName}}
+                                        <span style="float:right" ng-click="vm.instituteID = null; vm.med=undefined; vm.cls=undefined; vm.department = undefined; vm.sec = undefined;vm.session=undefined;vm.board=undefined;vm.brunch=undefined;vm.sft=undefined; $select.selected=undefined">
+                                            <i class="fa fa-remove" aria-hidden="true"></i>
+                                        </span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="institute in vm.institutes | filter: $select.search">
+                                        <div ng-bind-html="institute.InstituteName  | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            <span class="error" ng-show="(vm.BranchSetupSave.$dirty||submitted) && vm.BranchSetupSave.InsID.$error.required">*</span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label">Medium</label>
+                            <div class="col-sm-7">
+                                <ui-select ng-model="vm.med.selected" theme="bootstrap" ng-click="vm.MediumID = $select.selected.MediumID" on-select="vm.instituteSelected(vm.InstituteID,'',vm.MediumID)" ng-change="changeMed()">
+                                    <ui-select-match placeholder="- Select Medium -">
+                                        {{$select.selected.MameName}}
+                                        <span style="float:right" ng-click="vm.MediumID = null;vm.cls=undefined; vm.department = undefined; vm.sec = undefined; $select.selected=undefined"><i class="fa fa-remove" aria-hidden="true"></i></span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="med in   vm.medium | filter: $select.search">
+                                        <div ng-bind-html="med.MameName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label">Class</label>
+                            <div class="col-sm-7">
+                                <ui-select ng-model="vm.cls.selected" theme="bootstrap" ng-click="vm.ClassID = $select.selected.ClassID" on-select="vm.ClassSelected(vm.cls.selected.ClassID)" ng-change="changeCls()">
+                                    <ui-select-match placeholder="- Select Class -">
+                                        {{$select.selected.ClassName}}
+                                        <span style="float:right" ng-click="vm.ClassID = null; vm.department = undefined; vm.sec = undefined; $select.selected=undefined"><i class="fa fa-remove" aria-hidden="true"></i></span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="cls in   vm.class | filter: $select.search">
+                                        <div ng-bind-html="cls.ClassName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label">Department</label>
+                            <div class="col-sm-7">
+                                <ui-select ng-model="vm.department.selected" theme="bootstrap" ng-click="vm.DepartmentID = $select.selected.DepartmentID" on-select="vm.DepartmentSelected(vm.department.selected.DepartmentID)" ng-change="changeDep()">
+                                    <ui-select-match placeholder="-Select Department-">
+                                        {{$select.selected.DepartmentName}}
+                                        <span style="float:right" ng-click="vm.DepartmentID = undefined; vm.sec = undefined; $select.selected=undefined"><i class="fa fa-remove" aria-hidden="true"></i></span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="department in vm.departments | filter: $select.search">
+                                        <div ng-bind-html="department.DepartmentName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label">Section</label>
+                            <div class="col-sm-7">
+                                <ui-select ng-model="vm.sec.selected" theme="bootstrap" ng-click="vm.SectionID = $select.selected.SectionID">
+                                    <ui-select-match placeholder="- Select Section -">
+                                        {{$select.selected.SectionName}}
+                                        <span style="float:right" ng-click="vm.SectionID = undefined; $select.selected=undefined"><i class="fa fa-remove" aria-hidden="true"></i></span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="sec in   vm.section | filter: $select.search">
+                                        <div ng-bind-html="sec.SectionName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="col-md-6">
+
+
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label">Branch</label>
+                            <div class="col-sm-7">
+                                <ui-select ng-model="vm.brunch.selected" theme="bootstrap" ng-click="vm.BrunchID = $select.selected.BrunchID">
+                                    <ui-select-match placeholder="-Select Brunch-">
+                                        {{$select.selected.BrunchName}}
+                                        <span style="float:right" ng-click="vm.BrunchID = null; $select.selected=null"><i class="fa fa-remove" aria-hidden="true"></i></span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="branch in vm.branches | filter: $select.search">
+                                        <div ng-bind-html="branch.BrunchName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label">Shift</label>
+                            <div class="col-sm-7">
+                                <ui-select ng-model="vm.sft.selected" theme="bootstrap" ng-click="vm.ShiftID = $select.selected.ShiftID">
+                                    <ui-select-match placeholder="- Select Shift -">
+                                        {{$select.selected.ShiftName}}
+                                        <span style="float:right" ng-click="vm.ShiftID = null; $select.selected=undefined"><i class="fa fa-remove" aria-hidden="true"></i></span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="shift in   vm.Shift | filter: $select.search">
+                                        <div ng-bind-html="shift.ShiftName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label">Session</label>
+                            <div class="col-sm-7">
+                                <ui-select ng-model="vm.session.selected" theme="bootstrap" ng-click="vm.SessionID = $select.selected.SessionID">
+                                    <ui-select-match placeholder="-Select Session-">
+                                        {{$select.selected.SessionName}}
+                                        <span style="float:right" ng-click="vm.SessionID = null; $select.selected=undefined"><i class="fa fa-remove" aria-hidden="true"></i></span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="session in vm.sessions | filter: $select.search">
+                                        <div ng-bind-html="session.SessionName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label">Board</label>
+                            <div class="col-sm-7">
+                                <ui-select ng-model="vm.board.selected" theme="bootstrap" ng-click="vm.BoardID = $select.selected.BoardID">
+                                    <ui-select-match placeholder="-Select BoardName-">
+                                        {{$select.selected.BoardName}}
+                                        <span style="float:right" ng-click="vm.BoardID = null; $select.selected=undefined"><i class="fa fa-remove" aria-hidden="true"></i></span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="board in vm.boards | filter: $select.search">
+                                        <div ng-bind-html="board.BoardName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="actions clearfix">
+                                <div class="pull-right" style="position: relative;left: 84px;">
+                                    <div class="col-sm-4">
+                                        <input type="text" class="form-control" placeholder="Student Number" ng-model="vm.nmbrOfRow" style="position: relative;left: -30px;height: 37px;width: 105px;">
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <button type="button" class="addNewRow btn btn-white btn-cons btn-sm col-sm-5" ng-click="vm.addNewRowForEducation(vm.nmbrOfRow)"
+                                                style="position: relative;left: -45px;width: 119px;">
+                                            <i class="fa fa-plus"></i> Enter Row
+                                        </button>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <button class="uploadBtn" type="file" ngf-select="uploadExcel($file, $invalidFiles,$parent.$index)" ng-submit="uploadExcel(imageFile)"
+                                                accept="application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ngf-max-height="1000"
+                                                ngf-max-size="4MB" ng-model="imageFile" ngf-multiple="false" name="UserImage" style="position: relative;width: 83px;left: -41px;height: 37px;">
+                                            UPLOAD FILE
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+<!-- Education Container -->
+<div class="grid simple col-md-12 vertical green" ng-show="educationInfoContainer">
+    <div class="grid-body">
+        <div class="row">
+            <div class="col-md-12" style="overflow: scroll;height: 600px;">
+                <!-- <p>JSON data: <br/>{{EducationData}}	 -->
+                <h4 class="clearfix">Student Details</h4>
+                <br />
+                <form class="newOvDiscount" action="#" method="post">
+
+                    <table class="newDiscounts dynaRows table table-hover table-condensed" style="width: 2500px;">
+                        <thead>
+                            <tr>
+                                <th style="width:1%">SN</th>
+                                <th style="width:14%">Student Deatils</th>
+                                <th style="width:9%">Student Name</th>
+                                <th style="width:8%">Student Image </th>
+                                <th style="width:9%">Parent Name</th>
+                                <th style="width:8%">Phone</th>
+                                <th style="width:8%">Email</th>
+                                <th style="width:6%">Roll</th>
+                                <th style="width:7%">Student ID</th>
+                                <th style="width:8%">DOB</th>
+                                <!-- <th style="width:8%">DOB Certificate No</th> -->
+                                <th style="width:6%">Gender</th>
+                                <th style="width:6%">Religion</th>
+                                <th style="width:6%">Address</th>
+
+                                <th style="width:2%">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="value in EducationData ">
+                                <td>
+                                    {{$index + 1}}
+                                </td>
+                                <td>
+                                    <div style="margin-bottom:9px">
+                                        <p class="label Htag">{{monthlyFeeInfo.UserName}}</p>
+                                    </div>
+                                    <div style="margin-bottom: 9px;">
+                                        <p class="label tag"> Class : {{vm.GridClassName}}</p>
+                                        <span class="label tag">Section : {{vm.GridSection}}</span>
+                                        <span class="label tag">Dept. : {{vm.GridDept}}</span>
+                                        <span class="label tag">Session : {{vm.GridSession}}</span>
+                                        <br>
+                                    </div>
+                                    <div>
+                                        <span class="label tag">Board: {{vm.GridBoard}}</span>
+                                        <span class="label tag">Brunch : {{vm.GridBrunch}}</span>
+                                        <span class="label tag">Shift : {{vm.GridShift}}</span>
+                                        <span class="label tag">Medium : {{vm.GridMed}}</span>
+                                    </div>
+                                </td>
+                                <td ng-repeat="field in value">
+                                    <input type="text" class="form-control" ng-model="field.studentName">
+                                </td>
+
+                                <td ng-repeat="field in value">
+                                    <div class="col-sm-7">
+                                        <button class="uploadBtn" type="file" ngf-select="uploadFilesSignature($file, $invalidFiles,$parent.$index)" ng-submit="uploadFilesSignature(vm.imageFile)"
+                                                accept="image/jpg" ngf-max-height="1000" ngf-max-size="2MB" ng-model="vm.imageFile" ngf-multiple="false" name="UserImage"
+                                                style="position: relative; width: 100px; left: 21px;">
+                                            Upload Image
+                                        </button>
+
+                                        <img src="{{field.image}}" style="height: 60px;width: 61px; margin-left:40px;margin-bottom: -4px;" ng-show="field.imgShowSignature" />
+                                    </div>
+                                </td>
+
+
+                                <td ng-repeat="field in value">
+                                    <input type="text" class="form-control" ng-model="field.parentName">
+                                </td>
+                                <td ng-repeat="field in value">
+                                    <input type="text" class="form-control" ng-model="field.phone">
+                                </td>
+                                <td ng-repeat="field in value">
+                                    <input type="text" class="form-control" ng-model="field.email">
+                                </td>
+                                <td ng-repeat="field in value">
+                                    <input type="number" class="form-control" ng-model="field.roll">
+                                </td>
+                                <td ng-repeat="field in value">
+                                    <input type="number" class="form-control" ng-model="field.studentID">
+                                </td>
+                                <td ng-repeat="field in value">
+                                    <datepicker date-format="yyyy-MM-dd" selector="form-control">
+                                        <div class="input-group">
+                                            <input class="form-control" placeholder="Choose a date" ng-model="field.DOB" />
+                                            <span class="input-group-addon" style="cursor: pointer">
+                                                <i class="fa fa-lg fa-calendar"></i>
+                                            </span>
+                                        </div>
+                                    </datepicker>
+                                </td>
+
+                                <td ng-repeat="field in value">
+                                    <ui-select ng-model="value[$index].genderSelected" theme="bootstrap" ng-click="field.GenderID = $select.selected.GenderID">
+                                        <ui-select-match placeholder="-Select Gender-">{{$select.selected.GenderName}}</ui-select-match>
+                                        <ui-select-choices repeat="gen in vm.genders | filter: $select.search">
+                                            <div ng-bind-html="gen.GenderName | highlight: $select.search"></div>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </td>
+                                <td ng-repeat="field in value">
+
+                                    <ui-select ng-model="value[$index].religionSelected" theme="bootstrap" ng-click="field.religionID = $select.selected.religionID">
+                                        <ui-select-match placeholder="-Select Relagion-">{{$select.selected.ReligionName}}</ui-select-match>
+                                        <ui-select-choices repeat="religion in vm.religions | filter: $select.search">
+                                            <div ng-bind-html="religion.ReligionName | highlight: $select.search"></div>
+                                        </ui-select-choices>
+                                    </ui-select>
+
+                                </td>
+                                <td ng-repeat="field in value">
+                                    <input type="text" class="form-control" ng-model="field.address">
+                                </td>
+
+
+
+                                <td ng-click="EducationRemoveRow($index)">
+                                    <i class="fa fa-times" ng-repeat="field in value" ng-hide="field.IsDeleted === true"></i>
+                                    <span ng-repeat="field in value" ng-show="field.IsDeleted === true" class="deleteTag">
+                                        Deleted
+                                    </span>
+                                </td>
+                            </tr>
+
+
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+<!-- ---------------------------------------------------- Start UI-Grid ------------------------------------------------ -->
+<div class="modal fade " id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-head">
+                <h3 style="margin-left:30px; font-weight:bold">Student List</h3>
+            </div>
+            <div class="modal-body">
+                <div class="col-md-12">
+                    <div ui-grid="gridOptions" style="height:550px" ui-grid-resize-columns ui-grid-auto-resize ui-grid-move-columns ui-grid-exporter ui-grid-pinning
+                         class="grid">
+                    </div>
+
+                    <div class="loadmore">
+                        <div ng-show="loaderMore" ng-class="result">
+                            <!-- <img src="~/Content/img/ng-loader.gif" /> -->
+                            {{lblMessage}}
+                        </div>
+                    </div>
+                    <div class="row"></div>
+                    <div role="contentinfo" style="margin-bottom:-20px" class="ui-grid-pager-panel ng-scope">
+                        <div role="navigation" class="ui-grid-pager-container">
+                            <div role="menubar" class="ui-grid-pager-control">
+                                <!-- Start Page -->
+                                <button type="button" role="menuitem" class="ui-grid-pager-first" ui-grid-one-bind-title="aria.pageToFirst" ui-grid-one-bind-aria-label="aria.pageToFirst"
+                                        ng-click="pagination.firstPage()" ng-disabled="cantPageBackward()" title="Page to first" aria-label="Page to first"
+                                        disabled="disabled">
+                                    <div class="first-triangle">
+                                        <div class="first-bar"></div>
+                                    </div>
+                                </button>
+
+                                <!-- Prev Page -->
+                                <button type="button" role="menuitem" class="ui-grid-pager-previous" ui-grid-one-bind-title="aria.pageBack" ui-grid-one-bind-aria-label="aria.pageBack"
+                                        ng-click="pagination.previousPage()" ng-disabled="cantPageBackward()" title="Page back" aria-label="Page back" disabled="disabled">
+                                    <div class="first-triangle prev-triangle"></div>
+                                </button>
+
+                                <input type="number" ui-grid-one-bind-title="aria.pageSelected" ui-grid-one-bind-aria-label="aria.pageSelected" class="ui-grid-pager-control-input ng-pristine ng-untouched ng-valid ng-not-empty ng-valid-min ng-valid-max ng-valid-required"
+                                       ng-model="pagination.pageNumber" min="1" max="{{pagination.getTotalPages()}}" required="" title="Selected page" aria-label="Selected page" />
+
+                                <span class="ui-grid-pager-max-pages-number ng-binding" ng-show="pagination.getTotalPages() > 0">
+                                    <abbr ui-grid-one-bind-title="paginationOf" title="of">/</abbr>{{pagination.getTotalPages()}}
+                                </span>
+
+                                <!-- Next Page -->
+                                <button type="button" role="menuitem" class="ui-grid-pager-next" ui-grid-one-bind-title="aria.pageForward" ui-grid-one-bind-aria-label="aria.pageForward"
+                                        ng-click="pagination.nextPage()" ng-disabled="cantPageForward()" title="Page forward" aria-label="Page forward">
+                                    <div class="last-triangle next-triangle"></div>
+                                </button>
+
+                                <!-- Last Page -->
+                                <button type="button" role="menuitem" class="ui-grid-pager-last" ui-grid-one-bind-title="aria.pageToLast" ui-grid-one-bind-aria-label="aria.pageToLast"
+                                        ng-click="pagination.lastPage()" ng-disabled="cantPageToLast()" title="Page to last" aria-label="Page to last">
+                                    <div class="last-triangle">
+                                        <div class="last-bar"></div>
+                                    </div>
+                                </button>
+                            </div>
+                            <!-- ngIf: grid.options.paginationPageSizes.length > 1 -->
+
+                            <div class="ui-grid-pager-row-count-picker ng-scope">
+                                <select ng-model="pagination.ddlpageSize" ng-options="o as o for o in pagination.paginationPageSizes" ng-change="pagination.pageSizeChange()"
+                                        class="ng-pristine ng-untouched ng-valid ng-not-empty"></select>
+                                <span class="ui-grid-pager-row-count-label ng-binding">&nbsp;items per page</span>
+                            </div>
+                            <!-- end ngIf: grid.options.paginationPageSizes.length > 1 -->
+                            <!-- ngIf: grid.options.paginationPageSizes.length <= 1 -->
+                        </div>
+                        <div class="ui-grid-pager-count-container">
+                            <div class="ui-grid-pager-count">
+                                <span ng-show="pagination.totalItems > 0" class="ng-binding">
+                                    {{pagination.pageNumber}}
+                                    <abbr ui-grid-one-bind-title="paginationThrough" title="through">-</abbr>
+                                    {{pagination.ddlpageSize}} of {{pagination.totalItems}} items
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ----------------------------------------------------- End UI-Grid ------------------------------------------------- -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+    .thumb {
+        width: 24px;
+        height: 24px;
+        float: none;
+        position: relative;
+        top: 7px;
+    }
+
+    .hungry table.dynaRows tr td input {
+        width: 100%;
+        border: 1px solid #0aa69994;
+    }
+
+    .modal-content {
+        width: 1320px;
+        margin-left: -362px;
+    }
+
+    a {
+        cursor: pointer;
+    }
+</style>

@@ -1,0 +1,814 @@
+
+
+
+<div class="grid simple col-md-12" ng-show="createItem">
+
+    <div class="grid-title">
+        <div class="row">
+            <div class="col-md-9">
+                <div class="page-title">
+                    <i class="fa fa-keyboard-o" aria-hidden="true"></i>
+                    <h3>
+                        Monthly Attendence -
+                        <span class="semi-bold">Report</span>
+                    </h3>
+                </div>
+            </div>
+            <!--<div class="col-md-2">
+                <button href="#" class="btn btn-primary btn-block showBtn" data-toggle="modal" ng-click="vm.getMonthlyAtd()" ng-disabled="vm.attendance.$invalid">Find Student</button>
+            </div>-->
+            <!--<div class="col-md-1">
+                <button type="submit" class="btn btn-primary btn-block resetBtn" ng-click="clearField()">Reset</button>
+            </div>-->
+        </div>
+    </div>
+    <div class="grid-body">
+        <div class="row">
+
+            <form class="form-horizontal col-md-12" name="vm.attendance">
+                <div class="row">
+
+
+                    <div class="col-md-4">
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Month</label>
+                            <div class="col-sm-8">
+                                <ui-select ng-model="vm.mon.selected" theme="bootstrap" name="month" ng-click="vm.monthID = $select.selected.MonthID" on-select="getStudentAtdByMonthDdl(vm.monthID)" required>
+                                    <ui-select-match placeholder=" -Select-">
+                                        {{$select.selected.MonthName}}
+                                        <span style="float:right" ng-click="vm.monthID = null; $select.selected=undefined">
+                                            <i class="fa fa-remove" aria-hidden="true"></i>
+                                        </span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="mon in vm.months | filter: $select.search">
+                                        <div ng-bind-html="mon.MonthName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                                <!-- value:{{vm.mon.selected.MonthID}} -->
+                            </div>
+                            <span class="error" ng-show="(vm.attendance.$dirty||submitted) && vm.attendance.month.$error.required">*</span>
+                        </div>
+
+
+                    </div>
+
+                    <div class="col-md-6" ng-show="vm.UserInfoList.length > 0 ? true : false">
+                        <div class="form-group">
+                            <label class="col-md-4 control-label" style="font-weight:bold; margin-top:5px">Select Your Student</label>
+                            <div class="col-md-8">
+                                <ui-select ng-model="vm.user.selected" theme="bootstrap" ng-click="vm.UserID = $select.selected.UserID" on-select="getStudentPeriodByddl(vm.UserID)">
+                                    <ui-select-match placeholder="-Select Your Student-">
+                                        {{$select.selected.UserFullName}}
+                                        <span style="float:right" ng-click="vm.UserID = null; $select.selected=undefined">
+                                            <i class="fa fa-remove" aria-hidden="true"></i>
+                                        </span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="user in vm.UserInfoList | filter: $select.search">
+                                        <div ng-bind-html="user.UserFullName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            <span class="error" ng-show="(vm.PeriodSetup.$dirty||submitted) && vm.PeriodSetup.InsID.$error.required">*</span>
+                        </div>
+                    </div>
+
+
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="page-title">
+                            <i class="fa fa-keyboard-o" aria-hidden="true"></i>
+                            <h3>
+                                Student -
+                                <span class="semi-bold">Info</span>
+                            </h3>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="grid-body">
+                    <div class="row">
+
+                        <div class="col-md-12">
+
+                            <p>data:</p> <br /><pre>{{vm.monAtd|json}}</pre>
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 113px">Sl.</th>
+                                        <th style="width: 338px">Student Name</th>
+                                        <th style="width: 216px"> Student Id</th>
+                                        <th style="width: 313px">Roll No</th>
+                                        <th style="width: 175px;"> Attendence</th>
+                                    </tr>
+
+                                </thead>
+                            </table>
+                            <div id="table-wrapper">
+                                <div id="table-scroll" style="margin-top: -21px;">
+                                    <table class="table table-bordered">
+                                        <tbody>
+
+                                            <tr ng-repeat="list in vm.monAtd">
+                                                <td style="width: 113px">{{$index+1}}</td>
+                                                <td style="width: 338px">{{list.UserFullName}}</td>
+                                                <td style="width: 216px">{{list.RFID}}</td>
+                                                <td style="width: 313px">{{list.RollNo}}</td>
+                                                <td style="width: 175px;">
+                                                    <button type="submit" class="btn btn-primary btn-xs btn-mini" data-dismiss="modal" ng-click="vm.getMonthlyAtd($index)">Show</button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+    </div>
+</div>
+
+<!-- ---------------------------Student Attendance Details----------------------------------- -->
+<div class="grid simple col-md-12" id="myZone" ng-show="showItem">
+    <div class="grid-title">
+        <div class="row">
+            <div class="col-md-10">
+                <div class="page-title">
+                </div>
+            </div>
+            <div class="col-md-1 marginOff">
+                <button type="submit" class="btn btn-primary btn-block saveBtn" ng-click="vm.printDiv('print')">
+                    <span class="glyphicon glyphicon-print"></span> Print
+                </button>
+            </div>
+            <div class="col-md-1 marginOff">
+                <button type="submit" class="btn btn-danger clearfix btn-block " ng-click="vm.printDiv('print')">
+                    <span class="fa fa-file-pdf-o"></span> PDF
+                </button>
+            </div>
+
+
+        </div>
+    </div>
+    <div class="grid-body">
+        <div class="row">
+            <form class="form-horizontal col-sm-8" name="vm.menuSetup">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label">Student Name</label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" ng-model="vm.menuSetup.StudentName" disabled>
+                                <input type="hidden" class="form-control" ng-model="vm.menuSetup.MenuID">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label">Student ID</label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" ng-model="vm.menuSetup.StudentID" disabled>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label">Roll No</label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" ng-model="vm.menuSetup.RollNo" disabled>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label">Guardian Name</label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" ng-model="vm.menuSetup.GuardianName" disabled>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label">Guardian Email</label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" ng-model="vm.menuSetup.GuardianMail" disabled>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label">Total Present</label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" ng-model="vm.menuSetup.TotalPresent" disabled>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            <div id="exportable">
+
+
+                <div class="col-md-12" id="exportable">
+                    <table id="myTable" st-table="rowCollection" class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Sl</th>
+                                <th>Date </th>
+                                <th>Status</th>
+                                <th>Late in Min.</th>
+                                <th>Subject Wise Present</th>
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+                            <tr ng-repeat="row in vm.monthlyAtd">
+                                <td>{{$index+1}}</td>
+                                <td>
+                                    {{row.Date | date : "dd-MM-y"}} {{row.Date |date : "EEEE"}}
+                                </td>
+                                <td>{{row.Present===1?"Present":"Absent"}}</td>
+                                <td>{{row.Late* -1}}</td>
+                                <td>
+                                    <button href="#" class="btn btn-info btn-xs btn-xs " ng-click="vm.getAllSubjectAtd($index)">
+                                        <i class="fa fa-share-square-o" data-toggle="modal" data-target="#myModal1"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Total Class Day</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control" ng-model="vm.menuSetup.ToTalClass" disabled>
+
+                        </div>
+                    </div>
+                    <br />
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Total Present</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control" ng-model="vm.menuSetup.TotalPre" disabled>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- -------------------------------------------------------------- -->
+<!-- -----------------------Teacher Load--------------------------------------- -->
+<div class="grid simple col-md-12" id="myZone" ng-show="showItemForTeacher">
+    <div class="grid-title">
+        <div class="row">
+            <div class="col-md-10">
+                <div class="page-title">
+                </div>
+            </div>
+
+            <div class="col-md-1 marginOff">
+                <button type="submit" class="btn btn-primary btn-block saveBtn" ng-click="vm.printDivTeacher('printTeacher')">
+                    <span class="glyphicon glyphicon-print"></span> Print
+                </button>
+            </div>
+            <div class="col-md-1 marginOff">
+                <button type="submit" class="btn btn-danger clearfix btn-block " ng-click="vm.printDivTeacher('printTeacher')">
+                    <span class="fa fa-file-pdf-o"></span> PDF
+                </button>
+            </div>
+
+        </div>
+    </div>
+    <div class="grid-body">
+        <div class="row">
+            <form class="form-horizontal col-sm-8" name="vm.TechAtd">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label"> Name</label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" ng-model="vm.TechAtd.TeacherName" disabled>
+                                <input type="hidden" class="form-control" ng-model="vm.menuSetup.MenuID">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label">Teacher ID</label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" ng-model="vm.TechAtd.RFID" disabled>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label">Branch</label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" ng-model="vm.TechAtd.Branch" disabled>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label">Phone</label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" ng-model="vm.TechAtd.Phone" disabled>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label"> Email</label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" ng-model="vm.TechAtd.Email" disabled>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label">Total Present</label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" ng-model="vm.TechAtd.TotalPresent" disabled>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            <div id="exportable">
+
+
+                <div class="col-md-12" id="exportable">
+                    <table id="myTable" st-table="rowCollection" class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Sl</th>
+                                <th>Date </th>
+                                <th>Status</th>
+                                <th>Late in Min.</th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+                            <tr ng-repeat="row in vm.TechAtd">
+                                <td>{{$index+1}}</td>
+                                <td>
+                                    {{row.Date | date : "dd-MM-y"}}
+                                </td>
+                                <td>{{row.Present===1?"Present":"Absent"}}</td>
+                                <td>{{row.LateMins * -1}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Total Class Day</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control" ng-model="vm.TechAtd.ToTalClass" disabled>
+
+                        </div>
+                    </div>
+                    <br />
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Total Present</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control" ng-model="vm.TechAtd.TotalPresentDeti" disabled>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- -------------------------------------------------------------- -->
+<!-- ----------------------------------------last modal---------------------------- -->
+
+<div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <button type="button" class="btn btn-default pull-right" data-dismiss="modal">Close</button>
+
+                    </div>
+                </div>
+                <div class="grid-body">
+                    <div class="row">
+
+                        <div class="col-md-12">
+
+                            <!-- <p>data: <br/><pre>{{subwiseAtd|json}}</pre>   -->
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Sl.</th>
+                                        <th>Subject Name</th>
+                                        <th>Subject Code</th>
+                                        <th>Status</th>
+                                        <th> Class Teacher</th>
+
+                                    </tr>
+
+                                </thead>
+                                <tbody>
+
+                                    <tr ng-repeat="list in vm.AllSubjectAtd">
+                                        <td>{{$index+1}}</td>
+                                        <td>{{list.Subject}}</td>
+                                        <td>{{list.SubjectNo}}</td>
+                                        <td>{{list.Status===1 ? "Present" : "None" && list.Status===2 ? "Absent": "None" &&list.Status===3 ? "Late" : "Leave"}}</td>
+                                        <td>{{list.ClassTeacher}}</td>
+
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <!-- <tr>
+                                        <td colspan="5" class="text-center">
+                                            <div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="7"></div>
+                                        </td>
+                                    </tr> -->
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <!--  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" ng-click="vm.patchClass()">Save changes</button>
+                </div> -->
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+</div>
+
+<!-- -------------------end--------------------------- -->
+<!----------------------------------- Print Student Start ------------------------->
+
+<div class="grid-body" id="print" ng-show="printthis">
+    <!-- logo title -->
+    <table width=100%>
+        <tr>
+            <td width=40%>
+                <div>
+                    <img src="{{vm.imgHost}}{{InstituteLogo}}" style="height:35px; width:35px" />
+                    <b style="color: #131212;">
+
+                        {{InstituteName}}
+
+                    </b>
+
+                </div>
+               
+            </td>
+            <td></td>
+            <td>
+                <div class="col-md-5 pull-right">
+                    <div style="float:right;">
+                        <p style="color: #131212;">
+                            Phone: {{InsPhoneNo}}
+                            <br style="color: #131212;"> Email: {{InsEmail}}
+                            <br style="color: #131212;"> Web:{{InsWeb}}
+                        </p>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </table>
+    <br />
+    <br />
+
+    <div id="export">
+        <div class="row">
+            <table align="center" width="100%" style="border: 1px solid gray;">
+
+                <tr>
+                    <td width=15%; height="30px" style=" color: black"> Name &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </td>
+
+                    <td style=" color: black;text-align:left; font-weight: bold" width=20%;>
+                        {{vm.menuSetup.StudentName}}
+                    </td>
+                    <td width=15%; style=" color: black"> Roll &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </td>
+
+                    <td style="color: black;text-align:left; font-weight: bold" width=20%;>
+                        {{ vm.menuSetup.RollNo}}
+                    </td>
+                    <td width=15%; style=" color: black">Student ID &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </td>
+
+                    <td style="color: black;text-align:left; font-weight: bold" width=20%;>
+                        {{vm.menuSetup.StudentID}}
+                    </td>
+                </tr>
+
+
+                <tr>
+                    <td width=15%; height="30px" style=" color: black"> Medium &nbsp;&nbsp;&nbsp;: </td>
+
+                    <td style=" color: black;text-align:left; font-weight: bold" width=20%;>
+                        {{vm.menuSetup.Medium}}
+                    </td>
+                    <td width=15%; style=" color: black">  Class &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </td>
+
+                    <td style="color: black;text-align:left; font-weight: bold" width=20%;>
+                        {{ vm.menuSetup.Class}}
+                    </td>
+                    <td width=15%; style=" color: black">Department &nbsp;&nbsp;&nbsp;&nbsp;: </td>
+
+                    <td style="color: black;text-align:left; font-weight: bold" width=20%;>
+                        {{vm.menuSetup.Department}}
+                    </td>
+                </tr>
+
+
+
+                <tr>
+                    <td width=15%; height="30px" style=" color: black"> Section &nbsp;&nbsp;&nbsp;&nbsp;: </td>
+
+                    <td style=" color: black;text-align:left; font-weight: bold" width=20%;>
+                        {{vm.menuSetup.Section}}
+                    </td>
+                    <td width=15%; style=" color: black">  Month &nbsp;&nbsp;&nbsp;&nbsp;: </td>
+
+                    <td style="color: black;text-align:left; font-weight: bold" width=20%;>
+                        {{ vm.mon.selected.MonthName}}
+                    </td>
+                    <td width=15%; style=" color: black">Total Present &nbsp;&nbsp;: </td>
+
+                    <td style="color: black;text-align:left; font-weight: bold" width=20%;>
+                        {{vm.menuSetup.TotalPresent}}
+                    </td>
+                </tr>
+
+            </table>
+        </div>
+        <div class="row">
+            <div style="margin-top : 30px">
+                <i aria-hidden="true"></i>
+
+                <h3>
+
+                    <pre>                       
+                    <u style="color:black; font-size: 20px; font-weight: bold">Monthly  Attendance Report Of {{vm.mon.selected.MonthName}}</u>
+                   </pre>
+                </h3>
+
+            </div>
+        </div>
+
+
+        <table class="table" style=" border-collapse: collapse; " border="1px solid black">
+            <thead>
+                <tr>
+                    <th style="width:150px; background-color:black" class="unseen text-center">Sl</th>
+                    <th style="width:260px;background-color:black" class="unseen text-center">Date</th>
+                    <th style="width:250px; background-color:black" class="unseen text-center">Status</th>
+                    <th style="width:150px;background-color:black" class="unseen text-center">Late in Min</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="row in vm.monthlyAtd">
+                    <td style="text-align:center">{{$index+1}}</td>
+                    <td style="text-align:left">
+                        {{row.Date | date : "dd-MM-y"}} {{row.Date |date : "EEEE"}}
+                    </td>
+                    <td style="text-align:center">{{row.Present===1?"Present":"Absent"}}</td>
+                    <td style="text-align:center">{{row.Late* -1}}</td>
+                </tr>
+
+            </tbody>
+        </table>
+
+
+    </div>
+
+    <br>
+    <br>
+    <br>
+
+    <pre>   ______________________            _______________________               ______________________</pre>
+    <pre>        Signed by                          Approved by                         Final approved</pre>
+    <br />
+    <!-- <p>
+     Powered by : OnAir Int'l Ltd
+    </p> -->
+
+
+</div>
+
+
+<!----------------------------------- Print Student End ------------------------->
+
+<!----------------------------------- Print Teacher Start ------------------------->
+
+<div class="grid-body" id="printTeacher" ng-show="printthisForTeacher">
+    <!-- logo title -->
+    <table width=100%>
+        <tr>
+            <td width=20%>
+                <div>
+                    <img src="{{vm.imgHost}}{{InstituteLogo}}" style="height:35px; width:35px" />
+                    <b style="color: #131212;">
+
+                        {{InstituteName}}
+
+                    </b>
+
+                </div>
+            </td>
+            <td></td>
+            <td>
+                <div class="col-md-5 pull-right">
+                    <div style="float:right;">
+                        <p style="color: #131212;">
+                            Phone: {{InsPhoneNo}}
+                            <br style="color: #131212;"> Email: {{InsEmail}}
+                            <br style="color: #131212;"> Web:{{InsWeb}}
+                        </p>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </table>
+    <br />
+    <br />
+
+    <div id="export">
+        <div class="row">
+            <table align="center" width="100%"; style="border: 1px solid gray;">
+
+                <tr>
+                    <td width=10%; height="30px" style=" color: black"> Name &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </td>
+
+                    <td style=" color: black;text-align:left; font-weight: bold" width=20%;>
+                        {{vm.TechAtd.TeacherName}}
+                    </td>
+                    <td width=10%; style=" color: black"> Phone &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </td>
+
+                    <td style="color: black;text-align:left; font-weight: bold" width=20%;>
+                        {{ vm.TechAtd.Phone}}
+                    </td>
+                    <td width=15%; style=" color: black">Email &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </td>
+
+                    <td style="color: black;text-align:left; font-weight: bold" width=20%;>
+                        {{vm.TechAtd.Email}}
+                    </td>
+                </tr>
+
+
+                <tr>
+                    <td width=15%; height="30px" style=" color: black"> Teacher ID &nbsp;&nbsp;&nbsp;: </td>
+
+                    <td style=" color: black;text-align:left; font-weight: bold" width=20%;>
+                        {{vm.TechAtd.RFID}}
+                    </td>
+                    <td width=15%; style=" color: black">  Branch &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </td>
+
+                    <td style="color: black;text-align:left; font-weight: bold" width=20%;>
+                        {{ vm.TechAtd.Branch}}
+                    </td>
+                    <td width=17%; style=" color: black">Total Present &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </td>
+
+                    <td style="color: black;text-align:left; font-weight: bold" width=20%;>
+                        {{ vm.TechAtd.TotalPresent}}
+                    </td>
+                </tr>
+
+
+
+                <!--<tr>
+                    <td width=15%; height="30px" style=" color: black"> Section &nbsp;&nbsp;&nbsp;&nbsp;: </td>
+
+                    <td style=" color: black;text-align:left; font-weight: bold" width=20%;>
+                        {{vm.menuSetup.Section}}
+                    </td>
+                    <td width=15%; style=" color: black">  Month &nbsp;&nbsp;&nbsp;&nbsp;: </td>
+
+                    <td style="color: black;text-align:left; font-weight: bold" width=20%;>
+                        {{ vm.mon.selected.MonthName}}
+                    </td>
+                    <td width=15%; style=" color: black">Total Present &nbsp;&nbsp;: </td>
+
+                    <td style="color: black;text-align:left; font-weight: bold" width=20%;>
+                        {{vm.menuSetup.TotalPresent}}
+                    </td>
+                </tr>-->
+
+            </table>
+        </div>
+        <div class="row">
+            <div style="margin-top : 30px">
+                <i aria-hidden="true"></i>
+
+                <h3>
+
+                    <pre>                       
+                    <u style="color:black; font-size: 15px; font-weight: bold">Monthly  Attendance Report Of {{vm.mon.selected.MonthName}}</u>
+                   </pre>
+                </h3>
+
+            </div>
+        </div>
+
+
+        <table class="table" style=" border-collapse: collapse; " border="1px solid black">
+            <thead>
+                <tr>
+                    <th style="width:150px; background-color:black" class="unseen text-center">Sl</th>
+                    <th style="width:260px;background-color:black" class="unseen text-center">Date</th>
+                    <th style="width:250px; background-color:black" class="unseen text-center">Status</th>
+                    <th style="width:150px;background-color:black" class="unseen text-center">Late in Min</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="row in vm.TechAtd">
+                    <td style="text-align:center">{{$index+1}}</td>
+                    <td style="text-align:left">
+                        {{row.Date | date : "dd-MM-y"}} {{row.Date |date : "EEEE"}}
+                    </td>
+                    <td style="text-align:center">{{row.Present===1?"Present":"Absent"}}</td>
+                    <td style="text-align:center">{{row.LateMins*-1}}</td>
+                </tr>
+
+            </tbody>
+        </table>
+
+
+    </div>
+
+    <br>
+    <br>
+    <br>
+    <br>
+
+    <pre>   ______________________            _______________________               ______________________</pre>
+    <pre>        Signed by                          Approved by                         Final approved</pre>
+    <br />
+    <!-- <p>
+     Powered by : OnAir Int'l Ltd
+    </p> -->
+
+
+</div>
+
+
+<!----------------------------------- Print Student End ------------------------->
+
+
+
+
+
+
+
+<style>
+    .thumb {
+        width: 24px;
+        height: 24px;
+        float: none;
+        position: relative;
+        top: 7px;
+    }
+
+    .modal-content {
+        width: 1500px;
+        margin-left: -367px;
+    }
+
+    .no-margin {
+        padding-top: 11px;
+    }
+
+    .studentInfo h4 {
+        font-size: 14px;
+    }
+
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        margin: 0;
+    }
+</style>
+
+<script src="https://rawgithub.com/eligrey/FileSaver.js/master/FileSaver.js" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.debug.js"></script>
+<script src="http://mrrio.github.io/jsPDF/dist/jspdf.debug.js"></script>

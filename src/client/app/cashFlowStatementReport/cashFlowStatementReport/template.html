@@ -1,0 +1,139 @@
+<div class="grid simple col-md-12" ng-show="createItem">
+
+	<div class="grid-title">
+		<div class="row">
+			<div class="col-md-9">
+				<div class="page-title">
+
+					<h3>Cash Flow -
+						<span class="semi-bold">Statement</span>
+					</h3>
+				</div>
+
+			</div>
+			<div class="col-md-1 marginOff pull-right">
+				<button type="submit" class="btn btn-danger clearfix btn-block " ng-click="vm.exportToPDF('print')">
+					<span class="fa fa-file-pdf-o"></span> PDF</button>
+			</div>
+			<div class="col-md-1 marginOff pull-right">
+				<button type="submit" class="btn btn-primary btn-block saveBtn" ng-click="vm.printDiv('print')">
+					<span class="glyphicon glyphicon-print"></span> Print</button>
+			</div>
+
+		</div>
+	</div>
+	<div class="grid-body">
+		<div class="row">
+
+			<form class="form-horizontal col-sm-10" name="vm.feeCollection">
+				<div class="row">
+					<div class="col-md-6">
+						<div class="form-group">
+							<label class="col-sm-7 control-label">Method</label>
+							<div class="col-sm-5">
+								<ui-select ng-model="vm.shift.selected" theme="bootstrap" ng-click="vm.shiftID = $select.selected.ShiftID">
+									<ui-select-match placeholder="-Select-">{{$select.selected.ShiftName}}</ui-select-match>
+									<ui-select-choices repeat="shift in vm.shifts | filter: $select.search">
+										<div ng-bind-html="shift.ShiftName | highlight: $select.search"></div>
+									</ui-select-choices>
+								</ui-select>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-7 control-label">Cost Center</label>
+							<div class="col-sm-5">
+								<ui-select ng-model="vm.month.selected" theme="bootstrap" ng-click="vm.MonthID = $select.selected.MonthID">
+									<ui-select-match placeholder="-Select-">{{$select.selected.MonthName}}</ui-select-match>
+									<ui-select-choices repeat="month in  vm.months | filter: $select.search">
+										<div ng-bind-html="month.MonthName | highlight: $select.search"></div>
+									</ui-select-choices>
+								</ui-select>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="col-sm-7 control-label">From Date</label>
+							<div class="col-sm-5 input-groups margin-bottom-sm">
+								<datepicker date-format="yyyy-MM-dd" selector="form-control">
+									<div class="input-group">
+										<input class="form-control" placeholder="Choose a date" ng-model="vm.userSetup.DOB" />
+										<span class="input-group-addon" style="cursor: pointer">
+										<i class="fa fa-lg fa-calendar"></i>
+										</span>
+									</div>
+								</datepicker>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="form-group">
+							<label class="col-sm-5 control-label">Project</label>
+							<div class="col-sm-5">
+								<ui-select ng-model="vm.medium.selected" theme="bootstrap" ng-click="vm.MediumID = $select.selected.MediumID">
+									<ui-select-match placeholder="-Select-">{{$select.selected.MameName}}</ui-select-match>
+									<ui-select-choices repeat="medium in vm.mediums | filter: $select.search">
+										<div ng-bind-html="medium.MameName | highlight: $select.search"></div>
+									</ui-select-choices>
+								</ui-select>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-5 control-label">Fiscal Year </label>
+							<div class="col-sm-5">
+								<ui-select ng-model="vm.class.selected" theme="bootstrap" ng-click="vm.ClassID = $select.selected.ClassID" on-select="vm.ClassSelected(vm.class.selected.ClassID)">
+									<ui-select-match placeholder="-Select-">{{$select.selected.ClassName}}</ui-select-match>
+									<ui-select-choices repeat="class in  vm.classes | filter: $select.search">
+										<div ng-bind-html="class.ClassName | highlight: $select.search"></div>
+									</ui-select-choices>
+								</ui-select>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="col-sm-5 control-label">To Date</label>
+							<div class="col-sm-5 input-groups margin-bottom-sm">
+								<datepicker date-format="yyyy-MM-dd" selector="form-control">
+									<div class="input-group">
+										<input class="form-control" placeholder="Choose a date" ng-model="vm.userSetup.DOB" />
+										<span class="input-group-addon" style="cursor: pointer">
+										<i class="fa fa-lg fa-calendar"></i>
+										</span>
+									</div>
+								</datepicker>
+							</div>
+						</div>
+					</div>
+
+
+				</div>
+			</form>
+
+		</div>
+	</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+	.thumb {
+		width: 24px;
+		height: 24px;
+		float: none;
+		position: relative;
+		top: 7px;
+	}
+
+	.modal-content {
+		width: 1660px;
+		margin-left: -405px;
+	}
+</style>

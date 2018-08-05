@@ -1,0 +1,176 @@
+
+
+<div class="grid simple col-md-12" ng-show="createItem">
+
+    <div class="grid-title">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="page-title">
+                    <i class="fa fa-keyboard-o" aria-hidden="true"></i>
+                    <h3> Class Wise Department - <span class="semi-bold">Settings</span></h3>
+                </div>
+
+            </div>
+
+            <div class="col-sm-2 marginOff">
+                <button type="submit" class="btn btn-primary btn-block showBtn" ng-click="vm.showDepartment()" ng-disabled="vm.addDepartment.$invalid">Show Department</button>
+            </div>
+            <div class="col-sm-1 marginOff ">
+                <button type="submit" class="btn btn-primary btn-block resetBtn" ng-click="clearField()">Reset</button>
+            </div>
+            <div class="col-sm-1 marginOff">
+                <button type="submit" ng-show="showDepeartment" id="saveBtn" class="btn btn-primary btn-block saveBtn" ng-click="vm.insdepartments()" ng-disabled="Dis">Save</button>
+                <!-- <button type="submit" class="btn btn-primary btn-block" ng-click="">Update</button> -->
+            </div>
+
+
+        </div>
+    </div>
+    <div class="grid-body">
+        <div class="row">
+
+            <form class="form-horizontal col-md-12" name="vm.addDepartment">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">Institute</label>
+                            <div class="col-md-7">
+                                <ui-select ng-model="vm.institute.selected" required name="InsID" theme="bootstrap" ng-click="vm.instituteID = $select.selected.InstituteID" ng-disabled="vm.InstituteID!==1?true:false" ng-change="hideList()" on-select="vm.instituteSelectedMedium($select.selected.InstituteID)">
+                                    <ui-select-match placeholder="-Select Institute-">
+                                        {{$select.selected.InstituteName}}
+                                        <span style="float:right" ng-click="vm.instituteID = null; hideList(); vm.med = undefined; vm.MediumID=null; vm.medium= []; vm.cls= undefined; vm.ClassID= null; vm.class= []; $select.selected=undefined">
+                                            <i class="fa fa-remove" aria-hidden="true"></i>
+                                        </span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="institute in vm.institutes | filter: $select.search">
+                                        <div ng-bind-html="institute.InstituteName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            <span class="error" ng-show="(vm.addDepartment.$dirty||submitted) && vm.addDepartment.InsID.$error.required">*</span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Medium</label>
+                            <div class="col-sm-7">
+                                <ui-select ng-model="vm.med.selected" name="Medi" theme="bootstrap" ng-click="vm.MediumID = $select.selected.MediumID" ng-change="hideList()" on-select="vm.MediumWiseClassDDL($select.selected.MediumID)" required>
+                                    <ui-select-match placeholder="- Select Medium -">
+                                        {{$select.selected.MameName}}
+                                        <span style="float:right" ng-click="vm.MediumID = null; hideList(); vm.cls= undefined; vm.ClassID= null; vm.class= []; $select.selected=undefined">
+                                            <i class="fa fa-remove" aria-hidden="true"></i>
+                                        </span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="med in   vm.medium | filter: $select.search">
+                                        <div ng-bind-html="med.MameName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            <span class="error" ng-show="(vm.addDepartment.$dirty||submitted) && vm.addDepartment.Medi.$error.required">*</span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">Class</label>
+                            <div class="col-md-7">
+                                <ui-select ng-model="vm.cls.selected" theme="bootstrap" name="cls" ng-click="vm.ClassID = $select.selected.ClassID" ng-change="hideList()" on-select="vm.ClassSelected(vm.cls.selected.ClassID)" required>
+                                    <ui-select-match placeholder="- Select Class -">
+                                        {{$select.selected.ClassName}}
+                                        <span style="float:right" ng-click="vm.ClassID = null; hideList(); $select.selected=undefined"><i class="fa fa-remove" aria-hidden="true"></i></span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="cls in   vm.class | filter: $select.search">
+                                        <div ng-bind-html="cls.ClassName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            <span class="error" ng-show="(vm.addDepartment.$dirty||submitted) && vm.addDepartment.cls.$error.required">*</span>
+                        </div>
+
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<!-- Item Entry List Grid -->
+<!-- <pre>{{departments|json}}</pre>  -->
+<div class="grid simple col-md-12" ng-show="showDepeartment">
+    <div class="grid-title">
+        <div class="row">
+            <div class="col-md-11">
+                <!-- <div class="page-title"> <i class="fa fa-keyboard-o" aria-hidden="true"></i>
+                    <h3>Department Name - <span class="semi-bold">List</span></h3>
+                </div> -->
+            </div>
+
+            <div class="col-md-1 marginOff">
+
+            </div>
+        </div>
+    </div>
+    <div class="grid-body">
+        <div class="row">
+            <div class="col-md-12">
+                <table st-table="rowCollection" class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>sl</th>
+                            <th>Department Name</th>
+                            <th>Is Active</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="department in departments">
+                            <td>{{$index + 1}}</td>
+                            <td>{{department.DepartmentName}}</td>
+                            <td ng-click="openDepartmentIndex($index)">
+                                <div class="checkbox check-primary">
+                                    <input id="{{department.DepartmentID}}" type="checkbox" ng-model="department.IsActive" ng-checked="department.IsActive===1" ng-click="switch(department.IsActive)">
+                                    <label for="{{department.DepartmentID}}"></label>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+    .thumb {
+        width: 24px;
+        height: 24px;
+        float: none;
+        position: relative;
+        top: 7px;
+    }
+
+    .modal-content {
+        width: 1660px;
+        margin-left: -405px;
+    }
+</style>

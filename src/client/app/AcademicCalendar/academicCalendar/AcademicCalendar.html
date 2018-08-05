@@ -1,0 +1,96 @@
+<div class="grid simple col-md-12">
+
+    <div class="grid-title">
+        <div class="row">
+            <div class="col-md-9">
+                <div class="page-title">
+
+                    <h3>
+                        Academic Calendar -
+                        <span class="semi-bold">Entry</span>
+                    </h3>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="grid-body">
+        <div class="row">
+            <form class="form-horizontal col-md-12" name="AcademicCalendar">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Institute</label>
+                            <div class="col-sm-9">
+                                    <ui-select ng-model="vm.institute.selected" theme="bootstrap" ng-click="vm.instituteID = $select.selected.InstituteID" on-select="IfExistAcademicYearCalendar()" ng-disabled="vm.InstituteID!==1?true:false" required>
+                                        <ui-select-match placeholder="-Select Institute-">
+                                            {{$select.selected.InstituteName}}
+                                            <span class="pull-right" ng-click="vm.instituteID = null; $select.selected=undefined">
+                                                <i class="fa fa-remove" aria-hidden="true"></i>
+                                            </span>
+                                        </ui-select-match>
+                                        <ui-select-choices repeat="institute in vm.institutes | filter: $select.search">
+                                            <div ng-bind-html="institute.InstituteName | highlight: $select.search"></div>
+                                        </ui-select-choices>
+                                    </ui-select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Academic Year</label>
+                            <div class="col-sm-9">
+                                    <ui-select ng-model="vm.year.selected" theme="bootstrap" ng-click="vm.YearName = $select.selected.YearName" on-select="IfExistAcademicYearCalendar()">
+                                        <ui-select-match placeholder=" -Select-">
+                                            {{$select.selected.YearName}}
+                                            <span class="pull-right" ng-click="setYear()">
+                                                <i class="fa fa-remove" aria-hidden="true"></i>
+                                            </span>
+                                        </ui-select-match>
+                                        <ui-select-choices repeat="year in vm.YearList | filter: $select.search">
+                                            <div ng-bind-html="year.YearName | highlight: $select.search"></div>
+                                        </ui-select-choices>
+                                    </ui-select>                    
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-3"></div>
+                            <div class="col-sm-9">
+                                <div class="col-sm-6 marginOff">
+                                    <span type="button" class="btn btn-{{IfExist===true?'danger':'primary'}} btn-block" ng-disabled="IfExist" ng-click="SetFullYearCalendar()"><i class="fa  fa-{{IfExist===true?'check':'arrow-circle-o-right'}}"> {{lblProceed=IfExist===true?'Already Exist':'Proceed'}}</i></span>
+                                </div>
+                                <div class="col-md-6 marginOff">
+                                    <span type="button" class="btn btn-danger btn-block" ng-show="IfExist" ng-click="RemoveFullYearCalendar()"><i class="fa  fa-remove"> Remove</i></span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<style>
+    .thumb {
+        width: 24px;
+        height: 24px;
+        float: none;
+        position: relative;
+        top: 7px;
+    }
+
+    .modal-content {
+        width: 1660px;
+        margin-left: -405px;
+    }
+
+    #defaultDiv {
+        margin-left: 105px;
+        margin-top: -30px;
+    }
+</style>

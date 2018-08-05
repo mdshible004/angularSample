@@ -1,0 +1,179 @@
+<!-- Item Entry List Grid -->
+<div class="grid simple col-md-12" ng-show="createItem">
+
+	<div class="grid-title">
+		<div class="row">
+			<div class="col-md-9">
+				<div class="page-title">
+					<i class="fa fa-keyboard-o" aria-hidden="true"></i>
+					<h3>Weekend -<span class="semi-bold">Settings</span>
+					</h3>
+				</div>
+			</div>
+			<div class="col-md-1 marginOff">
+				<button type="submit" class="btn btn-primary btn-block showBtn" ng-click="itemEvent()">Show List</button>
+				<!-- <button type="submit" class="btn btn-primary btn-block" ng-click="">Update</button> -->
+			</div>
+			<div class="col-md-1 marginOff">
+				<button type="submit" class="btn btn-primary btn-block resetBtn" ng-click="clearField()">Reset</button>
+			</div>
+			<div class="col-md-1 marginOff">
+				<button type="submit" class="btn btn-primary btn-block saveBtn" ng-click="vm.saveDay()">Save</button>
+			</div>
+		</div>
+	</div>
+	<div class="grid-body">
+		<div class="row">
+			<form class="form-horizontal col-sm-8" name="vm.addday">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="form-group">
+							<label class="col-sm-5 control-label">Institute</label>
+							<div class="col-sm-7">
+								<ui-select ng-disabled="isReadOnly" ng-model="vm.Institute.selected" theme="bootstrap" ng-click="vm.instituteID = $select.selected.InstituteID">
+									<ui-select-match placeholder=" -Select-">{{$select.selected.InstituteName}}</ui-select-match>
+
+									<ui-select-choices value="Please select" repeat="Institute in vm.Institutes | filter: $select.search">
+										<div ng-bind-html="Institute.InstituteName | highlight: $select.search"></div>
+									</ui-select-choices>
+								</ui-select>
+
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-5 control-label">Day</label>
+							<div class="col-sm-7">
+								<ui-select ng-model="vm.day.selected" theme="bootstrap" ng-click="vm.dayID = $select.selected.DayID">
+									<ui-select-match placeholder="-Select Day-">{{$select.selected.Day}}</ui-select-match>
+									<ui-select-choices repeat="day in vm.days | filter: $select.search">
+										<div ng-bind-html="day.Day | highlight: $select.search"></div>
+									</ui-select-choices>
+								</ui-select>
+							</div>
+						</div>
+
+
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+
+</div>
+<!-- start Show List -->
+<div class="grid simple col-md-12" ng-show="showItem">
+	<div class="grid-title">
+		<div class="row">
+			<div class="col-md-11">
+				<div class="page-title"> <i class="fa fa-keyboard-o" aria-hidden="true"></i>
+					<h3>Weekend - <span class="semi-bold">List</span></h3>
+				</div>
+			</div>
+
+			<div class="col-md-1 marginOff">
+				<button type="submit" class="btn btn-primary btn-block saveBtn" ng-click="listEvent()">Create</button>
+			</div>
+		</div>
+	</div>
+	<div class="grid-body">
+		<div class="row">
+			<div class="col-md-12">
+				<table st-table="rowCollection" class="table table-bordered">
+					<thead>
+						<tr>
+							<th st-sort="ItemID">SL</th>
+							<th st-sort="ItemName">Day</th>
+							 <th st-sort="ItemBrandID">Institute</th> 
+							<th st-sort="">Edit</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="weekend in vm.weekends">
+							<td>{{$index+1}}</td>
+							<td>{{weekend.Day}}</td>
+							 <td>{{weekend.Institute}}</td> 
+							<td>
+								<button href="#" class="btn btn-info btn-xs btn-mini" data-toggle="modal" data-target="#myModal" ng-click="vm.editWeekend(weekend.WeekendID)">Edit</button>
+								<button href="/manage-deliveryman-info/edit/1" ng-click="vm.deleteWeekend(weekend.WeekendID)" class="btn btn-primary btn-xs btn-mini">Delete</button>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- End of Item Entry List Grid -->
+<!-- Modal Start from here -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="page-title"> <i class="fa fa-keyboard-o" aria-hidden="true"></i>
+							<h3>Edit Weekend </h3>
+						</div>
+					</div>
+				</div>
+				<div class="grid-body">
+					<div class="row">
+						<form class="form-horizontal col-sm-8" name="vm.addday">
+							<div class="row">
+								<div class="col-md-12">
+										<div class="form-group">
+											<label class="col-sm-5 control-label">Institute</label>
+											<div class="col-sm-7">
+												<ui-select ng-disabled="isReadOnly" ng-model="vm.Institute.selected" theme="bootstrap" ng-click="vm.instituteID = $select.selected.InstituteID">
+													<ui-select-match placeholder=" -Select-">{{$select.selected.InstituteName}}</ui-select-match>
+
+													<ui-select-choices value="Please select" repeat="Institute in vm.Institutes | filter: $select.search">
+														<div ng-bind-html="Institute.InstituteName | highlight: $select.search"></div>
+													</ui-select-choices>
+												</ui-select>
+
+											</div>
+										</div>
+									<div class="form-group">
+										<label class="col-sm-5 control-label">Day</label>
+										<div class="col-sm-7">
+											<ui-select ng-model="vm.day.selected" theme="bootstrap" ng-click="vm.dayID = $select.selected.DayID">
+												<ui-select-match placeholder="-Select Day-">{{$select.selected.Day}}</ui-select-match>
+												<ui-select-choices repeat="day in vm.days | filter: $select.search">
+													<div ng-bind-html="day.Day | highlight: $select.search"></div>
+												</ui-select-choices>
+											</ui-select>
+										</div>
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-primary" ng-click="vm.updateWeekend()" data-dismiss="modal">Save changes</button>
+			</div>
+		</div>
+		<!-- /.modal-content -->
+	</div>
+	<!-- /.modal-dialog -->
+</div>
+<!-- End Modal -->
+
+
+<style>
+	.thumb {
+		width: 24px;
+		height: 24px;
+		float: none;
+		position: relative;
+		top: 7px;
+	}
+
+	.modal-content {
+		width: 1660px;
+		margin-left: -405px;
+	}
+</style>

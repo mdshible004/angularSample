@@ -1,0 +1,1461 @@
+
+<div class="grid simple col-md-12 col-sm-12 col-xs-12" ng-show="createItem">
+
+    <div class="grid-title">
+        <div class="row">
+            <div class="col-md-9">
+                <div class="page-title">
+                    <i class="fa fa-keyboard-o" aria-hidden="true"></i>
+                    <h3>Add New - <span class="semi-bold">Employee</span></h3>
+                </div>
+            </div>
+            <div class="col-md-1 marginOff">
+                <button type="submit" class="btn btn-primary btn-block showBtn" ng-click="showListBtn()">Show List</button>
+                <!-- <button type="submit" class="btn btn-primary btn-block" ng-click="">Update</button> -->
+            </div>
+            <div class="col-md-1 marginOff">
+                <button type="submit" class="btn btn-primary btn-block resetBtn" ng-click="clearField()">Reset</button>
+            </div>
+            <div class="col-md-1 marginOff">
+                <button type="submit" class="btn btn-primary btn-block saveBtn" ng-click="vm.postUserSetupEmployee()" ng-disabled="vm.userSetups.$invalid">Save</button>
+                <!-- <button type="submit" class="btn btn-primary btn-block saveBtn" ng-click="vm.postUserSetupStudent()">Update</button> -->
+            </div>
+        </div>
+
+    </div>
+
+    <div class="grid-body">
+        <div class="row">
+            <!-- <pre>{{vm.userSetup | json}}</pre> -->
+            <form class="form-horizontal col-lg-12 col-sm-12 col-xs-12" name="vm.userSetups" ng-submit="updatePhoto(vm.userSetup.UserImage)">
+                <div class="row">
+                    <div class="col-lg-4 col-sm-4 col-xs-4">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">First Name</label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" placeholder="First Name" ng-model="vm.userSetup.UserFirstName" ng-keydown="$event.keyCode == 13 ? $event.preventDefault() : null" name="FName" required>
+                                <input type="hidden" class="form-control" placeholder="First Name" ng-model="vm.UserID">
+                            </div>
+                            <span class="error" ng-show="(vm.userSetups.$dirty||submitted) && vm.userSetups.FName.$error.required">*</span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label"><span style="font-size:13px">Middle Name</span></label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" placeholder="Middle Name" ng-model="vm.userSetup.UserMiddleName" ng-keydown="$event.keyCode == 13 ? $event.preventDefault() : null">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Last Name</label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" name="LName" placeholder="Last Name" ng-model="vm.userSetup.UserLastName" ng-keydown="$event.keyCode == 13 ? $event.preventDefault() : null" required>
+                            </div>
+                            <span class="error" ng-show="(vm.userSetups.$dirty||submitted) && vm.userSetups.LName.$error.required">*</span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Nick Name</label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" placeholder="Nick Name" ng-model="vm.userSetup.NickName" ng-keydown="$event.keyCode == 13 ? $event.preventDefault() : null">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label"><span style="font-size:13px">Date Of Birth</span></label>
+                            <div class="col-sm-7 input-groups margin-bottom-sm">
+                                <datepicker date-format="dd-MM-yyyy" selector="form-control">
+                                    <div class="input-group">
+                                        <input class="form-control" placeholder="Choose a date" ng-model="vm.userSetup.DOB" ng-keydown="$event.keyCode == 13 ? $event.preventDefault() : null" />
+                                        <span class="input-group-addon" style="cursor: pointer">
+                                            <i class="fa fa-lg fa-calendar"></i>
+                                        </span>
+                                    </div>
+                                </datepicker>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Institute</label>
+                            <div class="col-sm-7">
+                                <ui-select ng-model="vm.institute.selected" name="InsID" theme="bootstrap" ng-click="vm.userSetup.instituteID = $select.selected.InstituteID" ng-disabled="IsDis=vm.InstituteID!==1?true:false" on-select="vm.instituteSelected(vm.userSetup.instituteID)" required>
+                                    <ui-select-match placeholder=" -Select-">
+                                        {{$select.selected.InstituteName}}
+                                        <span style="float:right" ng-click="vm.instituteID = null; $select.selected=undefined">
+                                            <i class="fa fa-remove" aria-hidden="true"></i>
+                                        </span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="institute in vm.institutes | filter: $select.search">
+                                        <div ng-bind-html="institute.InstituteName  | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            <span class="error" ng-show="(vm.userSetups.$dirty||submitted) && vm.userSetups.InsID.$error.required">*</span>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-sm-4 col-xs-4">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Gender</label>
+                            <div class="col-sm-7">
+                                <ui-select ng-model="vm.gender.selected" theme="bootstrap" ng-click="vm.userSetup.GenderID = $select.selected.GenderID">
+                                    <ui-select-match placeholder="-Select Gender-">
+                                        {{$select.selected.GenderName}}
+                                        <span style="float:right" ng-click="vm.userSetup.GenderID = null; $select.selected=undefined">
+                                            <i class="fa fa-remove" aria-hidden="true"></i>
+                                        </span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="gender in vm.genders | filter: $select.search">
+                                        <div ng-bind-html="gender.GenderName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Religion</label>
+                            <div class="col-sm-7">
+                                <ui-select ng-model="vm.religion.selected" theme="bootstrap" ng-click="vm.userSetup.ReligionID = $select.selected.ReligionID">
+                                    <ui-select-match placeholder="-Select Religion-">
+                                        {{$select.selected.ReligionName}}
+                                        <span style="float:right" ng-click="vm.userSetup.ReligionID = null; $select.selected=undefined">
+                                            <i class="fa fa-remove" aria-hidden="true"></i>
+                                        </span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="religion in vm.religions | filter: $select.search">
+                                        <div ng-bind-html="religion.ReligionName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Blood Group</label>
+                            <div class="col-sm-7">
+                                <ui-select ng-model='vm.bloodgroup.selected' theme='bootstrap' ng-click='vm.userSetup.BloodGroupID = $select.selected.BloodGroupID'>
+                                    <ui-select-match placeholder='-Select Blood Group-'>
+                                        {{$select.selected.BloodGroupName}}
+                                        <span style="float:right" ng-click="vm.userSetup.BloodGroupID = null; $select.selected=undefined">
+                                            <i class="fa fa-remove" aria-hidden="true"></i>
+                                        </span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat='bloodgroup in vm.bloodGroups | filter: $select.search'>
+                                        <div ng-bind-html='bloodgroup.BloodGroupName | highlight: $select.search'></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Height(Feet)</label>
+                            <div class="col-sm-7">
+                                <input type="number" class="form-control" placeholder="Height" ng-model="vm.userSetup.Height" step="0.01" min=0 oninput="validity.valid||(value=null);" ng-keydown="$event.keyCode == 13 ? $event.preventDefault() : null">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Weight(Kg)</label>
+                            <div class="col-sm-7">
+                                <input type="number" class="form-control" placeholder="Weight" ng-model="vm.userSetup.Weigth" step="0.01" min=0 oninput="validity.valid||(value=null);" ng-keydown="$event.keyCode == 13 ? $event.preventDefault() : null">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">NID</label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" placeholder="NID Number" ng-model="vm.userSetup.NID" ng-keydown="$event.keyCode == 13 ? $event.preventDefault() : null">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-sm-4 col-xs-4">
+
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Passport</label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" placeholder="Passport Number" ng-model="vm.userSetup.PassportNO" ng-keydown="$event.keyCode == 13 ? $event.preventDefault() : null">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label"><span style="font-size:13px">Birth Cert. No</span></label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" placeholder="Birth Certificate No" ng-model="vm.userSetup.BirthCertificate" ng-keydown="$event.keyCode == 13 ? $event.preventDefault() : null">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Phone</label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" placeholder="Phone Number" ng-model="vm.userSetup.PhoneNo" ng-keydown="$event.keyCode == 13 ? $event.preventDefault() : null">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Email</label>
+                            <div class="col-sm-7">
+                                <input type="email" class="form-control" placeholder="Email" ng-model="vm.userSetup.EmailID" ng-keydown="$event.keyCode == 13 ? $event.preventDefault() : null">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label"><span style="font-size:11.8px">Unique Identity</span></label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" placeholder="Unique Identity" ng-model="vm.userSetup.UniqueIdentity" ng-keydown="$event.keyCode == 13 ? $event.preventDefault() : null">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Remarks</label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" placeholder="Remarks" ng-model="vm.userSetup.Remarks" ng-keydown="$event.keyCode == 13 ? $event.preventDefault() : null">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-lg-10 col-sm-10 col-xs-10">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label" style="margin-left:-100px"> User Type </label>
+                            <div class="col-sm-7">
+                                <div class="wrapper">
+                                    <div class="selected-items-box">
+                                        <div class="col-md-4 checkbox check-primary pull-left" style="margin-left:-4px" ng-show="ShowItemList">
+                                            <input id="1" type="checkbox" ng-click="setSelectedItemsChecked(CheckedAll)" ng-checked="CheckedAll===true" ng-model="CheckedAll">
+                                            <label style="width:100px" for="1">{{ChecView=CheckedAll===true?'Uncheck All':'Check All'}}</label>
+                                        </div>
+                                        <div class="control-label" ng-click="setSlid('caret')">
+                                            <span style="color:#808080; margin-right: 30px;"></span>
+                                        </div>
+                                        <div class="pull-left" style="margin-top: -30px;margin-left: -7px;" ng-show="ShowItemList">
+                                            <input type="text" placeholder="Search" ng-model="SearchUserType" />
+                                        </div>
+                                        <div ng-hide="ShowItemList" style="text-align:center; margin-top: -25px" ng-click="setSlid('caret')">
+                                            <span style="color:#808080" ng-hide="{{ShowItemList===true}}">{{CheckedNames=CheckedName.Name===''?'--Select--': CheckedName.Name.substring(2)}}</span>
+                                        </div>
+                                        <span class="caret pull-right" style="margin-top: -13px;" ng-click="setSlid('caret')"></span>
+                                    </div>
+                                    <div class="list">
+                                        <ul class="items-list">
+                                            <li ng-repeat="UT in vm.UserTypeList | filter: SearchUserType">
+                                                <div class="checkbox check-primary">
+                                                    <!--<div class="col-md-12">-->
+                                                        <div class="col-md-8" style="margin-left:-14px">
+                                                            <input id="a{{$index + 100}}" type="checkbox" ng-click="getSelectedItems(UT)" ng-checked="UT.selected===true" ng-model="UT.selected" />
+                                                            <label for="a{{$index + 100}}">{{UT.UserTypeName}}</label>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <input id="b{{$index + 200}}" type="checkbox" ng-click="getDefaultItem(UT, 0)" ng-checked="UT.IsDefault===true" ng-model="UT.IsDefault" />
+                                                            <label for="b{{$index + 200}}">IsDefault</label>
+                                                        </div>
+
+                                                    <!--</div>-->
+
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-lg-4 col-sm-4 col-xs-4">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label"><span style="font-size:11.8px">User Signature</span></label>
+                            <div class="col-sm-7">
+                                <button class="uploadBtn" type="file" ngf-select="uploadFilesSignature($file, $invalidFiles)" ng-submit="uploadFilesSignature(vm.userSetup.UserImage)"
+                                        accept="image/*" ngf-max-height="1000" ngf-max-size="1MB" ng-model="vm.userSetup.UserImage" ngf-multiple="false" name="UserImage">
+                                    UPLOAD FILE
+                                </button>
+                                <br><br>
+                                <!-- File:
+                                <div style="font:smaller">{{f.name}} {{errFile.name}} {{errFile.$error}} {{errFile.$errorParam}}
+                                    <span class="progress" ng-show="f.progress >= 0">
+                                        <div style="width:{{f.progress}}%"
+                                            ng-bind="f.progress + '%'"></div>
+                                    </span>
+                                </div> -->
+                                <!--<img src="{{Simage}}" style="height:94.488189px; width:75.590551px" ng-show="imgShowSignature" />-->
+                                <img src="{{vm.imgHost}}{{vm.SignatureUrl}}" style="height:94.488189px; width:75.590551px" ng-if="vm.SignatureUrl != 'undefined' && vm.SignatureUrl != undefined" />
+                                <!-- {{errorMsg}} -->
+                                <!-- <input type="file" fileinput="file" filepreview="filepreview"/>
+                                <img ng-src="{{filepreview}}" class="img-responsive" ng-show="filepreview"/> -->
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-sm-4 col-xs-4">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">User Image</label>
+                            <div class="col-sm-7">
+                                <button class="uploadBtn" type="file" ngf-select="uploadFiles($file, $invalidFiles)" ng-submit="uploadFiles(vm.userSetup.UserImage)"
+                                        accept="image/*" ngf-max-height="1000" ngf-max-size="1MB" ng-model="vm.userSetup.UserImage" ngf-multiple="false" name="UserImage">
+                                    UPLOAD FILE
+                                </button>
+                                <br><br>
+
+                                
+
+                                  <!--<img src="{{Uimage}}" style="height:94.488189px; width:75.590551px" ng-show="imgShow" />-->
+
+
+                                <img src="{{vm.imgHost}}{{vm.ImageUrl}}" style="height:94.488189px; width:75.590551px" ng-if="vm.ImageUrl != 'undefined' && vm.ImageUrl != undefined" />
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-sm-4 col-xs-4">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">User Finger</label>
+                            <div class="col-sm-7">
+                                <button class="uploadBtn" type="file" ngf-select="uploadFilesFinger($file, $invalidFiles)" ng-submit="uploadFilesFinger(vm.userSetup.UserImage)"
+                                        accept="image/*" ngf-max-height="1000" ngf-max-size="1MB" ng-model="vm.userSetup.UserImage" ngf-multiple="false" name="UserImage">
+                                    UPLOAD FILE
+                                </button>
+                                <br><br>
+
+                                
+
+                                  <!--<img src="{{Fimage}}" style="height:94.488189px; width:75.590551px" ng-show="imgShowFinger" />-->
+                                <img src="{{vm.imgHost}}{{vm.FingerUrl}}" style="height:94.488189px; width:75.590551px" ng-if="vm.FingerUrl != 'undefined' && vm.FingerUrl != undefined" />
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- present Address Container -->
+<div class="grid simple col-md-12 vertical green" ng-show="presentAddressContainer">
+    <div class="grid-body">
+        <div class="row">
+            <div class="col-md-12">
+                <h4 class="clearfix">Present Address</h4>
+                <!-- <p>Present Address PresentAddressData: <br/><pre>{{PresentAddressData|json}}</pre>   -->
+                <form class="newOvDiscount" name="pre">
+                    <table class="newDiscounts dynaRows table table-hover table-condensed">
+                        <thead>
+                            <tr>
+                                <th>SN</th>
+                                <th>Address</th>
+                                <th>Thana</th>
+                                <th>Post Code</th>
+                                <th style="width:15%">Country</th>
+                                <th style="width:15%">Division</th>
+                                <th style="width:15%">District</th>
+                                <th>Is Active</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            <tr ng-repeat="value in PresentAddressData">
+                                <td>{{$index + 1}}</td>
+                                <td ng-repeat="field in value"> <input type="text" class="form-control" ng-model="field.address"> </td>
+                                <td ng-repeat="field in value"> <input type="text" class="form-control" ng-model="field.thana"> </td>
+                                <td ng-repeat="field in value"> <input type="text" class="form-control" ng-model="field.postCode"> </td>
+                                <td ng-repeat="field in value">
+                                    <ui-select ng-model="value[$index].countrySelected" theme="bootstrap" ng-click="field.CountryID = $select.selected.CountryID" on-select="getAllState(field)">
+                                        <ui-select-match placeholder="-Select Country-">
+                                            {{$select.selected.CountryName}}
+                                            <span style="float:right" ng-click="field.CountryID = null; $select.selected=undefined">
+                                                <i class="fa fa-remove" aria-hidden="true"></i>
+                                            </span>
+                                        </ui-select-match>
+                                        <ui-select-choices repeat="country in vm.countrys | filter: $select.search">
+                                            <div ng-bind-html="country.CountryName | highlight: $select.search"></div>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </td>
+                                <td ng-repeat="field in value">
+                                    <ui-select ng-model="value[$index].statueSelected" theme="bootstrap" ng-click="field.StateID = $select.selected.StateID" on-select="getAllCity(field)">
+                                        <ui-select-match placeholder="-Select State-">
+                                            {{$select.selected.StateName}}
+                                            <span style="float:right" ng-click="field.StateID = null; $select.selected=undefined">
+                                                <i class="fa fa-remove" aria-hidden="true"></i>
+                                            </span>
+                                        </ui-select-match>
+                                        <ui-select-choices repeat="state in field.StateList | filter: $select.search">
+                                            <div ng-bind-html="state.StateName | highlight: $select.search"></div>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </td>
+                                <td ng-repeat="field in value">
+                                    <ui-select ng-model="value[$index].citySelected" theme="bootstrap" ng-click="field.CityID = $select.selected.CityID">
+                                        <ui-select-match placeholder="-Select City-">
+                                            {{$select.selected.CityName}}
+                                            <span style="float:right" ng-click="field.CityID = null; $select.selected=undefined">
+                                                <i class="fa fa-remove" aria-hidden="true"></i>
+                                            </span>
+                                        </ui-select-match>
+                                        <ui-select-choices repeat="city in field.citys | filter: $select.search">
+                                            <div ng-bind-html="city.CityName | highlight: $select.search"></div>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    t>
+                                    <!-- <pre>{{vm.citys[0] | json}}</pre>
+                                    <pre>{{value[$index].citySelected}}</pre> -->
+                                </td>
+                                <td ng-click="openPresentAddressIndex($index)">
+                                    <div class="checkbox check-primary" ng-repeat="field in value">
+                                        <input id="c{{200+$index+field.id}}" type="checkbox" ng-model="field.IsActive" ng-checked="field.IsActive === true" ng-click="presenttoggleSelection(field, $index)">
+                                        <label for="c{{200+$index+field.id}}"></label>
+                                    </div>
+                                </td>
+
+                                <td ng-click="PreAddressremoveRow($index)">
+                                    <i class="fa fa-times" ng-repeat="field in value" ng-hide="field.IsDeleted === true"></i>
+                                    <span ng-repeat="field in value" ng-show="field.IsDeleted === true" class="deleteTag">
+                                        Deleted
+                                    </span>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                    <div class="actions clearfix">
+                        <div class="pull-right">
+                            <div class="hungry-spacer"></div>
+                            <button type="button" class="addNewRow btn btn-white btn-cons btn-sm " ng-click="vm.addNewRowForPressentAddress(); "><i class="fa fa-plus"></i> Add more</button>
+                            <!-- <button type="submit" class="btn btn-primary btn-cons"ng-click="vm.postUserPresentAdderss()"><i class="icon-ok"></i> Save</button>
+                            <button type="button" class="btn btn-danger btn-cons reset">Cancel</button> -->
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- parmanent Address Container -->
+<div class="grid simple col-md-12 vertical green" ng-show="permanentAddressContainer">
+    <div class="grid-body">
+        <div class="row">
+            <div class="col-md-12">
+                <h4 class="clearfix">Permanent Address</h4>
+
+                <!-- <p>permanentData: <br/><pre>{{permanentData|json}}</pre> -->
+                <!-- <p>JSON data: <br/>{{PresentAddressData}} -->
+                <form class="newOvDiscount" action="#" method="post">
+                    <table class="newDiscounts dynaRows table table-hover table-condensed">
+                        <thead>
+                            <tr>
+                                <th>SN</th>
+                                <th>Address</th>
+                                <th>Thana</th>
+                                <th>Post Code</th>
+                                <th style="width:15%">Country</th>
+                                <th style="width:15%">Division</th>
+                                <th style="width:15%">District</th>
+                                <th>Is Active</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="value in permanentData">
+                                <td>{{$index + 1}}</td>
+                                <td ng-repeat="field in value"> <input type="text" class="form-control" ng-model="field.address"> </td>
+                                <td ng-repeat="field in value"> <input type="text" class="form-control" ng-model="field.thana"> </td>
+                                <td ng-repeat="field in value"> <input type="text" class="form-control" ng-model="field.postCode"> </td>
+                                <td ng-repeat="field in value">
+                                    <ui-select ng-model="value[$index].countrySelected" theme="bootstrap" ng-click="field.CountryID = $select.selected.CountryID" on-select="getAllState(field)">
+                                        <ui-select-match placeholder="-Select Country-">
+                                            {{$select.selected.CountryName}}
+                                            <span style="float:right" ng-click="field.CountryID = null; $select.selected=undefined">
+                                                <i class="fa fa-remove" aria-hidden="true"></i>
+                                            </span>
+                                        </ui-select-match>
+                                        <ui-select-choices repeat="country in vm.countrys | filter: $select.search">
+                                            <div ng-bind-html="country.CountryName | highlight: $select.search"></div>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </td>
+                                <td ng-repeat="field in value">
+                                    <ui-select ng-model="value[$index].statueSelected" theme="bootstrap" ng-click="field.StateID = $select.selected.StateID" on-select="getAllCity(field)">
+                                        <ui-select-match placeholder="-Select State-">
+                                            {{$select.selected.StateName}}
+                                            <span style="float:right" ng-click="field.StateID = null; $select.selected=undefined">
+                                                <i class="fa fa-remove" aria-hidden="true"></i>
+                                            </span>
+                                        </ui-select-match>
+                                        <ui-select-choices repeat="state in field.StateList | filter: $select.search">
+                                            <div ng-bind-html="state.StateName | highlight: $select.search"></div>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </td>
+                                <td ng-repeat="field in value">
+                                    <ui-select ng-model="value[$index].citySelected" theme="bootstrap" ng-click="field.CityID = $select.selected.CityID">
+                                        <ui-select-match placeholder="-Select City-">
+                                            {{$select.selected.CityName}}
+                                            <span style="float:right" ng-click="field.CityID = null; $select.selected=undefined">
+                                                <i class="fa fa-remove" aria-hidden="true"></i>
+                                            </span>
+                                        </ui-select-match>
+                                        <ui-select-choices repeat="city in field.citys | filter: $select.search">
+                                            <div ng-bind-html="city.CityName | highlight: $select.search"></div>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    t>
+                                    <!-- <pre>{{vm.citys[0] | json}}</pre>
+                                    <pre>{{value[$index].citySelected}}</pre> -->
+                                </td>
+                                <td ng-click="openPermanentAddressIndex($index)">
+                                    <div class="checkbox check-primary" ng-repeat="field in value">
+                                        <input id="a{{300+field.id}}" type="checkbox" ng-model="field.IsActive" ng-checked="field.IsActive === true" ng-click="permanentToggleSelection(field, $index)">
+                                        <label for="a{{300+field.id}}"></label>
+                                    </div>
+                                </td>
+                                <td ng-click="ParAddressRemoveRow($index)">
+                                    <i class="fa fa-times" ng-repeat="field in value" ng-hide="field.IsDeleted === true"></i>
+                                    <span ng-repeat="field in value" ng-show="field.IsDeleted === true" class="deleteTag">
+                                        Deleted
+                                    </span>
+                                </td>
+
+                            </tr>
+
+
+                        </tbody>
+                    </table>
+                    <div class="actions clearfix">
+                        <div class="pull-right">
+                            <div class="hungry-spacer"></div>
+                            <button type="button" class="addNewRow btn btn-white btn-cons btn-sm " ng-click="vm.addNewRowForPremanentAddress()"><i class="fa fa-plus"></i> Add more</button>
+                            <!-- <button type="submit" class="btn btn-primary btn-cons"><i class="icon-ok"></i> Save</button>
+                            <button type="button" class="btn btn-danger btn-cons reset">Cancel</button> -->
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Education Container -->
+<div class="grid simple col-md-12 vertical green" ng-show="educationInfoContainer">
+    <div class="grid-body">
+        <div class="row">
+            <div class="col-md-12">
+                  <!-- <p>JSON data: <br/>{{EducationData}}	 -->
+                <h4 class="clearfix">Education Info</h4>
+
+                <!-- <p>EducationData: <br/><pre>{{EducationData|json}}</pre> -->
+                <!-- <p>JSON data: <br/>{{data}} -->
+                <form class="newOvDiscount" action="#" method="post">
+                    <div id="customScrolledTableInspac" style="overflow: auto; max-width: 3000px">
+                        <!--<table class="newDiscounts dynaRows table table-hover table-condensed" style="overflow: auto; min-width: 1713px;">
+                            <thead class="grid-top-panel">
+                                <tr>
+                                    <th style="width:37px">SN</th>
+                                    <th style="width:208px">Exam</th>
+                                    <th style="width:208px">Grade</th>
+                                    <th style="width:204px">Remarks</th>
+                                    <th style="width:102px">Passing Year</th>
+                                    <th style="width:104px">GPA</th>
+                                    <th style="width:209px">Board</th>
+                                    <th style="width:205px">Session</th>
+                                    <th style="width:100px">Duration</th>
+                                    <th style="width:150px">Ref Document</th>
+                                    <th style="width:150px">Institute</th>
+                                    <th style="width:78px">Action</th>
+                                </tr>
+                            </thead>
+                        </table>-->
+                        <!--<div class="col-md-12" style="background-color:#e8e8e8; min-width: 1713px; height:10px; margin-top:-21px"></div>-->
+
+                        <table class="newDiscounts dynaRows table table-hover table-condensed" style="min-width: 1713px;">
+                            <thead class="grid-top-panel">
+                                <tr>
+                                    <th style="width:37px">SN</th>
+                                    <th style="width:208px">Exam</th>
+                                    <th style="width:208px">Grade</th>
+                                    <th style="width:204px">Remarks</th>
+                                    <th style="width:102px">Passing Year</th>
+                                    <th style="width:104px">GPA</th>
+                                    <th style="width:209px">Board</th>
+                                    <th style="width:205px">Session</th>
+                                    <th style="width:100px">Duration</th>
+                                    <th style="width:150px">Ref Document</th>
+                                    <th style="width:150px">Institute</th>
+                                    <th style="width:78px">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="value in EducationData">
+                                    <td style="width:37px">{{$index + 1}}</td>
+                                    <td style="width:203px" ng-repeat="field in value">
+                                        <ui-select ng-model='value[$index].ExamSelected' theme='bootstrap' ng-click='field.ExamID = $select.selected.ExamID'>
+                                            <ui-select-match placeholder='-Select Exam-'>
+                                                {{$select.selected.ExamName}}
+                                                <span style="float:right" ng-click="field.ExamID = null; $select.selected=undefined">
+                                                    <i class="fa fa-remove" aria-hidden="true"></i>
+                                                </span>
+                                            </ui-select-match>
+                                            <ui-select-choices repeat='exam in vm.exams | filter: $select.search'>
+                                                <div ng-bind-html='exam.ExamName | highlight: $select.search'></div>
+                                            </ui-select-choices>
+                                        </ui-select>
+                                    </td>
+                                    <td style="width:202px" ng-repeat="field in value">
+                                        <ui-select ng-model="value[$index].GradeSelected" theme="bootstrap" ng-click="field.GradeID = $select.selected.GradeID">
+                                            <ui-select-match placeholder="-Select Grade-">
+                                                {{$select.selected.GradeName}}
+                                                <span style="float:right" ng-click="field.GradeID = null; $select.selected=undefined">
+                                                    <i class="fa fa-remove" aria-hidden="true"></i>
+                                                </span>
+                                            </ui-select-match>
+                                            <ui-select-choices repeat="grade in vm.grades | filter: $select.search">
+                                                <div ng-bind-html="grade.GradeName | highlight: $select.search"></div>
+                                            </ui-select-choices>
+                                        </ui-select>
+                                    </td>
+                                    <td style="width:200px" ng-repeat="field in value"> <input type="text" class="form-control" ng-model="field.Description"> </td>
+                                    <td style="width:100px" ng-repeat="field in value"> <input type="number" class="form-control" ng-model="field.YearPass" min=0 oninput="validity.valid||(value=null);" ng-change="ChecPassYear(field)"> </td>
+                                    <td style="width:100px" ng-repeat="field in value"> <input type="number" class="form-control" ng-model="field.GPA" min=0 oninput="validity.valid||(value=null);"> </td>
+                                    <td style="width:205px" ng-repeat="field in value">
+                                        <ui-select ng-model="value[$index].BoardSelected" theme="bootstrap" ng-click="field.BoardID = $select.selected.BoardID">
+                                            <ui-select-match placeholder="-Select Board-">
+                                                {{$select.selected.BoardName}}
+                                                <span style="float:right" ng-click="field.BoardID = null; $select.selected=undefined">
+                                                    <i class="fa fa-remove" aria-hidden="true"></i>
+                                                </span>
+                                            </ui-select-match>
+                                            <ui-select-choices repeat="board in vm.boards | filter: $select.search">
+                                                <div ng-bind-html="board.BoardName | highlight: $select.search"></div>
+                                            </ui-select-choices>
+                                        </ui-select>
+                                    </td>
+                                    <td style="width:203px" ng-repeat="field in value">
+                                        <ui-select ng-model="value[$index].SessionSelected" theme="bootstrap" ng-click="field.SessionID = $select.selected.SessionID">
+                                            <ui-select-match placeholder="-Select Session-">
+                                                {{$select.selected.SessionName}}
+                                                <span style="float:right" ng-click="field.SessionID = null; $select.selected=undefined">
+                                                    <i class="fa fa-remove" aria-hidden="true"></i>
+                                                </span>
+                                            </ui-select-match>
+                                            <ui-select-choices repeat="session in vm.sessions | filter: $select.search">
+                                                <div ng-bind-html="session.SessionName | highlight: $select.search"></div>
+                                            </ui-select-choices>
+                                        </ui-select>
+                                    </td>
+                                    <td style="width:100px" ng-repeat="field in value"> <input type="number" class="form-control" ng-model="field.EducationDuration" min=0 oninput="validity.valid||(value=null);"> </td>
+                                    <td style="width:150px" ng-repeat="field in value"> <input type="text" class="form-control" ng-model="field.ImageURL"> </td>
+                                    <td style="width:150px" ng-repeat="field in value"> <input type="text" class="form-control" ng-model="field.Institute"> </td>
+                                    <td style="width:61px" ng-click="EducationRemoveRow($index)">
+                                        <i class="fa fa-times" ng-repeat="field in value" ng-hide="field.IsDeleted === true"></i>
+                                        <span ng-repeat="field in value" ng-show="field.IsDeleted === true" class="deleteTag">
+                                            Deleted
+                                        </span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="actions clearfix">
+                        <div class="pull-right">
+                            <div class="hungry-spacer"></div>
+                            <button type="button" class="addNewRow btn btn-white btn-cons btn-sm " ng-click="vm.addNewRowForEducation()"><i class="fa fa-plus"></i> Add more</button>
+                            <!-- <button type="submit" class="btn btn-primary btn-cons" ng-click="vm.openModal()"><i class="icon-ok"></i> Save</button>
+                            <button type="button" class="btn btn-danger btn-cons reset">Cancel</button> -->
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Gardian Info Start-->
+<div class="grid simple col-md-12 vertical green" ng-show="guardianInfoContainer">
+    <div class="grid-body">
+        <div class="row">
+            <div class="col-md-12">
+                <h4 class="clearfix">Family Info</h4>
+
+                <!--<p>GuardianData: <br /><pre>{{GuardianData|json}}</pre></p>
+                <p>GuardianData: <br /><pre>{{GuardianSaveArray|json}}</pre></p>-->
+                <form class="newOvDiscount" action="#" method="post">
+                    <div id="customScrolledTableInspac" style="overflow: auto; max-width: 3000px">
+                        <table class="newDiscounts dynaRows table table-hover table-condensed" style="min-width: 1200px;">
+                            <thead class="grid-top-panel">
+                                <tr>
+                                    <th>SN</th>
+                                    <th style="width:17%">Relation</th>
+                                    <th>Full Name</th>
+                                    <th>DOB</th>
+                                    <th>Nationality</th>
+                                    <th>Religion</th>
+                                    <th>PhoneNo</th>
+                                    <th>NID</th>
+                                    <th>Email</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="value in GuardianData">
+                                    <td>{{$index+1}}</td>
+                                    <td>
+                                        <div class="selectDiv" style="width:85% !important" ng-repeat="field in value">
+                                            <ui-select ng-model='value[$index].RelationSelected' theme='bootstrap' ng-click='field.RelationID = $select.selected.RelationID'>
+                                                <ui-select-match placeholder='-Select Relation-'>
+                                                    {{$select.selected.RelationName}}
+                                                    <span style="float:right" ng-click="field.RelationID = null; $select.selected=undefined">
+                                                        <i class="fa fa-remove" aria-hidden="true"></i>
+                                                    </span>
+                                                </ui-select-match>
+                                                <ui-select-choices repeat='relation in vm.relations | filter: $select.search'>
+                                                    <div ng-bind-html='relation.RelationName | highlight: $select.search'></div>
+                                                </ui-select-choices>
+                                            </ui-select>
+                                        </div>
+                                        <div class="popUpDiv" ng-click="openGuardian(value, $index)">
+                                            <i class="fa fa-share-square-o" data-toggle="modal" data-target="#myModal"></i>
+                                        </div>
+
+                                    </td>
+                                    <td ng-repeat="field in value">
+                                        <input type="text" class="form-control" placeholder="Full Name" ng-model="field.UserFullName" disabled>
+
+                                    </td>
+                                    <td ng-repeat="field in value">
+                                        <input type="text" class="form-control" placeholder="DOB" ng-model="field.DOB" disabled>
+                                    </td>
+                                    <td ng-repeat="field in value">
+                                        N/A
+                                    </td>
+                                    <td ng-repeat="field in value">
+                                        <input type="hidden" ng-model="field.ReligionID">
+                                        <input type="text" class="form-control" placeholder="Religion" ng-model="field.ReligionName" disabled>
+                                    </td>
+                                    <td ng-repeat="field in value">
+                                        <input type="text" class="form-control" placeholder="Phone Number" ng-model="field.PhoneNo" disabled>
+                                    </td>
+                                    <td ng-repeat="field in value">
+                                        <input type="text" class="form-control" placeholder="NID" ng-model="field.NID" disabled>
+                                    </td>
+                                    <td ng-repeat="field in value">
+                                        <input type="text" class="form-control" placeholder="Email" ng-model="field.EmailID" disabled>
+                                    </td>
+                                    <td ng-click="GuardianRemoveRow($index)">
+                                        <i class="fa fa-times" ng-repeat="field in value" ng-hide="field.IsDeleted === true"></i>
+                                        <span ng-repeat="field in value" ng-show="field.IsDeleted === true" class="deleteTag">
+                                            Deleted
+                                        </span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="actions clearfix">
+                        <div class="pull-right">
+                            <div class="hungry-spacer"></div>
+                            <button type="button" class="addNewRow btn btn-white btn-cons btn-sm " ng-click="vm.addNewRowForGuardian()"><i class="fa fa-plus"></i> Add more</button>
+                            <!-- <button type="submit" class="btn btn-primary btn-cons"><i class="icon-ok"></i> Save</button>
+                            <button type="button" class="btn btn-danger btn-cons reset">Cancel</button> -->
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Gardian Info End -->
+<!-- Exprience Info Start-->
+<div class="grid simple col-md-12 vertical green" ng-show="exprienceInfoContainer">
+    <div class="grid-body">
+        <div class="row">
+            <div class="col-md-12">
+                <h4 class="clearfix">Exprience Inf
+o
+                </h4>
+                  <!-- <p>Data: <br/><pre>{{ExprienceData|json}}</pre>  -->
+                <form class="newOvDiscount" action="#" method="post">
+                    <table class="newDiscounts dynaRows table table-hover table-condensed">
+                        <thead>
+                            <tr>
+                                <th>SN</th>
+                                <th style="width:17%">Experience</th>
+                                <th>Start Date</th>
+                                <th>End Date</th>
+                                <th>Duration</th>
+                                <th>organization</th>
+                                <th>address</th>
+                                <th>Remarks</th>
+                                <th>Ref Document</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="value in ExprienceData">
+                                <td>{{$index + 1}}</td>
+                                <td ng-repeat="field in value">
+                                    <ui-select ng-model="value[$index].ExperienceSelected" theme="bootstrap" ng-click="field.ExperienceID = $select.selected.ExperienceID">
+                                        <ui-select-match placeholder="-Select Designation-">
+                                            {{$select.selected.ExperienceName}}
+                                            <span style="float:right" ng-click="field.ExperienceID = null; $select.selected=undefined">
+                                                <i class="fa fa-remove" aria-hidden="true"></i>
+                                            </span>
+                                        </ui-select-match>
+                                        <ui-select-choices repeat="exprience in vm.expriences | filter: $select.search">
+                                            <div ng-bind-html="exprience.ExperienceName | highlight: $select.search"></div>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </td>
+                                <td ng-repeat="field in value">
+                                    <datepicker date-format="dd-MM-yyyy" selector="form-control">
+                                        <div class="input-group">
+                                            <input class="form-control" placeholder="Choose a date" ng-model="field.ExperienceStartDate" ng-change="ValidationOfExpDate(field)" />
+                                            <span class="input-group-addon" style="cursor: pointer">
+                                                <i class="fa fa-lg fa-calendar"></i>
+                                            </span>
+                                        </div>
+                                    </datepicker>
+                                </td>
+                                <td ng-repeat="field in value">
+                                    <datepicker date-format="dd-MM-yyyy" selector="form-control">
+                                        <div class="input-group">
+                                            <input class="form-control" placeholder="Choose a date" ng-model="field.ExperienceEndDate" ng-change="ValidationOfExpDate(field)" />
+                                            <span class="input-group-addon" style="cursor: pointer">
+                                                <i class="fa fa-lg fa-calendar"></i>
+                                            </span>
+                                        </div>
+                                    </datepicker>
+                                </td>
+                                <td ng-repeat="field in value">
+                                    <input type="number" class="form-control" placeholder="" ng-model="field.ExperienceDuration" min=0 oninput="validity.valid||(value=null);">
+                                </td>
+                                <td ng-repeat="field in value">
+                                    <input type="text" class="form-control" placeholder="" ng-model="field.Institute">
+                                </td>
+                                <td ng-repeat="field in value">
+                                    <input type="text" class="form-control" placeholder="" ng-model="field.InstituteAddress">
+                                </td>
+                                <td ng-repeat="field in value">
+                                    <input type="text" class="form-control" placeholder="" ng-model="field.Description">
+                                </td>
+                                <td ng-repeat="field in value">
+                                    <input type="text" class="form-control" placeholder="" ng-model="field.ImageURL">
+                                </td>
+                                <td ng-click="ExperienceRemoveRow($index)">
+                                    <i class="fa fa-times" ng-repeat="field in value" ng-hide="field.IsDeleted === true"></i>
+                                    <span ng-repeat="field in value" ng-show="field.IsDeleted === true" class="deleteTag">
+                                        Deleted
+                                    </span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="actions clearfix">
+                        <div class="pull-right">
+                            <div class="hungry-spacer"></div>
+                            <button type="button" class="addNewRow btn btn-white btn-cons btn-sm " ng-click="vm.addNewRowForExprience()"><i class="fa fa-plus"></i> Add more</button>
+                            <!-- <button type="submit" class="btn btn-primary btn-cons"><i class="icon-ok"></i> Save</button>
+                            <button type="button" class="btn btn-danger btn-cons reset">Cancel</button> -->
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Exprience Info End -->
+<!-- Contract Info Start-->
+<div class="grid simple col-md-12 vertical green" ng-show="jobContarctInfoContainer">
+    <div class="grid-body">
+        <div class="row">
+            <div class="col-md-12">
+                <h4 class="clearfix">Job Contact Inf
+o
+                </h4>
+                  <!-- <p>Data: <br/><pre>{{JobContractData|json}}</pre>  -->
+                <form class="newOvDiscount" action="#" method="post">
+                    <table class="newDiscounts dynaRows table table-hover table-condensed">
+                        <thead class="grid-top-panel">
+                            <tr>
+                                <th>SN</th>
+                                <th style="width:17%">Designation</th>
+                                <th>Employee ID</th>
+                                <th>Department</th>
+                                <!--<th>Institute</th>-->
+                                <th>Branch</th>
+                                <th>Contact Date</th>
+                                <th>Confirmation Date</th>
+                                <th>joining Date</th>
+                                <th>Is Active</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="value in JobContractData">
+                                <td>{{$index + 1}}</td>
+                                <td ng-repeat="field in value">
+                                    <ui-select ng-model="value[$index].DesignationSelected" theme="bootstrap" ng-click="field.DesignationID = $select.selected.UserDesignationID">
+                                        <ui-select-match placeholder="-Select-">
+                                            {{$select.selected.DesignationName}}
+                                            <span style="float:right" ng-click="field.DesignationID = null; $select.selected=undefined">
+                                                <i class="fa fa-remove" aria-hidden="true"></i>
+                                            </span>
+                                        </ui-select-match>
+                                        <ui-select-choices repeat="designation in vm.designations | filter: $select.search">
+                                            <div ng-bind-html="designation.DesignationName | highlight: $select.search"></div>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </td>
+                                <td ng-repeat="field in value">
+                                    <input type="text" class="form-control" placeholder="" ng-model="field.RFID">
+                                </td>
+                                <td ng-repeat="field in value">
+                                    <ui-select ng-model="value[$index].DepertmentSelected" theme="bootstrap" ng-click="field.DepartmentID = $select.selected.DepartmentID">
+                                        <ui-select-match placeholder="-Select-">
+                                            {{$select.selected.DepartmentName}}
+                                            <span style="float:right; overflow:auto" ng-click="field.DepartmentID = null; $select.selected=undefined">
+                                                <i class="fa fa-remove" aria-hidden="true"></i>
+                                            </span>
+                                        </ui-select-match>
+                                        <ui-select-choices repeat="depertment in vm.depertments | filter: $select.search">
+                                            <div ng-bind-html="depertment.DepartmentName | highlight: $select.search"></div>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </td>
+                                <!--<td ng-repeat="field in value">
+                                    <ui-select ng-model="value[$index].InstituteSelected" theme="bootstrap" ng-click="field.InstituteID = $select.selected.InstituteID">
+                                        <ui-select-match placeholder="-Select Institute-">{{$select.selected.InstituteName}}</ui-select-match>
+                                        <ui-select-choices repeat="institute in vm.institutes | filter: $select.search">
+                                            <div ng-bind-html="institute.InstituteName | highlight: $select.search"></div>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </td>-->
+                                <td ng-repeat="field in value">
+
+                                    <ui-select ng-model="value[$index].BranchSelected" theme="bootstrap" ng-click="field.BrunchID = $select.selected.BrunchID">
+                                        <ui-select-match placeholder="-Select-">
+                                            {{$select.selected.BrunchName}}
+                                            <span class="pull-right" ng-click="field.BrunchID = null; $select.selected=undefined">
+                                                <i class="fa fa-remove" aria-hidden="true"></i>
+                                            </span>
+                                        </ui-select-match>
+                                        <ui-select-choices repeat="branch in vm.branches | filter: $select.search">
+                                            <div ng-bind-html="branch.BrunchName | highlight: $select.search"></div>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </td>
+                                <td ng-repeat="field in value">
+                                    <datepicker date-format="dd-MM-yyyy" selector="form-control">
+                                        <div class="input-group">
+                                            <input class="form-control" placeholder="Choose a date" ng-model="field.ContractDate" />
+                                            <span class="input-group-addon" style="cursor: pointer">
+                                                <i class="fa fa-lg fa-calendar"></i>
+                                            </span>
+                                        </div>
+                                    </datepicker>
+                                </td>
+                                <td ng-repeat="field in value">
+                                    <datepicker date-format="dd-MM-yyyy" selector="form-control">
+                                        <div class="input-group">
+                                            <input class="form-control" placeholder="Choose a date" ng-model="field.ConfirmationDate" />
+                                            <span class="input-group-addon" style="cursor: pointer">
+                                                <i class="fa fa-lg fa-calendar"></i>
+                                            </span>
+                                        </div>
+                                    </datepicker>
+                                </td>
+                                <td ng-repeat="field in value">
+                                    <datepicker date-format="dd-MM-yyyy" selector="form-control">
+                                        <div class="input-group">
+                                            <input class="form-control" placeholder="Choose a date" ng-model="field.JoiningDate" />
+                                            <span class="input-group-addon" style="cursor: pointer">
+                                                <i class="fa fa-lg fa-calendar"></i>
+                                            </span>
+                                        </div>
+                                    </datepicker>
+                                </td>
+                                <td ng-click="openJob($index)">
+                                    <div class="checkbox check-primary" ng-repeat="field in value">
+                                        <input id="b{{100+field.id}}" type="checkbox" ng-model="field.IsActive" ng-checked="field.IsActive === true">
+                                        <label for="b{{100+field.id}}"></label>
+                                    </div>
+                                </td>
+                                <td ng-click="JobContractRemoveRow($index)">
+                                    <i class="fa fa-times" ng-repeat="field in value" ng-hide="field.IsDeleted === true"></i>
+                                    <span ng-repeat="field in value" ng-show="field.IsDeleted === true" class="deleteTag" disable>
+                                        Deleted
+                                    </span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="actions clearfix">
+                        <div class="pull-right">
+                            <div class="hungry-spacer"></div>
+                            <button type="button" class="addNewRow btn btn-white btn-cons btn-sm " ng-click="vm.addNewRowForJobContract()"><i class="fa fa-plus"></i> Add more</button>
+                            <!-- <button type="submit" class="btn btn-primary btn-cons"><i class="icon-ok"></i> Save</button>
+                            <button type="button" class="btn btn-danger btn-cons reset">Cancel</button> -->
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Contract Info End -->
+
+
+<div class="modal fade col-lg-12 col-sm-12 col-xs-12" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" style="float:left">Family Information</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <!--<div class="page-title">
+                            <i class="fa fa-keyboard-o" aria-hidden="true"></i>
+                            <h3>Family - <span class="semi-bold">Information</span></h3>
+                        </div>-->
+                    </div>
+                </div>
+                <div class="grid-body">
+                    <div class="row">
+                        <form class="form-horizontal col-lg-12 col-sm-12 col-xs-12" name="vm.guardianSerups">
+                            <div class="row">
+                                <div class="col-lg-3 col-sm-4 col-xs-4">
+                                    <div class="form-group">
+                                        <label class="col-sm-4 control-label">First Name <span ng-show="Gfistname" style="color:red;font-size:15px">*</span> </label>
+                                        <div class="col-sm-7">
+                                            <input type="text" class="form-control" placeholder="First Name" ng-model="vm.guardianSerup.UserFirstName" name="GFName" required>
+                                        </div>
+                                        <span class="error" ng-show="(vm.guardianSerups.$dirty||submitted) && vm.guardianSerups.GFName.$error.required">*</span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-4 control-label">Middle Name</label>
+                                        <div class="col-sm-7">
+                                            <input type="text" class="form-control" placeholder="Middle Name" ng-model="vm.guardianSerup.UserMiddleName">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-4 control-label">Last Name <span ng-show="Glastname" style="color:red;font-size:15px">*</span> </label>
+                                        <div class="col-sm-7">
+                                            <input type="text" class="form-control" placeholder="Last Name" ng-model="vm.guardianSerup.UserLastName" name="GLName" required>
+                                        </div>
+                                        <span class="error" ng-show="(vm.guardianSerups.$dirty||submitted) && vm.guardianSerups.GLName.$error.required">*</span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-4 control-label">Full Name</label>
+                                        <div class="col-sm-7">
+                                            <input type="text" class="form-control" placeholder="Full Name" ng-model="vm.guardianSerup.UserFullName" disabled>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="col-lg-3 col-sm-4 col-xs-4">
+                                    <div class="form-group">
+                                        <label class="col-sm-4 control-label">Nick Name</label>
+                                        <div class="col-sm-7">
+                                            <input type="text" class="form-control" placeholder="Nick Name" ng-model="vm.guardianSerup.NickName">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-sm-4 control-label">DOB</label>
+                                        <div class="col-sm-7 input-groups margin-bottom-sm">
+                                            <datepicker date-format="dd-MM-yyyy" selector="form-control">
+                                                <div class="input-group">
+                                                    <input class="form-control" placeholder="Choose a date" ng-model="vm.guardianSerup.DOB" />
+                                                    <span class="input-group-addon" style="cursor: pointer">
+                                                        <i class="fa fa-lg fa-calendar"></i>
+                                                    </span>
+                                                </div>
+                                            </datepicker>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-4 control-label">Gender</label>
+                                        <div class="col-sm-7">
+                                            <ui-select ng-model="vm.guardianSerup.gender.selected" theme="bootstrap" ng-click="vm.guardianSerup.GenderID = $select.selected.GenderID">
+                                                <ui-select-match placeholder="-Select Gender-">
+                                                    {{$select.selected.GenderName}}
+                                                    <span style="float:right" ng-click="field.GenderID = null; $select.selected=undefined">
+                                                        <i class="fa fa-remove" aria-hidden="true"></i>
+                                                    </span>
+                                                </ui-select-match>
+                                                <ui-select-choices repeat="gender in vm.genders | filter: $select.search">
+                                                    <div ng-bind-html="gender.GenderName | highlight: $select.search"></div>
+                                                </ui-select-choices>
+                                            </ui-select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-4 control-label">Religion</label>
+                                        <div class="col-sm-7">
+                                            <ui-select ng-model="vm.guardianSerup.religion.selected" theme="bootstrap" ng-click="vm.guardianSerup.religionID = $select.selected.ReligionID">
+                                                <ui-select-match placeholder="-Select Relagion-">
+                                                    {{$select.selected.ReligionName}}
+                                                    <span style="float:right" ng-click="field.religionID = null; $select.selected=undefined">
+                                                        <i class="fa fa-remove" aria-hidden="true"></i>
+                                                    </span>
+                                                </ui-select-match>
+                                                <ui-select-choices repeat="religion in vm.religions | filter: $select.search">
+                                                    <div ng-bind-html="religion.ReligionName | highlight: $select.search"></div>
+                                                </ui-select-choices>
+                                            </ui-select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-sm-4 col-xs-4">
+                                    <div class="form-group">
+                                        <label class="col-sm-4 control-label">Blood Group</label>
+                                        <div class="col-sm-7">
+                                            <ui-select ng-model='vm.guardianSerup.bloodgroup.selected' theme='bootstrap' ng-click='vm.guardianSerup.bloodgroupID = $select.selected.BloodGroupID'>
+                                                <ui-select-match placeholder='-Select Blood Group-'>
+                                                    {{$select.selected.BloodGroupName}}
+                                                    <span style="float:right" ng-click="field.bloodgroupID = null; $select.selected=undefined">
+                                                        <i class="fa fa-remove" aria-hidden="true"></i>
+                                                    </span>
+                                                </ui-select-match>
+                                                <ui-select-choices repeat='bloodgroup in vm.bloodGroups | filter: $select.search'>
+                                                    <div ng-bind-html='bloodgroup.BloodGroupName | highlight: $select.search'></div>
+                                                </ui-select-choices>
+                                            </ui-select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-sm-4 control-label">Height</label>
+                                        <div class="col-sm-7">
+                                            <input type="number" class="form-control" placeholder="Height" ng-model="vm.guardianSerup.Height">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-4 control-label">Weight</label>
+                                        <div class="col-sm-7">
+                                            <input type="number" class="form-control" placeholder="Weight" ng-model="vm.guardianSerup.Weigth">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-4 control-label">NID</label>
+                                        <div class="col-sm-7">
+                                            <input type="text" class="form-control" placeholder="NID Number" ng-model="vm.guardianSerup.NID">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-4 control-label">Passport</label>
+                                        <div class="col-sm-7">
+                                            <input type="text" class="form-control" placeholder="Passport Number" ng-model="vm.guardianSerup.PassportNO">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-sm-4 col-xs-4">
+                                    <div class="form-group">
+                                        <label class="col-sm-4 control-label"><span style="font-size:12px">Birth Certificate No</span></label>
+                                        <div class="col-sm-7">
+                                            <input type="text" class="form-control" placeholder="Birth Certificate No" ng-model="vm.guardianSerup.BirthCertificate">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-sm-4 control-label">Phone</label>
+                                        <div class="col-sm-7">
+                                            <input type="text" class="form-control" placeholder="Phone Number" ng-model="vm.guardianSerup.PhoneNo">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-sm-4 control-label">Email</label>
+                                        <div class="col-sm-7">
+                                            <input type="email" class="form-control" placeholder="Email" ng-model="vm.guardianSerup.EmailID">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-4 control-label">Unique Identity</label>
+                                        <div class="col-sm-7">
+                                            <input type="text" class="form-control" placeholder="Unique Identity" ng-model="vm.guardianSerup.UniqueIdentity">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-4 control-label">Remarks</label>
+                                        <div class="col-sm-7">
+                                            <input type="text" class="form-control" placeholder="Remarks" ng-model="vm.guardianSerup.Remarks">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-danger" ng-click="vm.ResetGuardian()">Reset</button>
+                <button type="button" class="btn btn-primary" style="width:90px" data-dismiss="modal" ng-click="vm.postUserSetupGuardian()" ng-disabled="vm.guardianSerups.$invalid">Save</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+
+<!-- ---------------------------------------------------- Start UI-Grid ------------------------------------------------ -->
+<div class="grid simple col-md-12 col-sm-12 col-xs-12" ng-show="showItem">
+    <div class="grid-title">
+        <div class="row">
+            <div class="col-md-11">
+                <div class="page-title">
+                    <i class="fa fa-keyboard-o" aria-hidden="true"></i>
+                    <h3>
+                        User -
+                        <span class="semi-bold">List</span>
+                    </h3>
+                </div>
+            </div>
+
+            <div class="col-md-1 marginOff">
+                <button type="submit" class="btn btn-primary btn-block saveBtn" ng-click="listEvent()">Create</button>
+            </div>
+        </div>
+    </div>
+    <div class="grid-body">
+        <div class="row">
+            <div class="col-md-12" style="text-align:right">
+                <input type="text" ng-model="SearchProperty" placeholder="Search User" ng-keyup="$event.keyCode == 13 ? SearchNow(SearchProperty) : null" />
+                <button type="button" class="close" aria-label="Close" ng-click="SearchCancel('')">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div ui-grid="gridOptions" ui-grid-resize-columns ui-grid-auto-resize ui-grid-move-columns ui-grid-exporter ui-grid-pinning
+                     class="grid" style="height:550px"></div>
+
+                <div class="loadmore">
+                    <div ng-show="loaderMore" ng-class="result">
+                        <!-- <img src="~/Content/img/ng-loader.gif" /> -->
+                        {{lblMessage}}
+                    </div>
+                </div>
+                <div class="row"></div>
+                <div role="contentinfo" style="margin-bottom: -20px;" class="ui-grid-pager-panel ng-scope">
+                    <div role="navigation" class="ui-grid-pager-container">
+                        <div role="menubar" class="ui-grid-pager-control">
+                            <!-- Start Page -->
+                            <button type="button" role="menuitem" class="ui-grid-pager-first" ui-grid-one-bind-title="aria.pageToFirst" ui-grid-one-bind-aria-label="aria.pageToFirst"
+                                    ng-click="pagination.firstPage()" ng-disabled="cantPageBackward()" title="Page to first" aria-label="Page to first"
+                                    disabled="disabled">
+                                <div class="first-triangle">
+                                    <div class="first-bar"></div>
+                                </div>
+                            </button>
+
+                            <!-- Prev Page -->
+                            <button type="button" role="menuitem" class="ui-grid-pager-previous" ui-grid-one-bind-title="aria.pageBack" ui-grid-one-bind-aria-label="aria.pageBack"
+                                    ng-click="pagination.previousPage()" ng-disabled="cantPageBackward()" title="Page back" aria-label="Page back"
+                                    disabled="disabled">
+                                <div class="first-triangle prev-triangle"></div>
+                            </button>
+
+                            <input type="number" ui-grid-one-bind-title="aria.pageSelected" ui-grid-one-bind-aria-label="aria.pageSelected" class="ui-grid-pager-control-input ng-pristine ng-untouched ng-valid ng-not-empty ng-valid-min ng-valid-max ng-valid-required"
+                                   ng-model="pagination.pageNumber" min="1" max="{{pagination.getTotalPages()}}" required="" title="Selected page"
+                                   aria-label="Selected page" />
+
+                            <span class="ui-grid-pager-max-pages-number ng-binding" ng-show="pagination.getTotalPages() > 0">
+                                <abbr ui-grid-one-bind-title="paginationOf" title="of">/</abbr>{{pagination.getTotalPages()}}
+                            </span>
+
+                            <!-- Next Page -->
+                            <button type="button" role="menuitem" class="ui-grid-pager-next" ui-grid-one-bind-title="aria.pageForward" ui-grid-one-bind-aria-label="aria.pageForward"
+                                    ng-click="pagination.nextPage()" ng-disabled="cantPageForward()" title="Page forward" aria-label="Page forward">
+                                <div class="last-triangle next-triangle"></div>
+                            </button>
+
+                            <!-- Last Page -->
+                            <button type="button" role="menuitem" class="ui-grid-pager-last" ui-grid-one-bind-title="aria.pageToLast" ui-grid-one-bind-aria-label="aria.pageToLast"
+                                    ng-click="pagination.lastPage()" ng-disabled="cantPageToLast()" title="Page to last" aria-label="Page to last">
+                                <div class="last-triangle">
+                                    <div class="last-bar"></div>
+                                </div>
+                            </button>
+                        </div>
+                        <!-- ngIf: grid.options.paginationPageSizes.length > 1 -->
+
+                        <div class="ui-grid-pager-row-count-picker ng-scope">
+                            <select ng-model="pagination.ddlpageSize" ng-options="o as o for o in pagination.paginationPageSizes" ng-change="pagination.pageSizeChange()"
+                                    class="ng-pristine ng-untouched ng-valid ng-not-empty"></select>
+                            <span class="ui-grid-pager-row-count-label ng-binding">&nbsp;items per page</span>
+                        </div>
+                        <!-- end ngIf: grid.options.paginationPageSizes.length > 1 -->
+                        <!-- ngIf: grid.options.paginationPageSizes.length <= 1 -->
+                    </div>
+                    <div class="ui-grid-pager-count-container">
+                        <div class="ui-grid-pager-count">
+                            <span ng-show="pagination.totalItems > 0" class="ng-binding">
+                                {{pagination.pageNumber}}
+                                <abbr ui-grid-one-bind-title="paginationThrough" title="through">-</abbr>
+                                {{pagination.ddlpageSize}} of {{pagination.totalItems}} items
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ----------------------------------------------------- End UI-Grid ------------------------------------------------- -->
+<!-- User List -->
+<!--<div class="grid simple col-md-12" ng-show = "showItem" >
+    <div class="grid-title">
+        <div class="row">
+            <div class="col-md-11">
+                <div class="page-title"> <i class="fa fa-keyboard-o" aria-hidden="true"></i>
+                    <h3>Employee - <span class="semi-bold">List</span></h3>
+                </div>
+            </div>
+
+            <div class="col-md-1 marginOff">
+                <button type="submit" class="btn btn-primary btn-block saveBtn" ng-click="listEvent()">Create</button>
+            </div>
+        </div>
+    </div>
+    <div class="grid-body">
+        <div class="row">
+            <div class="col-md-12">
+
+                <table class="ListItems dynaRows table table-hover table-condensed">
+                    <thead>
+                        <tr>
+                            <th rowspan="2">UserFullName</th>
+                            <th rowspan="2">EmailID</th>
+                            <th rowspan="2">DOB</th>
+                            <th rowspan="2">PassportNO</th>
+                            <th rowspan="1" colspan="5">Address</th>
+                            <th rowspan="2">InstituteName</th>
+                            <th rowspan="2">ReligionName</th>
+                            <th rowspan="2">Edit</th>
+                        </tr>
+                        <tr>
+                            <th rowspan="1">Present Address</th>
+                            <th rowspan="1">Permanent Address</th>
+                            <th rowspan="1">Blood Group</th>
+                            <th rowspan="1">Phone</th>
+                            <th rowspan="1">NID</th>
+                        </tr>
+
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="student in vm.students | orderBy:'-UserID'">
+                            <td>{{student.UserFullName}}</td>
+                            <td>{{student.EmailID}}</td>
+                            <td>{{student.DOB}}</td>
+                            <td>{{student.PassportNO}}</td>
+                            <td>{{student.PreAddress}}</td>
+                            <td>{{student.ParAddress}}</td>
+                            <td>{{student.BloodGroupName}}</td>
+                            <td>{{student.PhoneNo}}</td>
+                            <td>{{student.NID}}</td>
+                            <td>{{student.InstituteName}}</td>
+                            <td>{{student.ReligionName}}</td>
+                            <td>
+                                <button href="#" class="btn btn-info btn-xs btn-mini" ng-click="vm.editMasterUser(student.UserID)">Edit</button>
+                                <button href="#" class="btn btn-primary btn-xs btn-mini" ng-click="vm.deleteUserStudent(student.UserID)">Delete</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <ul ng-if="vm.pager.pages.length" class="pagination">
+                    <li ng-class="{disabled:vm.pager.currentPage === 1}">
+                        <a ng-click="vm.setPage(1)">First</a>
+                    </li>
+                    <li ng-class="{disabled:vm.pager.currentPage === 1}">
+                        <a ng-click="vm.setPage(vm.pager.currentPage - 1)">Previous</a>
+                    </li>
+                    <li ng-repeat="page in vm.pager.pages" ng-class="{active:vm.pager.currentPage === page}">
+                        <a ng-click="vm.setPage(page)">{{page}}</a>
+                    </li>
+                    <li ng-class="{disabled:vm.pager.currentPage === vm.pager.totalPages}">
+                        <a ng-click="vm.setPage(vm.pager.currentPage + 1)">Next</a>
+                    </li>
+                    <li ng-class="{disabled:vm.pager.currentPage === vm.pager.totalPages}">
+                        <a ng-click="vm.setPage(vm.pager.totalPages)">Last</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>-->
+
+<style>
+    a {
+        cursor: pointer;
+    }
+
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        margin: 0;
+    }
+
+    .thumb {
+        width: 24px;
+        height: 24px;
+        float: none;
+        position: relative;
+        top: 7px;
+    }
+
+    .hungry table.dynaRows tr td input {
+        width: 100%;
+        border: 1px solid #0aa69994;
+    }
+
+    .wrapper {
+        /*width: 200px;*/
+        position: relative;
+    }
+
+        .wrapper .selected-items-box {
+            cursor: pointer;
+            border: solid 1px #ddd;
+            padding: 10px;
+            background-color: #f0f8f5;
+            color: #131212;
+        }
+
+    .selected-items-box .items-list {
+        list-style-type: none;
+        width: 100%;
+        padding: 0;
+        margin: 0;
+    }
+
+        .selected-items-box .items-list li {
+            display: inline;
+        }
+
+    .wrapper .list {
+        display: none;
+        max-height: 200px;
+        overflow-y: auto;
+        overflow-x: hidden;
+        border-left: solid 1px #C7C6C7;
+        border-right: solid 1px #C7C6C7;
+        border-bottom: solid 1px #C7C6C7;
+        z-index: 100;
+        position: absolute;
+        width: 100%;
+    }
+
+    .list .items-list {
+        list-style-type: none;
+        width: 100%;
+        padding: 0;
+        margin: 0;
+    }
+
+        .list .items-list li {
+            margin: 0;
+            width: 100%;
+            padding: 0;
+            border-bottom: solid 1px #C7C6C7;
+            padding: 5px;
+            background-color: #fff;
+        }
+</style>

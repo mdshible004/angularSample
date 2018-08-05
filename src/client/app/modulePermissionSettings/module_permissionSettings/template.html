@@ -1,0 +1,150 @@
+
+
+<div class="grid simple col-md-12"  ng-show="createItem">
+    <div class="grid-title">
+        <div class="row">
+            <div class="col-md-9">
+                <div class="page-title">
+                    <i class="fa fa-keyboard-o" aria-hidden="true"></i>
+                    <h3>Permission - <span class="semi-bold">Entry</span></h3>
+                </div>
+            </div>
+            <div class="col-md-1 col-sm-3 marginOff">
+                <button type="submit" class="btn btn-primary btn-block showBtn" ng-click="itemEvent()">Show List</button>
+                <!-- <button type="submit" class="btn btn-primary btn-block" ng-click="">Update</button> -->
+            </div>
+            <div class="col-md-1 col-sm-3 marginOff">
+                <button type="submit" class="btn btn-primary btn-block resetBtn" ng-click="clearField()">Reset</button>
+            </div>
+            <div class="col-md-1  col-sm-3 marginOff">
+                <button type="submit" class="btn btn-primary btn-block saveBtn" ng-click="vm.updateModulePer()">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid-body">
+        <div class="row">
+            <form class="form-horizontal col-sm-8" name="vm.addAdress">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <label class="col-md-5 control-label">Institute</label>
+                                <div class="col-md-7">
+                                    <ui-select ng-model="vm.institute.selected" name="InsID" theme="bootstrap" ng-click="vm.instituteID = $select.selected.InstituteID" ng-disabled="IsDis=vm.InstituteID!==1?true:false" on-select="vm.instituteSelected($select.selected.InstituteID)" required>
+                                        <ui-select-match placeholder="---Select---">
+                                            {{$select.selected.InstituteName}}
+                                            <span style="float:right" ng-click="vm.instituteID = undefined; $select.selected=undefined" >
+                                                <i class="fa fa-remove" aria-hidden="true"   ng-click="vm.instituteSelected(undefined)" ></i>
+                                            </span>
+                                        </ui-select-match>
+                                        <ui-select-choices repeat="institute in vm.institutes | filter: $select.search">
+                                            <div ng-bind-html="institute.InstituteName  | highlight: $select.search"></div>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+                            </div>
+                        </div>
+                    
+                        <div class="col-md-4">
+
+                            <!--<div class="form-group">
+                                <label class="col-md-5 control-label">User Type</label>
+                                <div class="col-md-7">
+                                    <ui-select ng-model="vm.userType.selected" theme="bootstrap" ng-click="vm.UserTypeID = $select.selected.UserTypeID" on-select="vm.UserTypeSelected($select.selected.UserTypeID)" >
+                                        <ui-select-match placeholder="-Select Type-">
+                                            {{$select.selected.UserTypeName}}
+                                            <span style="float:right" ng-click="vm.UserTypeID  = undefined; $select.selected=undefined">
+                                                <i class="fa fa-remove" aria-hidden="true"  ng-click="vm.UserTypeSelected(undefined)"></i>
+                                            </span>
+                                        </ui-select-match>
+                                        <ui-select-choices repeat="module in vm.UserType | filter: $select.search">
+                                            <div ng-bind-html="module.UserTypeName | highlight: $select.search"></div>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+                            </div>-->
+
+                        </div>                     
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="grid simple col-md-12" ng-show="showItem">
+    <div class="grid-title">
+        <div class="row">
+            <div class="col-md-11">
+                <div class="page-title">
+                    <i class="fa fa-keyboard-o" aria-hidden="true"></i>
+                    <h3>Permission - <span class="semi-bold">Records</span></h3>
+                </div>
+            </div>
+
+            <!--<div class="col-md-1 marginOff">
+                <button type="submit" class="btn btn-primary btn-block saveBtn" ng-click="listEvent()">Create</button>
+            </div>-->
+        </div>
+    </div>
+    <div class="grid-body">
+        <div class="row">
+            <input id="custSearch" ng-model="custSearch" type="text" class="form-control search" placeholder="Search...">
+            <table class="table  table-hover table-striped">
+                <thead class="grid-top-panel">
+                    <tr>
+                        <!--<th style="display:none">ModulePermissionID</th>-->
+                        <th>SL.</th>
+                        <!--<th>Custom Code</th>-->
+                        <th>Module</th>
+                        <!--<th>Institute</th>-->
+                        <!--<th style="text-align:right;">Options</th>-->
+                        <th>Is Enabled?</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="dataModel in vm.modulesperm |filter:custSearch">
+                        <!--<td style="display:none">{{dataModel.ModulePermissionID}}</td>-->
+                        <td>{{$index+1}}</td>
+                        <!--<td>{{dataModel.ModuleID}}</td>-->
+                        <td>{{dataModel.ModuleName}}</td>
+                        <!--<td>{{dataModel.InstituteName}}</td>-->
+                     
+                        <td class="checkbox-column col-md-1" ng-click="checkIsEnable($index)">
+                            <div><span><input type="checkbox" ng-model="dataModel.EnableView" ng-click="gridViewCheckBoxClicked(dataModel.EnableView)"></span></div>
+                        </td>
+
+
+
+                    </tr>
+                </tbody>
+            </table>
+            <p ng-show="(vm.modulesperm | filter:UserSearch).length == 0" style="color:red">Nothing found!</p>
+
+            <div class="loadmore">
+                <div ng-show="loaderMore" ng-class="result">
+                    <img src="~/Content/img/ng-loader.gif" />
+                    {{lblMessage}}
+                </div>
+                <div ng-show="scrollended" ng-class="result">
+                    {{lblMessage}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    .thumb {
+        width: 24px;
+        height: 24px;
+        float: none;
+        position: relative;
+        top: 7px;
+    }
+
+    .modal-content {
+        width: 1660px;
+        margin-left: -405px;
+    }
+</style>

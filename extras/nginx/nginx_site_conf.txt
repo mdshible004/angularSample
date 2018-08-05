@@ -1,0 +1,91 @@
+﻿upstream accounts_frontend {
+    server 127.0.0.1:8001;
+}
+
+server {
+    listen       80;
+    server_name accountsui.aisaventltd.com www.accountsui.aisaventltd.com;
+
+    keepalive_timeout 5;
+    root /srv/www/accounts.front/build;
+    index index.php index.html index.htm;
+    charset utf-8;
+
+    access_log /var/log/nginx/accountsfront.hungrynaki.com.log;
+    error_log /var/log/nginx/accountsfront.hungrynaki.com-error error;
+
+    location ~ ^/(js.*js|styles|images) {
+        gzip_static on;
+        gzip on;
+        gzip_disable "msie6";
+        gzip_vary on;
+        gzip_proxied any;
+        gzip_comp_level 9;
+        # gzip_buffers 16 8k;
+        gzip_http_version 1.1;
+        gzip_types text/plain text/css application/json application/x-javascript text/xml application/xml application/xml+rss text/javascript;
+        expires 1y;
+        add_header Cache-Control public;
+        add_header ETag "";
+        break;
+    }
+
+    ### root directory ###
+    location / {
+        if (!-e $request_filename){
+            rewrite ^(.*)$ /index.html break;
+        }
+    }
+
+    ### security ###
+    error_page 403 =404;
+
+    ### security ###
+    location ~* ^/uploads/.*.(html|htm|shtml|php)$ {
+            types { }
+            default_type text/plain;
+    }
+
+    ## Block download agents ##
+    if ($http_user_agent ~* LWP::Simple|BBBike|wget) {
+        return 403;
+    }
+
+    ## Block some robots ##
+    if ($http_user_agent ~* msnbot|scrapbot) {
+        return 403;
+    }
+
+    ## Deny certain Referers ###
+    if ( $http_referer ~* (babes|forsale|girl|jewelry|love|nudit|organic|poker|porn|sex|teen) )
+    {
+     return 403;
+    }
+
+    # Do not list Hidden files
+    location ~ /\. {
+        deny all;
+        access_log off;
+        log_not_found off;
+    }
+
+    ### disable logging ###
+    location = /robots.txt { access_log off; log_not_found off; }
+    location = /favicon.ico { access_log off; log_not_found off; }
+
+    ### php block ###
+    location ~ \.php$ {
+        # Filter out arbitrary code execution
+        #if URI contains a dot, then a slash (ex: image.jpg/...)
+        #if URI ends with .php (ex: image.jpg/test.php)
+        location ~ \..*/.*\.php$ {return 404;}
+        try_files $uri =404;
+        include fastcgi_params;
+        fastcgi_pass unix:/var/run/php5-fpm.sock;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        fastcgi_intercept_errors on;
+        fastcgi_split_path_info ^(.+\.php)(.*)$;
+        #Prevent version info leakage
+        fastcgi_hide_header X-Powered-By;
+    }
+}

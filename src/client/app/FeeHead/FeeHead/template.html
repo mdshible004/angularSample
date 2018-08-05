@@ -1,0 +1,323 @@
+<div class="grid simple col-lg-12 col-sm-12 col-xs-12" ng-show="createItem">
+
+    <div class="grid-title">
+        <div class="row">
+            <div class="col-lg-9 col-sm-7 col-xs-7">
+                <div class="page-title">
+                    <i class="fa fa-keyboard-o" aria-hidden="true"></i>
+                    <h3>
+                        Fees -
+                        <span class="semi-bold">Settings</span>
+                    </h3>
+                </div>
+            </div>
+            <div class="col-lg-1 col-sm-2 col-xs-2 marginOff">
+                <button type="submit" class="btn btn-primary btn-block showBtn" ng-click="itemEvent()">Show List</button>
+                <!-- <button type="submit" class="btn btn-primary btn-block" ng-click="">Update</button> -->
+            </div>
+            <div class="col-lg-1 col-sm-2 col-xs-2 marginOff">
+                <button type="submit" class="btn btn-primary btn-block resetBtn" ng-click="clearField()">Reset</button>
+            </div>
+            <div class="col-lg-1 col-sm-1 col-xs-1 marginOff">
+                <button type="submit" class="btn btn-primary btn-block saveBtn" ng-click="vm.AddFees()" ng-disabled="vm.FeesSetupSave.$invalid">Save</button>
+            </div>
+        </div>
+    </div>
+    <div class="grid-body">
+        <div class="row">
+            <form class="form-horizontal col-lg-8 col-sm-12 col-xs-12" name="vm.FeesSetupSave">
+                <div class="row">
+                    <div class="col-lg-12 col-sm-12 col-xs-12">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Fees Head</label>
+                            <div class="col-sm-6 autoSuggesst">
+                                <input type="text" class="form-control" name="FeesHead" placeholder="Fees Head" ng-model="vm.FeesSetup.FeesHead" required>
+                            </div>
+                            <span class="error" ng-show="(vm.FeesSetupSave.$dirty||submitted) && vm.FeesSetupSave.FeesHead.$error.required">*</span>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Fees Type</label>
+                            <div class="col-sm-6">
+                                <ui-select ng-model="vm.Fee.selected" name="drpType" theme="bootstrap" ng-click="vm.FeesTypeID = $select.selected.FeesTypeID" required>
+                                    <ui-select-match placeholder="- Select Fees Type -">
+                                        {{$select.selected.FeesType}}
+                                        <span style="float:right" ng-click="vm.FeesTypeID = null; $select.selected=undefined">
+                                            <i class="fa fa-remove" aria-hidden="true"></i>
+                                        </span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="Fee in   vm.FeeTypes | filter: $select.search">
+                                        <div ng-bind-html="Fee.FeesType | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            <span class="error" ng-show="(vm.FeesSetupSave.$dirty||submitted) && vm.FeesSetupSave.drpType.$error.required">*</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Account Head</label>
+                            <div class="col-sm-6">
+                                <ui-select ng-model="vm.coaType.selected" name="coa" theme="bootstrap" ng-click="vm.COAID = $select.selected.COAID" required>
+                                    <ui-select-match placeholder=" -Select Account Head-">
+                                        {{$select.selected.COAName}}
+                                        <span class="pull-right" ng-click="vm.COAID = undefined; $select.selected=undefined">
+                                            <i class="fa fa-remove" aria-hidden="true"></i>
+                                        </span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="coa in vm.COATypeList | filter: $select.search">
+                                        <div ng-bind-html="coa.COAName | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            <div class="col-sm-1">
+                                <span style="margin-left:-15px" class="error" ng-show="(vm.FeesSetupSave.$dirty||submitted) && vm.FeesSetupSave.coa.$error.required">*</span>
+                            </div>
+                            <div class="col-sm-1" title="Click here to Create Account Head">
+                                <span style="margin-left:-55px" class="btn btn-primary showBtn" href="#" data-toggle="modal" data-target="#AccHeadModal">
+                                    <i class="glyphicon glyphicon-plus" aria-hidden="true"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label"></label>
+                            <div class="col-sm-6">
+                                <div class="checkbox check-primary">
+                                    <input id="checkbox3" type="checkbox" value="1" ng-click="check()" ng-model="vm.check">
+                                    <label for="checkbox3">&nbsp;Is Active</label>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Item Entry List Grid -->
+
+<div class="grid simple col-md-12" ng-show="showItem">
+    <div class="grid-title">
+        <div class="row">
+            <div class="col-md-11">
+                <div class="page-title">
+                    <i class="fa fa-keyboard-o" aria-hidden="true"></i>
+                    <h3>
+                        All Fees -
+                        <span class="semi-bold">List</span>
+                    </h3>
+                </div>
+            </div>
+
+            <div class="col-md-1 marginOff">
+                <button type="submit" class="btn btn-primary btn-block saveBtn" ng-click="listEvent()">Create</button>
+            </div>
+        </div>
+    </div>
+    <div class="grid-body">
+        <div class="row">
+            <div class="col-md-12">
+
+                <!--<label for="items">items by page</label>-->
+                <table st-table="rowCollection" class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th st-sort="ItemID">SL</th>
+                            <th st-sort="ItemName">Fees Head</th>
+                            <th st-sort="ItemBrandID">Fees Type</th>
+                            <th st-sort="ItemBrandID">Is Active</th>
+                            <th st-sort="">Edit</th>
+                        </tr>
+                        <tr>
+                            <!-- <th>
+                                    <input st-search="'ItemName'" placeholder="search for ItemName" class="input-sm form-control" type="search"/>
+                                </th>
+                                 <th colspan="4">
+                                    <input st-search placeholder="global search" class="input-sm form-control" type="search"/>
+                                </th>  -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="fee in vm.Fees">
+                            <td>{{$index+1}}</td>
+                            <td>{{fee.FeesHead}}</td>
+                            <td>{{fee.FeesType}}</td>
+                            <td>{{fee.IsActive}}</td>
+                            <td>
+                                <button href="#" class="btn btn-info btn-xs btn-mini" data-toggle="modal" data-target="#myModal" ng-click="vm.getFeesByID(fee.InsFeesHeadID)">Edit</button>
+                                <button href="#" class="btn btn-primary btn-xs btn-mini" data-toggle="modal" ng-click="vm.deleteFee(fee.InsFeesHeadID)">Delete</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="5" class="text-center">
+                                <div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="7"></div>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade col-lg-12 col-sm-12 col-xs-12" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+             <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                       <h4 class="modal-title" style="float:left">Edit Fees Entry</h4>
+               </div> 
+            <div class="modal-body">
+                
+                <div class="grid-body">
+                    <div class="row">
+                        <form class="form-horizontal col-lg-10 col-sm-10 col-xs-10" name="vm.FeesSetup">
+                            <div class="row">
+                                <div class="col-lg-12 col-sm-12 col-xs-12">
+                                    <div class="form-group">
+                                        <label class="col-sm-4 control-label">Fees Head</label>
+                                        <div class="col-sm-6">
+                                            <input type="text" class="form-control" placeholder="Fees Head" name="updateHead" ng-model="vm.FeesSetup.FeesHead" required>
+                                            <input type="hidden" class="form-control" placeholder="Class Name" ng-model="vm.FeesSetup.classID">
+                                        </div>
+
+                                        <span class="error" ng-show="(vm.FeesSetup.$dirty||submitted) && vm.FeesSetup.updateHead.$error.required">*</span>
+
+
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-4 control-label">Fees Type</label>
+                                        <div class="col-sm-6">
+                                            <ui-select ng-model="vm.Fee.selected" theme="bootstrap" ng-click="vm.FeesTypeID = $select.selected.FeesTypeID" required>
+                                                <ui-select-match placeholder="-Select Institute-">
+                                                    {{$select.selected.FeesType}}
+                                                    <span style="float:right" ng-click="vm.FeesTypeID = null; $select.selected=undefined">
+                                                        <i class="fa fa-remove" aria-hidden="true"></i>
+                                                    </span>
+                                                </ui-select-match>
+                                                <ui-select-choices repeat="Fee in   vm.FeeTypes | filter: $select.search">
+                                                    <div ng-bind-html="Fee.FeesType | highlight: $select.search"></div>
+                                                </ui-select-choices>
+                                            </ui-select>
+                                        </div>
+                                        <span class="error" ng-show="(vm.FeesSetup.$dirty||submitted) && vm.Fee.selected.$error.required">*</span>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-sm-4 control-label">Account Head</label>
+                                        <div class="col-sm-6">
+                                            <ui-select ng-model="vm.coaType.selected" name="coa" theme="bootstrap" ng-click="vm.COAID = $select.selected.COAID" required>
+                                                <ui-select-match placeholder=" -Select Account Head-">
+                                                    {{$select.selected.COAName}}
+                                                    <span class="pull-right" ng-click="vm.COAID = undefined; $select.selected=undefined">
+                                                        <i class="fa fa-remove" aria-hidden="true"></i>
+                                                    </span>
+                                                </ui-select-match>
+                                                <ui-select-choices repeat="coa in vm.COATypeList | filter: $select.search">
+                                                    <div ng-bind-html="coa.COAName | highlight: $select.search"></div>
+                                                </ui-select-choices>
+                                            </ui-select>
+                                        </div>
+
+                                        <div class="col-sm-1">
+                                            <span style="margin-left:-15px" class="error" ng-show="(vm.FeesSetup.$dirty||submitted) && vm.FeesSetup.coa.$error.required">*</span>
+                                        </div>
+
+                                        <div class="col-sm-1" title="Click here to Create Account Head">
+                                            <span style="margin-left:-85px" class="btn btn-primary showBtn" data-target="#AccHeadModal">
+                                                <i class="glyphicon glyphicon-plus" aria-hidden="true"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-sm-4 control-label"></label>
+                                        <div class="col-sm-6">
+                                            <div class="checkbox check-primary">
+                                                <input id="checkbox3" type="checkbox" value="1" ng-click="check()" ng-model="vm.check">
+                                                <label for="checkbox3">&nbsp;Is Active</label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.Refresh()">Close</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="vm.UpdateFees()" ng-disabled="vm.FeesSetup.$invalid">Save changes</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+<div class="modal fade col-lg-12 col-sm-12 col-xs-12" id="AccHeadModal" tabindex="-1" role="dialog" aria-labelledby="AccHeadModal"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" style="float:left">Create Account Head</h4>
+            </div>
+            <div class="modal-body">
+                <div class="grid-body">
+                    <div class="row">
+                        <form class="form-horizontal col-lg-12 col-sm-12 col-xs-12" name="vm.AccountHeadSetup">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="form-group">
+                                        <label class="col-sm-4 control-label">Account Head</label>
+                                        <div class="col-sm-6">
+                                            <input type="text" name="coaname" class="form-control" placeholder="Account Head" ng-model="vm.COAName" required>
+                                        </div>
+                                        <span class="error" ng-show="(vm.AccountHeadSetup.$dirty||submitted) && vm.AccountHeadSetup.coaname.$error.required">*</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.COAName = undefined">Close</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="SaveAccountHead()" ng-disabled="vm.AccountHeadSetup.$invalid">Save</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+
+<style>
+    .thumb {
+        width: 24px;
+        height: 24px;
+        float: none;
+        position: relative;
+        top: 7px;
+    }
+
+    .modal-content {
+        width: 1660px;
+        margin-left: -405px;
+    }
+
+    .autoSuggesst ul {
+        z-index: 5000;
+        position: fixed;
+        width: 320px;
+        background: #ddd;
+    }
+</style>

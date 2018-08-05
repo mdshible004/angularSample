@@ -1,0 +1,44 @@
+/url > Swagger Tag
+[Table]
+/accountsbalances > order
+
+[Table]
+/paymenthistory/restaurant > restaurantTransactionHistory
+
+[Table]
+/paymenthistory/deliverypartner > deliveryPartnerTransactionHistory
+
+[Table]
+/paytodeliverypartners > deliveryPartnerTransactionHistory
+
+[Table]
+/resdeliveryamounts > order, order.id>>orderDiscount
+
+[Table]
+/commission/addmethod > restaurantCommissionFormula
+
+[Table]
+/commission/setrange > restaurantCommissionFormula
+
+[Table]
+/paymentmethodsettings/create > paymentMethod
+
+
+{
+discountAmount:	200.50
+discountCategory:"Restaurant/Menu"
+discountReferenceId:1	
+externalAmount:	0
+id:101	
+internalAmount:	200.50
+orderId:1212312	
+}
+
+
+[Table]
+/delpartneramounts > order, order.deliveryPartnerId>>deliveryPartner, order.deliveryPartnerId>>deliveryPartner
+RANGE = {{Max}}-{{Min}}
+DELIVERY PARTNER CHARGE FROM CUSTOMER = (from order)
+SLABBED WISE FEE = charge
+CASH HANDLING CHARGE = (from deliveryPartner)
+Total = {{+++}}

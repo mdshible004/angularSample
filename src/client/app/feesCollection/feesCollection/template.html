@@ -1,0 +1,549 @@
+<div class="grid simple col-md-12" ng-show="createItem">
+
+	<div class="grid-title">
+		<div class="row">
+			<div class="col-md-10">
+				<div class="page-title">
+					<i class="fa fa-keyboard-o" aria-hidden="true"></i>
+					<h3>Fess -
+						<span class="semi-bold">Collection</span>
+					</h3>
+				</div>
+			</div>
+			<div class="col-md-1 marginOff">
+				<button type="submit" class="btn btn-primary btn-block resetBtn" ng-click="clearField()">Reset</button>
+			</div>
+		</div>
+	</div>
+	<div class="grid-body">
+		<div class="row">
+			<form class="form-horizontal col-sm-11" name="vm.feeCollection">
+				<div class="row">
+					<div class="col-md-6">
+						<div class="form-group">
+							<label class="col-sm-5 control-label">Shift</label>
+							<div class="col-sm-7">
+								<ui-select ng-model="vm.shift.selected" theme="bootstrap" ng-click="vm.shiftID = $select.selected.ShiftID">
+									<ui-select-match placeholder="-Select Shift-">{{$select.selected.ShiftName}}
+										<span style="float:right" ng-click="vm.shiftID = undefined; $select.selected=undefined">
+											<i class="fa fa-remove" aria-hidden="true"></i>
+										</span>
+									</ui-select-match>
+									<ui-select-choices repeat="shift in vm.shifts | filter: $select.search">
+										<div ng-bind-html="shift.ShiftName | highlight: $select.search"></div>
+									</ui-select-choices>
+								</ui-select>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-5 control-label">Month</label>
+							<div class="col-sm-7">
+								<ui-select ng-model="vm.month.selected" theme="bootstrap" ng-click="vm.MonthID = $select.selected.MonthID">
+									<ui-select-match placeholder="-Select Month-">{{$select.selected.MonthName}}
+										<span style="float:right" ng-click="vm.MonthID = undefined; $select.selected=undefined">
+											<i class="fa fa-remove" aria-hidden="true"></i>
+										</span>
+									</ui-select-match>
+									<ui-select-choices repeat="month in  vm.months | filter: $select.search">
+										<div ng-bind-html="month.MonthName | highlight: $select.search"></div>
+									</ui-select-choices>
+								</ui-select>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label class="col-sm-5 control-label">Medium</label>
+							<div class="col-sm-7">
+								<ui-select ng-model="vm.medium.selected" theme="bootstrap" ng-click="vm.MediumID = $select.selected.MediumID">
+									<ui-select-match placeholder="-Select Medium-">{{$select.selected.MameName}}
+										<span style="float:right" ng-click="vm.MediumID = undefined; $select.selected=undefined">
+											<i class="fa fa-remove" aria-hidden="true"></i>
+										</span>
+									</ui-select-match>
+									<ui-select-choices repeat="medium in vm.mediums | filter: $select.search">
+										<div ng-bind-html="medium.MameName | highlight: $select.search"></div>
+									</ui-select-choices>
+								</ui-select>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-5 control-label">Class</label>
+							<div class="col-sm-7">
+								<ui-select ng-model="vm.class.selected" theme="bootstrap" ng-click="vm.ClassID = $select.selected.ClassID" on-select="vm.ClassSelected(vm.class.selected.ClassID)">
+									<ui-select-match placeholder="-Select Class-">{{$select.selected.ClassName}}
+										<span style="float:right" ng-click="vm.ClassID = undefined; $select.selected=undefined">
+											<i class="fa fa-remove" aria-hidden="true"></i>
+										</span>
+									</ui-select-match>
+									<ui-select-choices repeat="class in  vm.classes | filter: $select.search">
+										<div ng-bind-html="class.ClassName | highlight: $select.search"></div>
+									</ui-select-choices>
+								</ui-select>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3">
+
+						<div class="form-group">
+							<label class="col-sm-5 control-label">Department</label>
+							<div class="col-sm-7">
+								<ui-select ng-model="vm.depertment.selected" theme="bootstrap" ng-click="vm.DepartmentID = $select.selected.DepartmentID">
+									<ui-select-match placeholder="-Select Department-">{{$select.selected.DepartmentName}}
+										<span style="float:right" ng-click="vm.DepartmentID = undefined; $select.selected=undefined">
+											<i class="fa fa-remove" aria-hidden="true"></i>
+										</span>
+									</ui-select-match>
+									<ui-select-choices repeat="depertment in vm.depertments | filter: $select.search">
+										<div ng-bind-html="depertment.DepartmentName | highlight: $select.search"></div>
+									</ui-select-choices>
+								</ui-select>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="col-sm-5 control-label">Section</label>
+							<div class="col-sm-7">
+								<ui-select ng-model="vm.section.selected" theme="bootstrap" ng-click="vm.sectionID = $select.selected.SectionID">
+									<ui-select-match placeholder=" -Select Section-">{{$select.selected.SectionName}}
+										<span style="float:right" ng-click="vm.sectionID = undefined; $select.selected=undefined">
+											<i class="fa fa-remove" aria-hidden="true"></i>
+										</span>
+									</ui-select-match>
+									<ui-select-choices repeat="section in vm.sections | filter: $select.search">
+										<div ng-bind-html="section.SectionName | highlight: $select.search"></div>
+									</ui-select-choices>
+								</ui-select>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label class="col-sm-5 control-label">Student</label>
+							<div class="col-sm-5">
+								<input type="text" class="form-control" placeholder="Student" ng-model="vm.feeCollection.StudentName">
+
+							</div>
+							<div class="col-md-2 marginOff">
+								<button href="#" class="btn btn-primary btn-block showBtn" data-toggle="modal" data-target="#myModal" ng-click="vm.getStudent()">
+									<i class="fa fa-search" aria-hidden="true"></i>
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+
+<!-- Modal Start from here -->
+<div class="modal fade " id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-body">
+				<div class="grid-body">
+					<div class="row">
+						<div class="col-md-12">
+							<table st-table="rowCollection" class="table table-bordered">
+								<thead>
+									<tr>
+										<th>SL</th>
+										<th>Student</th>
+										<th>Student ID</th>
+										<th>Roll</th>
+										<th>Board</th>
+										<th>Session</th>
+										<th>Branch</th>
+										<th>Shift</th>
+										<th>Medium</th>
+										<th>Department</th>
+										<th>Class</th>
+										<th>Section</th>
+										<th>Preview</th>
+
+									</tr>
+								</thead>
+								<tbody>
+									<tr ng-repeat="std in vm.getStd">
+										<td>{{$index+1}}</td>
+										<td>{{std.UserName}}</td>
+										<td>{{std.RFID}}</td>
+										<td>{{std.RollNo}}</td>
+										<td>{{std.Board}}</td>
+										<td>{{std.Session}}</td>
+										<td>{{std.Brunch}}</td>
+										<td>{{std.Shift}}</td>
+										<td>{{std.Medium}}</td>
+										<td>{{std.Department}}</td>
+										<td>{{std.Class}}</td>
+										<td>{{std.Section}}</td>
+
+										<td>
+											<button type="submit" class="btn btn-info btn-xs btn-xs" data-dismiss="modal" ng-click="itemEvent()">
+												<i class="fa fa-eye"></i>
+											</button>
+										</td>
+
+									</tr>
+								</tbody>
+								<tfoot>
+									<tr>
+
+									</tr>
+								</tfoot>
+							</table>
+						</div>
+					</div>
+				</div>
+
+			</div>
+
+		</div>
+		<!-- /.modal-content -->
+	</div>
+	<!-- /.modal-dialog -->
+</div>
+<!-- End Modal -->
+
+<!-- Item Entry List Grid starts from here-->
+
+<div class="grid simple col-md-12" ng-show="showItem">
+	<div class="grid-title">
+		<div class="col-md-1 marginOff pull-right">
+			<button type="submit" class="btn btn-primary btn-block saveBtn" ng-click="vm.AddGrade()">Save</button>
+			<button type="submit" class="btn btn-primary btn-block resetBtn">Fees Collection</button>
+		</div>
+		<div class="row">
+
+			<div class="grid-body">
+
+				<!-- Item Entry List Grid with picture Info -->
+				<div class="row">
+					<div class="col-md-3 col-sm-3">
+						<div class="user-profile-pic">
+							<img width="69" height="69" data-src-retina="images/profiles/avatar_small.jpg" data-src="images/profiles/avatar_small.jpg"
+							 src="images/profiles/avatar_small.jpg" alt="">
+						</div>
+						<div class="user-mini-description">
+							<h3 class="text-success semi-bold">
+								{{vm.regedusers[vm.indexLenth-1].RollNo}}
+							</h3>
+							<h5>Roll Number</h5>
+							<h3 class="text-success semi-bold">
+								{{vm.regedusers[vm.indexLenth-1].Class}}
+							</h3>
+							<h5>Class</h5>
+							<h3 class="text-success semi-bold">
+								{{vm.regedusers[vm.indexLenth-1].Section}}
+							</h3>
+							<h5>Section</h5>
+						</div>
+					</div>
+					<div class="col-md-5 user-description-box  col-sm-5 customWidth">
+						<h4 class="semi-bold no-margin">{{vm.regedusers[vm.indexLenth-1].UserName}}</h4>
+						<h6 class="no-margin">Student</h6>
+						<br>
+						<p>
+							<i class="fa fa-briefcase"></i>
+							<b>Medium --</b>{{vm.regedusers[vm.indexLenth-1].Medium}}</p>
+						<p>
+							<i class="fa fa-globe"></i>
+							<b>Session --</b> {{vm.regedusers[vm.indexLenth-1].Session}} </p>
+						<p>
+							<i class="fa fa-file-o"></i>
+							<b>Shift --</b> {{vm.regedusers[vm.indexLenth-1].Shift}}</p>
+						<p>
+							<i class="fa fa-envelope"></i>
+							<b>Depertment --</b> {{vm.regedusers[vm.indexLenth-1].Department}}</p>
+					</div>
+					<div class="col-md-3  col-sm-3">
+
+					</div>
+				</div>
+				<!-- End Item Entry List Grid with picture Info -->
+
+				<!-- Start table of Item Entry List Grid -->
+				<div class="row">
+					<div class="col-md-3">
+					</div>
+					<div class="col-md-6">
+						<table st-table="rowCollection" class="table table-bordered">
+							<thead>
+								<tr>
+									<th>SL</th>
+									<th>Parent Fees</th>
+									<th>Fees Head</th>
+									<th>Fees</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>{{$index + 1}}</td>
+									<td>Parenfees</td>
+									<td>Parenfees</td>
+									<td>
+										<b>10000</b>
+									</td>
+								</tr>
+								<tr>
+									<td>2</td>
+									<td>Parenfees</td>
+									<td>Parenfees</td>
+									<td>
+										<b>10000</b>
+									</td>
+								</tr>
+							</tbody>
+
+						</table>
+					</div>
+					<div class="col-md-3">
+					</div>
+				</div>
+				<!-- End of table view -->
+				<!-- total fees start -->
+				<div class="row">
+					<div class="col-md-6">
+					</div>
+					<div class="col-md-2">
+						<p>
+							<b> &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;Total Fees</b>
+						</p>
+					</div>
+					<div class="col-md-2">
+						&nbsp;&nbsp;
+						<b>10000</b>
+					</div>
+					<div class="col-md-2">
+
+					</div>
+
+				</div>
+				<!-- total fees end -->
+				<!-- schoolarship  start -->
+				<div class="row">
+					<div class="col-md-4">
+					</div>
+					<div class="col-md-5">
+						<table st-table="rowCollection" class="table table-bordered">
+
+							<tbody>
+								<tr>
+									<td>
+										<font color="#0000FF">30% schoolarship on Total</font>
+									</td>
+									<td>
+										<font color="#0000FF">
+											<b>10000</b>
+										</font>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="col-md-1">
+
+					</div>
+					<div class="col-md-2">
+
+					</div>
+				</div>
+				<!-- schoolarship  end -->
+				<!-- Sub total  start -->
+				<div class="row">
+					<div class="col-md-6">
+					</div>
+					<div class="col-md-2">
+						<p>
+							<b> &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;Sub Total</b>: </p>
+					</div>
+					<div class="col-md-2">
+						<b>10000</b>
+					</div>
+					<div class="col-md-2">
+
+					</div>
+				</div>
+				<!-- Sub total end -->
+				<!-- Start table of List Grid Fine head-->
+				<div class="row">
+					<div class="col-md-3">
+					</div>
+					<div class="col-md-6">
+						<table st-table="rowCollection" class="table table-bordered">
+							<thead>
+								<tr>
+									<th>SL</th>
+									<th>Fine Head</th>
+									<th>Details</th>
+									<th>Fees</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>{{$index + 1}}</td>
+									<td>Fine Head</td>
+									<td>Details</td>
+									<td>
+										<b>10000</b>
+									</td>
+								</tr>
+								<tr>
+									<td>2</td>
+									<td>Fine Head</td>
+									<td>Details</td>
+									<td>
+										<b>10000</b>
+									</td>
+								</tr>
+							</tbody>
+
+						</table>
+					</div>
+					<div class="col-md-1">
+					</div>
+					<div class="col-md-2">
+					</div>
+				</div>
+				<!-- End of table view -->
+				<!-- total fine start -->
+				<div class="row">
+					<div class="col-md-6">
+					</div>
+					<div class="col-md-2">
+						<p>
+							<b> &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;Total Fine</b>: </p>
+					</div>
+					<div class="col-md-2">
+						<b>10000</b>
+					</div>
+					<div class="col-md-2">
+
+					</div>
+				</div>
+				<!-- total fees end -->
+				<!-- Previous due start -->
+				<div class="row">
+					<div class="col-md-5">
+					</div>
+					<div class="col-md-4">
+						<table st-table="rowCollection" class="table table-bordered">
+
+							<tbody>
+								<tr>
+									<td>
+										<font color="FF0000"> &nbsp;&nbsp; &nbsp;&nbsp; Previous Due:</td>
+									<td>
+										<font color="FF0000">
+											<b>10000</b>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="col-md-2">
+
+					</div>
+					<div class="col-md-1">
+
+					</div>
+				</div>
+				<!--Previous due  end -->
+				<!-- total Payable fees start -->
+				<div class="row">
+					<div class="col-md-6">
+					</div>
+					<div class="col-md-2">
+						<p>
+							<b> &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;Total Payable Fees</b>: </p>
+					</div>
+					<div class="col-md-2">
+						<b>10000</b>
+					</div>
+					<div class="col-md-2">
+
+					</div>
+				</div>
+				<!-- total fees end -->
+				<!-- total due  start -->
+				<div class="row">
+					<div class="col-md-6">
+					</div>
+					<div class="col-md-2">
+						<p>
+							<b> &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;Paid Amount:</b>
+					</div>
+					<div class="col-md-1">
+						<input type="number" class="form-control" ng-model="vm.feeCollectio">
+					</div>
+					<div class="col-md-3">
+
+					</div>
+				</div>
+				<!-- total due end -->
+				<div class="row">
+					<div class="col-md-3">
+					</div>
+					<div class="col-md-6">
+						<p>_________________________________________________________________________________________________________________</p>
+					</div>
+					<div class="col-md-3">
+					</div>
+				</div>
+				<!-- total due  start -->
+				<div class="row">
+					<div class="col-md-6">
+					</div>
+					<div class="col-md-2">
+						<p>
+							<b> &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
+								<font color="FF0000"> Due </font>/
+								<font color="#008000">Advance: </font>
+							</b>
+						</p>
+					</div>
+					<div class="col-md-1">
+						<input type="number" class="form-control" ng-model="vm.feeCollecti">
+					</div>
+					<div class="col-md-3">
+					</div>
+				</div>
+				<!-- total due end -->
+			</div>
+		</div>
+
+	</div>
+</div>
+<!-- End Item Entry List Grid -->
+
+
+
+
+<style>
+	.thumb {
+		width: 24px;
+		height: 24px;
+		float: none;
+		position: relative;
+		top: 7px;
+	}
+
+	.modal-content {
+		width: 1500px;
+		margin-left: -367px;
+	}
+
+	.no-margin {
+		padding-top: 11px;
+	}
+
+	.studentInfo h4 {
+		font-size: 14px;
+	}
+
+	.customWidth {
+		width: 47.666667%;
+	}
+</style>
